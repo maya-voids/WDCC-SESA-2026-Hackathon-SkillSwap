@@ -1,12 +1,23 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   deleteTaskInServer,
+  educationTypeToLabel,
   getEventsFromServer,
   getTasksFromServer,
   sendServiceToServer,
+  CITY,
+  EDUCATIONTYPE,
+  SERVICETAGS,
   SERVICETYPE,
   type PostData,
 } from "../backend/DataUtils";
+import { DATA_SOURCE } from "../backend/dataSource";
+
+const TASKS_ENDPOINT = DATA_SOURCE === "mock" ? "/tasksMock.json" : "/tasks.json";
+const EVENT_READ_ENDPOINTS =
+  DATA_SOURCE === "mock"
+    ? ["/eventsMock.json", "/events.json"]
+    : ["/events.json"];
 
 describe("DataUtils", () => {
   const fetchMock = vi.fn();
@@ -16,9 +27,14 @@ describe("DataUtils", () => {
     image: new File(["image-bytes"], "photo.png", { type: "image/png" }),
     title: "Sell a bike",
     description: "Needs new brakes.",
-    location: "Wellington",
+    location: CITY.WELLINGTON,
+    address: "123 Willis Street, Wellington",
     author: "Alice",
-    type: SERVICETYPE.TASK,
+    type: SERVICETYPE.WORKSHOP,
+    credit: 50,
+    tags: [SERVICETAGS.WEB_DEVELOPMENT, SERVICETAGS.TYPESCRIPT],
+    time: "2026-08-01T12:00:00.000Z",
+    eduType: EDUCATIONTYPE.FIRST_YEAR,
   });
 
   beforeEach(() => {
@@ -39,10 +55,12 @@ describe("DataUtils", () => {
       await expect(sendServiceToServer(makePost())).resolves.toBeUndefined();
     });
 
-    it("resolves even when the server returns an error status", async () => {
+    it("rejects when the server returns an error status", async () => {
       fetchMock.mockResolvedValue(new Response("boom", { status: 500 }));
 
-      await expect(sendServiceToServer(makePost())).resolves.toBeUndefined();
+      await expect(sendServiceToServer(makePost())).rejects.toThrow(
+        "Failed to publish service (500)",
+      );
     });
 
     it("rejects with the original error and logs it when the request fails", async () => {
@@ -56,7 +74,7 @@ describe("DataUtils", () => {
       );
     });
 
-    it("posts all fields including location, author and type to /tasks.json", async () => {
+    it("posts all fields including location, author and type to /events.json", async () => {
       fetchMock.mockResolvedValue(new Response(null, { status: 200 }));
       const post = makePost();
 
@@ -64,7 +82,7 @@ describe("DataUtils", () => {
 
       expect(fetchMock).toHaveBeenCalledTimes(1);
       const [url, init] = fetchMock.mock.calls[0];
-      expect(url).toBe("/tasks.json");
+      expect(url).toBe("/events.json");
       expect(init.method).toBe("POST");
       expect(init.body).toBeInstanceOf(FormData);
 
@@ -74,14 +92,19 @@ describe("DataUtils", () => {
       expect(formData.get("title")).toBe(post.title);
       expect(formData.get("description")).toBe(post.description);
       expect(formData.get("location")).toBe(post.location);
+      expect(formData.get("address")).toBe(post.address);
       expect(formData.get("author")).toBe(post.author);
       expect(formData.get("type")).toBe(post.type);
+      expect(formData.get("credit")).toBe(String(post.credit));
+      expect(formData.getAll("tags")).toEqual(post.tags);
+      expect(formData.get("time")).toBe(post.time);
+      expect(formData.get("eduType")).toBe(String(post.eduType));
       expect(init.headers).toBeUndefined();
     });
 
-    it("posts to /events.json when the type is an EVENT", async () => {
+    it("posts the chosen SERVICETYPE to /events.json", async () => {
       fetchMock.mockResolvedValue(new Response(null, { status: 200 }));
-      const post = { ...makePost(), type: SERVICETYPE.EVENT };
+      const post = { ...makePost(), type: SERVICETYPE.HACKATHON };
 
       await sendServiceToServer(post);
 
@@ -90,7 +113,7 @@ describe("DataUtils", () => {
       expect(url).toBe("/events.json");
       expect(init.method).toBe("POST");
       const formData = init.body as FormData;
-      expect(formData.get("type")).toBe(SERVICETYPE.EVENT);
+      expect(formData.get("type")).toBe(SERVICETYPE.HACKATHON);
     });
   });
 
@@ -102,9 +125,14 @@ describe("DataUtils", () => {
           image: "data:image/png;base64,abc",
           title: "T1",
           description: "D1",
-          location: "Wellington",
+          location: CITY.WELLINGTON,
+          address: "123 Willis Street, Wellington",
           author: "Alice",
-          type: SERVICETYPE.TASK,
+          type: SERVICETYPE.STUDENT_WORK,
+          credit: 10,
+          tags: [SERVICETAGS.TYPESCRIPT],
+          time: "2026-08-01T09:00:00.000Z",
+          eduType: EDUCATIONTYPE.SECOND_YEAR,
         },
       ];
       fetchMock.mockResolvedValue(
@@ -120,14 +148,14 @@ describe("DataUtils", () => {
       await expect(getTasksFromServer()).resolves.toEqual([]);
     });
 
-    it("fetches /tasks.json with a GET request", async () => {
+    it("fetches the configured tasks endpoint with a GET request", async () => {
       fetchMock.mockResolvedValue(new Response("[]", { status: 200 }));
 
       await getTasksFromServer();
 
       expect(fetchMock).toHaveBeenCalledTimes(1);
       const [url, init] = fetchMock.mock.calls[0];
-      expect(url).toBe("/tasks.json");
+      expect(url).toBe(TASKS_ENDPOINT);
       expect(init?.method ?? "GET").toBe("GET");
     });
 
@@ -146,39 +174,61 @@ describe("DataUtils", () => {
           image: "data:image/png;base64,abc",
           title: "E1",
           description: "D1",
-          location: "Wellington",
+          location: CITY.WELLINGTON,
+          address: "123 Willis Street, Wellington",
           author: "Alice",
-          type: SERVICETYPE.EVENT,
+          type: SERVICETYPE.WORKSHOP,
+          credit: 20,
+          tags: [SERVICETAGS.WEB_DESIGN],
+          time: "2026-08-02T10:00:00.000Z",
+          eduType: EDUCATIONTYPE.GRADUATE,
         },
       ];
-      fetchMock.mockResolvedValue(
-        new Response(JSON.stringify(events), { status: 200 }),
+      fetchMock.mockImplementation(
+        () => Promise.resolve(new Response(JSON.stringify(events), { status: 200 })),
       );
 
       await expect(getEventsFromServer()).resolves.toEqual(events);
     });
 
     it("returns an empty array when the server has no events", async () => {
-      fetchMock.mockResolvedValue(new Response("[]", { status: 200 }));
+      fetchMock.mockImplementation(
+        () => Promise.resolve(new Response("[]", { status: 200 })),
+      );
 
       await expect(getEventsFromServer()).resolves.toEqual([]);
     });
 
-    it("fetches /events.json with a GET request", async () => {
-      fetchMock.mockResolvedValue(new Response("[]", { status: 200 }));
+    it("fetches the configured event endpoints with GET requests", async () => {
+      fetchMock.mockImplementation(
+        () => Promise.resolve(new Response("[]", { status: 200 })),
+      );
 
       await getEventsFromServer();
 
-      expect(fetchMock).toHaveBeenCalledTimes(1);
-      const [url, init] = fetchMock.mock.calls[0];
-      expect(url).toBe("/events.json");
-      expect(init?.method ?? "GET").toBe("GET");
+      expect(fetchMock).toHaveBeenCalledTimes(EVENT_READ_ENDPOINTS.length);
+      expect(fetchMock.mock.calls.map(([url]) => url)).toEqual(
+        EVENT_READ_ENDPOINTS,
+      );
+      fetchMock.mock.calls.forEach(([, init]) => {
+        expect(init?.method ?? "GET").toBe("GET");
+      });
     });
 
     it("throws when the request fails", async () => {
       fetchMock.mockResolvedValue(new Response("error", { status: 500 }));
 
       await expect(getEventsFromServer()).rejects.toThrow();
+    });
+  });
+
+  describe("educationTypeToLabel", () => {
+    it("returns the formally capitalised label for each EDUCATIONTYPE", () => {
+      expect(educationTypeToLabel(EDUCATIONTYPE.FIRST_YEAR)).toBe("First Year");
+      expect(educationTypeToLabel(EDUCATIONTYPE.SECOND_YEAR)).toBe(
+        "Second Year",
+      );
+      expect(educationTypeToLabel(EDUCATIONTYPE.GRADUATE)).toBe("Graduate");
     });
   });
 
@@ -192,7 +242,7 @@ describe("DataUtils", () => {
 
       expect(fetchMock).toHaveBeenCalledTimes(1);
       const [url, init] = fetchMock.mock.calls[0];
-      expect(url).toBe("/tasks.json");
+      expect(url).toBe(TASKS_ENDPOINT);
       expect(init.method).toBe("DELETE");
 
       const formData = init.body as FormData;
