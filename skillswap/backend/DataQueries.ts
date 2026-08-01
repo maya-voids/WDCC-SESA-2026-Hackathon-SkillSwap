@@ -1,7 +1,12 @@
 // Query helpers for Service data. All functions are pure: they never mutate
 // the input array and each returns a new array, so they're safe to chain
 // with the retrieval functions in ./DataUtils.ts.
-import { type Service } from "./DataUtils";
+import {
+  EDUCATIONTYPE,
+  SERVICETAGS,
+  SERVICETYPE,
+  type Service,
+} from "./DataUtils";
 
 /** Sort services by their UTC `time` field ascending (earliest first). */
 export function sortServicesByTimeAscending(services: Service[]): Service[] {
@@ -32,4 +37,36 @@ export function filterServicesByCredit(
   minCredit: number,
 ): Service[] {
   return services.filter((service) => service.credit >= minCredit);
+}
+
+/** Any value from the Service-related enums in DataUtils. */
+export type ServiceEnumValue = SERVICETYPE | SERVICETAGS | EDUCATIONTYPE;
+
+/**
+ * Keep only the services that match an enum value. The kind of match depends
+ * on which enum the value comes from:
+ *   - SERVICETYPE   → service.type === value
+ *   - SERVICETAGS   → value is one of service.tags
+ *   - EDUCATIONTYPE → service.eduType === value
+ * e.g. filterServicesByEnumValue(services, SERVICETAGS.WEB_DEVELOPMENT)
+ * returns every service tagged "Web Development".
+ */
+export function filterServicesByEnumValue(
+  services: Service[],
+  enumValue: ServiceEnumValue,
+): Service[] {
+  // EDUCATIONTYPE is the only numeric enum, so a number means an education type.
+  if (typeof enumValue === "number") {
+    return services.filter((service) => service.eduType === enumValue);
+  }
+
+  const serviceTypeValues = Object.values(SERVICETYPE) as string[];
+  if (serviceTypeValues.includes(enumValue)) {
+    return services.filter((service) => service.type === enumValue);
+  }
+
+  // Not a number and not a SERVICETYPE value, so it must be a SERVICETAGS value.
+  return services.filter((service) =>
+    service.tags.includes(enumValue as SERVICETAGS),
+  );
 }
