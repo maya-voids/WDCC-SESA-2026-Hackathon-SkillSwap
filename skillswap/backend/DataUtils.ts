@@ -1,10 +1,10 @@
 // This file contains utility functions for sending and receiving data to/from the server.
 // To use these functions/types, import them like this:
-// import { SERVICETYPE, PostData, Task, sendToServer, getTasksFromServer, deleteTaskInServer } from "./DataUtils";
+// import { SERVICETYPE, PostData, Service, sendServiceToServer, getTasksFromServer, getEventsFromServer, deleteTaskInServer } from "./DataUtils";
 
 export enum SERVICETYPE {
   TASK = "TASK",
-  SERVICE = "SERVICE",
+  EVENT = "EVENTS",
 }
 
 export type PostData = {
@@ -17,8 +17,8 @@ export type PostData = {
   type: SERVICETYPE;
 };
 
-/** A task as stored in tasks.json; the image is a base64 data URL. */
-export type Task = {
+/** A service (task or event) as stored on the server; the image is a base64 data URL. */
+export type Service = {
   id: string;
   image: string;
   title: string;
@@ -28,7 +28,7 @@ export type Task = {
   type: SERVICETYPE;
 };
 
-export async function sendToServer(data: PostData): Promise<void> {
+export async function sendServiceToServer(data: PostData): Promise<void> {
   try {
     const formData = new FormData();
     formData.append("id", data.id);
@@ -39,7 +39,10 @@ export async function sendToServer(data: PostData): Promise<void> {
     formData.append("author", data.author);
     formData.append("type", data.type);
 
-    await fetch("/tasks.json", {
+    const destination =
+      data.type === SERVICETYPE.EVENT ? "/events.json" : "/tasks.json";
+
+    await fetch(destination, {
       method: "POST",
       body: formData,
     });
@@ -49,10 +52,18 @@ export async function sendToServer(data: PostData): Promise<void> {
   }
 }
 
-export async function getTasksFromServer(): Promise<Task[]> {
+export async function getTasksFromServer(): Promise<Service[]> {
   const response = await fetch("/tasks.json");
   if (!response.ok) {
     throw new Error(`Failed to load tasks (${response.status})`);
+  }
+  return response.json();
+}
+
+export async function getEventsFromServer(): Promise<Service[]> {
+  const response = await fetch("/events.json");
+  if (!response.ok) {
+    throw new Error(`Failed to load events (${response.status})`);
   }
   return response.json();
 }

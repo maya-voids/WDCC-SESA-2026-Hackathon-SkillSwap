@@ -1,8 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   deleteTaskInServer,
+  getEventsFromServer,
   getTasksFromServer,
-  sendToServer,
+  sendServiceToServer,
   SERVICETYPE,
   type PostData,
 } from "../backend/DataUtils";
@@ -31,24 +32,24 @@ describe("DataUtils", () => {
     vi.restoreAllMocks();
   });
 
-  describe("sendToServer", () => {
+  describe("sendServiceToServer", () => {
     it("resolves when the request succeeds", async () => {
       fetchMock.mockResolvedValue(new Response("ok", { status: 200 }));
 
-      await expect(sendToServer(makePost())).resolves.toBeUndefined();
+      await expect(sendServiceToServer(makePost())).resolves.toBeUndefined();
     });
 
     it("resolves even when the server returns an error status", async () => {
       fetchMock.mockResolvedValue(new Response("boom", { status: 500 }));
 
-      await expect(sendToServer(makePost())).resolves.toBeUndefined();
+      await expect(sendServiceToServer(makePost())).resolves.toBeUndefined();
     });
 
     it("rejects with the original error and logs it when the request fails", async () => {
       const error = new Error("network down");
       fetchMock.mockRejectedValue(error);
 
-      await expect(sendToServer(makePost())).rejects.toBe(error);
+      await expect(sendServiceToServer(makePost())).rejects.toBe(error);
       expect(console.error).toHaveBeenCalledWith(
         "Error sending data to server:",
         error,
@@ -59,7 +60,7 @@ describe("DataUtils", () => {
       fetchMock.mockResolvedValue(new Response(null, { status: 200 }));
       const post = makePost();
 
-      await sendToServer(post);
+      await sendServiceToServer(post);
 
       expect(fetchMock).toHaveBeenCalledTimes(1);
       const [url, init] = fetchMock.mock.calls[0];
@@ -76,6 +77,20 @@ describe("DataUtils", () => {
       expect(formData.get("author")).toBe(post.author);
       expect(formData.get("type")).toBe(post.type);
       expect(init.headers).toBeUndefined();
+    });
+
+    it("posts to /events.json when the type is an EVENT", async () => {
+      fetchMock.mockResolvedValue(new Response(null, { status: 200 }));
+      const post = { ...makePost(), type: SERVICETYPE.EVENT };
+
+      await sendServiceToServer(post);
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      const [url, init] = fetchMock.mock.calls[0];
+      expect(url).toBe("/events.json");
+      expect(init.method).toBe("POST");
+      const formData = init.body as FormData;
+      expect(formData.get("type")).toBe(SERVICETYPE.EVENT);
     });
   });
 
@@ -120,6 +135,50 @@ describe("DataUtils", () => {
       fetchMock.mockResolvedValue(new Response("error", { status: 500 }));
 
       await expect(getTasksFromServer()).rejects.toThrow();
+    });
+  });
+
+  describe("getEventsFromServer", () => {
+    it("returns the events from the server", async () => {
+      const events = [
+        {
+          id: "event-1",
+          image: "data:image/png;base64,abc",
+          title: "E1",
+          description: "D1",
+          location: "Wellington",
+          author: "Alice",
+          type: SERVICETYPE.EVENT,
+        },
+      ];
+      fetchMock.mockResolvedValue(
+        new Response(JSON.stringify(events), { status: 200 }),
+      );
+
+      await expect(getEventsFromServer()).resolves.toEqual(events);
+    });
+
+    it("returns an empty array when the server has no events", async () => {
+      fetchMock.mockResolvedValue(new Response("[]", { status: 200 }));
+
+      await expect(getEventsFromServer()).resolves.toEqual([]);
+    });
+
+    it("fetches /events.json with a GET request", async () => {
+      fetchMock.mockResolvedValue(new Response("[]", { status: 200 }));
+
+      await getEventsFromServer();
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      const [url, init] = fetchMock.mock.calls[0];
+      expect(url).toBe("/events.json");
+      expect(init?.method ?? "GET").toBe("GET");
+    });
+
+    it("throws when the request fails", async () => {
+      fetchMock.mockResolvedValue(new Response("error", { status: 500 }));
+
+      await expect(getEventsFromServer()).rejects.toThrow();
     });
   });
 

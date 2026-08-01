@@ -1,10 +1,10 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { SERVICETYPE, type Task } from "../../backend/DataUtils";
+import { SERVICETYPE, type Service } from "../../backend/DataUtils";
 
 const TASKS_FILE = path.join(process.cwd(), "backend", "tasks.json");
 
-async function readTasks(): Promise<Task[]> {
+async function readTasks(): Promise<Service[]> {
   let raw: string;
   try {
     raw = await fs.readFile(TASKS_FILE, "utf8");
@@ -13,10 +13,10 @@ async function readTasks(): Promise<Task[]> {
     throw err;
   }
   if (raw.trim() === "") return [];
-  return JSON.parse(raw) as Task[];
+  return JSON.parse(raw) as Service[];
 }
 
-async function writeTasks(tasks: Task[]): Promise<void> {
+async function writeTasks(tasks: Service[]): Promise<void> {
   await fs.writeFile(TASKS_FILE, JSON.stringify(tasks, null, 2), "utf8");
 }
 
@@ -52,12 +52,12 @@ export async function POST(request: Request) {
     typeof description !== "string" ||
     typeof location !== "string" ||
     typeof author !== "string" ||
-    (type !== SERVICETYPE.TASK && type !== SERVICETYPE.SERVICE)
+    (type !== SERVICETYPE.TASK && type !== SERVICETYPE.EVENT)
   ) {
     return Response.json(
       {
         error:
-          "id (string), image (file), title (string), description (string), location (string), author (string) and type (TASK|SERVICE) are required",
+          "id (string), image (file), title (string), description (string), location (string), author (string) and type (TASK|EVENTS) are required",
       },
       { status: 400 },
     );
@@ -67,7 +67,7 @@ export async function POST(request: Request) {
     await image.arrayBuffer(),
   ).toString("base64")}`;
 
-  const task: Task = {
+  const task: Service = {
     id,
     image: imageDataUrl,
     title,
