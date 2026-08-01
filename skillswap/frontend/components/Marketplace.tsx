@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { SVGProps, useMemo, useState } from "react";
+import MockLogin from "./mock-login";
 
 const CATEGORIES = [
   "All",
@@ -175,9 +176,7 @@ export default function Marketplace() {
           <a href="#workshops">About</a>
         </nav>
         <div className="header-actions">
-          <button className="button button-ghost" type="button">
-            Log in
-          </button>
+          <MockLogin />
           <button className="button button-solid" type="button">
             Share a skill
           </button>
