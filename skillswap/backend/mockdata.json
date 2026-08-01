@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "title": "Partly x WDCC Hackathon",
+    "location": "Auckland CBD",
+    "category": "Hackathons",
+    "duration": "24 hrs",
+    "seats": 30,
+    "image": "https://i.snapcdn.app/photo?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJodHRwczovL3Njb250ZW50LmNkbmluc3RhZ3JhbS5jb20vdi90NTEuODI3ODctMTUvNzQzODA1NTY4XzE4MTE0Nzk2MzQ2Mjk4ODgyXzcxOTEwMTk4MTQzNjAxMTY1NzJfbi5qcGc_c3RwPWRzdC1qcGdfZTE1X3R0NiZfbmNfY2F0PTEwOSZpZ19jYWNoZV9rZXk9TXprME1EazFPRE00TmpVeE9USXpNVE14TVElM0QlM0QuMy1jY2I3LTUmY2NiPTctNSZfbmNfc2lkPTU4Y2RhZCZlZmc9ZXlKMlpXNWpiMlJsWDNSaFp5STZJa05CVWs5VlUwVk1YMGxVUlUwdWVIQnBaSE11TnpJd0xuTmtjaTUyYVdSbGIxOWtaV1poZFd4MFgyTnZkbVZ5WDJaeVlXMWxMa016SW4wJTNEJl9uY19vaGM9SVZ3UnkzWmlZZU1RN2tOdndGMlctcEkmX25jX29jPUFkb2NvRURCMVhsbjRNVDhteVQ5NVlDMjVyQ1JBbjJ3enFHR2NNVThLamR1Xzlid3R2VHAtODQ4QmhnaUt4eHFkZGMmX25jX2FkPXotbSZfbmNfY2lkPTAmX25jX3p0PTIzJl9uY19odD1zY29udGVudC1vcmQ1LTMuY2RuaW5zdGFncmFtLmNvbSZfbmNfZ2lkPTZzVVFqVHFoR2M2bGpEYVY0RTdhZWcmX25jX3NzPTdhMjJlJm9oPTAwX0FRRksweENDTzhjRWZQZGFtS0U5U1d1Zkx5OWhKc21BaHhNRHZ5YWM5TEJkZ0Emb2U9NkE3MzVDN0QiLCJmaWxlbmFtZSI6IlNuYXBJbnN0YS50b183NDM4MDU1NjhfMTgxMTQ3OTYzNDYyOTg4ODJfNzE5MTAxOTgxNDM2MDExNjU3Ml9uLmpwZyIsIm5iZiI6MTc4NTU2MTg0MiwiZXhwIjoxNzg1NTY1NDQyLCJpYXQiOjE3ODU1NjE4NDJ9.vw7_IV23tCbD_tpzVfGJQc2lvaHf5IqNw1kmFHBq-jA",
+    "description": "Come along to meet your fellow students, grow your network, and learn about upcoming technology community events."
+  },
+  {
+    "id": 2,
+    "title": "WDCC x SESA Hackathon",
+    "location": "GridAKL",
+    "category": "Hackathons",
+    "duration": "24 hrs",
+    "seats": 80,
+    "image": "https://i.snapcdn.app/photo?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJodHRwczovL3Njb250ZW50LmNkbmluc3RhZ3JhbS5jb20vdi90NTEuODI3ODctMTUvNzQxMjM2MDY3XzE4MTEwNjM5ODMwOTg4MTE3XzE5OTgzMzI3MzY1MjU5MDg0ODBfbi5qcGc_c3RwPWRzdC1qcGdfZTM1X3A0ODB4NDgwX3R0NiZfbmNfY2F0PTEwNyZpZ19jYWNoZV9rZXk9TXprek5UZzVOVEUzTnpjeE16STBPVFF5TnclM0QlM0QuMy1jY2I3LTUmY2NiPTctNSZfbmNfc2lkPTU4Y2RhZCZlZmc9ZXlKMlpXNWpiMlJsWDNSaFp5STZJa1pGUlVRdWVIQnBaSE11TWpjd01DNXpaSEl1Y21WbmRXeGhjbDl3YUc5MGJ5NURNeUo5Jl9uY19vaGM9WFBMYS04M0Q4eVlRN2tOdndHYnp4eVEmX25jX29jPUFkbzFScWtxMWw1NHQ4WGhCOVh2cVF0dHJ1Tkk0N3QtMmwxTXN4Tk5mZE9UbTdwbkI4ZjRBN2tTV1ROanNLem10c1kmX25jX2FkPXotbSZfbmNfY2lkPTAmX25jX3p0PTIzJl9uY19odD1zY29udGVudC1sZ2EzLTIuY2RuaW5zdGFncmFtLmNvbSZfbmNfZ2lkPWJ6TkExbVJGbFVzNGFpekZvT21YSlEmX25jX3NzPTdhMjJlJm9oPTAwX0FRRzliZUl1QXpobjQtMG5COXNveGExVGd5VHpfYmRRdGYtSG1jS2oyczJLc1Emb2U9NkE3MzZGNEEiLCJmaWxlbmFtZSI6IlNuYXBJbnN0YS50b183NDEyMzYwNjdfMTgxMTA2Mzk4MzA5ODgxMTdfMTk5ODMzMjczNjUyNTkwODQ4MF9uLmpwZyIsIm5iZiI6MTc4NTU2MTczOSwiZXhwIjoxNzg1NTY1MzM5LCJpYXQiOjE3ODU1NjE3Mzl9.yE_AwZLoKVGnBSTjJJ04qTYf5Vj2GKCZ7SNvHZFd8P4",
+    "description": "Team up, innovate, and build a real-world software proof of concept during an intensive collaborative event."
+  },
+  {
+    "id": 3,
+    "title": "AUT AI Hackathon",
+    "location": "South Campus",
+    "category": "Hackathons",
+    "duration": "24 hrs",
+    "seats": 25,
+    "image": "https://www.aut.ac.nz/__data/assets/image/0011/1143578/hackathon-2026.jpg",
+    "description": "A beginner-friendly practical introduction to semantic HTML and modern responsive CSS layout techniques."
+  },
+  {
+    "id": 4,
+    "title": "Build Night: Prototype Your Idea",
+    "location": "Auckland",
+    "category": "Tasks",
+    "duration": "4 hrs",
+    "seats": 20,
+    "image": "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=900&h=700&fit=crop&auto=format",
+    "description": "Bring an early-stage idea and work alongside student developers, designers, and makers to create a working prototype."
+  },
+  {
+    "id": 5,
+    "title": "Portfolio and CV Clinic",
+    "location": "Wellington",
+    "category": "Workshops",
+    "duration": "2 hrs",
+    "seats": 16,
+    "image": "https://images.unsplash.com/photo-1426927308491-6380b6a9936f?w=900&h=700&fit=crop&auto=format",
+    "description": "Get practical feedback on your portfolio, CV, or GitHub profile from senior students across design, software, and business."
+  },
+  {
+    "id": 6,
+    "title": "Creative Collaboration Mixer",
+    "location": "Dunedin",
+    "category": "Workshops",
+    "duration": "2 hrs",
+    "seats": 40,
+    "image": "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=900&h=700&fit=crop&auto=format",
+    "description": "Meet students across art, design, technology, music, and entrepreneurship, share your skills, and find a project team."
+  }
+]

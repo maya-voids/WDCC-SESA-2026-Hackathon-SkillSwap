@@ -1,5 +1,5 @@
-import Marketplace from "../frontend/components/Marketplace";
+import SkillSwapApp from "../frontend/components/SkillSwapApp";
 
 export default function Home() {
-  return <Marketplace />;
+  return <SkillSwapApp />;
 }
