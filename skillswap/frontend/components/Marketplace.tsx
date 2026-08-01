@@ -65,10 +65,6 @@ export default function Marketplace() {
     });
   }, [activeCategory, searchValue]);
 
-  function resetFilters() {
-    setSearchValue("");
-    setActiveCategory("All");
-  }
 
   return (
     <main>

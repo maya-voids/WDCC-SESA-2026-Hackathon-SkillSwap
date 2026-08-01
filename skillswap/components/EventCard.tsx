@@ -29,8 +29,12 @@ export default function EventCard({ event, index }: EventCardProps) {
         onClick={() => setIsOpen(true)} 
         style={{ cursor: "pointer" }}
       >
-        <div className="card-image">
-          <img src={event.image} alt={`${event.title} workshop`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <div className="card-image" style={{ position: 'relative', width: '100%', height: '200px', overflow: 'hidden', borderRadius: '8px' }}>
+          <img
+            src={event.image}
+            alt={`${event.title} workshop`}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
           <span className="card-number">{String(index + 1).padStart(2, "0")}</span>
           <button type="button" className="card-arrow" aria-label={`View ${event.title}`}>
             <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
@@ -46,14 +50,14 @@ export default function EventCard({ event, index }: EventCardProps) {
           <h2>{event.title}</h2>
           <div className="metadata card-metadata">
             <span>
-              <svg viewBox="0 0 24 24" fill="none" width="16" height="16" style={{ marginRight: '4px' }}>
+              <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
                 <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.7" />
                 <path d="M12 7v5l3 2" stroke="currentColor" strokeWidth="1.7" />
               </svg>
               {event.duration}
             </span>
             <span>
-              <svg viewBox="0 0 24 24" fill="none" width="16" height="16" style={{ marginRight: '4px' }}>
+              <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
                 <circle cx="9" cy="9" r="3" stroke="currentColor" strokeWidth="1.7" />
                 <circle cx="17" cy="10" r="2.2" stroke="currentColor" strokeWidth="1.7" />
                 <path d="M3.5 19c.5-3.1 2.4-4.8 5.5-4.8s5 1.7 5.5 4.8M15 14.5c2.9-.4 4.7 1.1 5.2 3.5" stroke="currentColor" strokeWidth="1.7" />
@@ -69,7 +73,7 @@ export default function EventCard({ event, index }: EventCardProps) {
         </div>
       </article>
 
-      {/* 2. Interactivity: Pop-up Detailed Modal Overlay */}
+      {/* 2. Redesigned Modifying Modal Overlay */}
       {isOpen && (
         <div 
           onClick={() => setIsOpen(false)}
@@ -79,55 +83,98 @@ export default function EventCard({ event, index }: EventCardProps) {
             left: 0,
             width: '100vw',
             height: '100vh',
-            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            backgroundColor: 'rgba(0, 0, 0, 0.4)', // Muted, clean dimming backdrop
+            backdropFilter: 'blur(4px)', // Optional: modern premium layout blurring
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             zIndex: 2000,
           }}
         >
+          {/* Main Container leveraging your page's structural section blocks */}
           <div 
             onClick={(e) => e.stopPropagation()}
+            className="workshop-section"
             style={{
               backgroundColor: '#fff',
-              padding: '32px',
-              borderRadius: '16px',
+              padding: '40px',
+              borderRadius: '0px', // Matches the sharp architectural style of the header tabs
+              border: '2px solid #000', // Matches clean line styling design aesthetics
               width: '90%',
-              maxWidth: '500px',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+              maxWidth: '600px',
+              boxShadow: '10px 10px 0px #000', // Sharp brut-minimalist shadow offset 
               position: 'relative',
-              color: '#333'
             }}
           >
+            {/* Native Close Button Trigger matching card-arrow styles */}
             <button 
-              onClick={() => setIsOpen(false)} 
-              style={{ position: 'absolute', top: '16px', right: '16px', border: 'none', background: 'none', fontSize: '20px', cursor: 'pointer', color: '#888' }}
+              onClick={() => setIsOpen(false)}
+              className="card-arrow"
+              style={{
+                position: 'absolute',
+                top: '24px',
+                right: '24px',
+                transform: 'rotate(45deg)' // Simple transform trick to make your arrow turn into a close sign
+              }}
             >
-              ✕
+              <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                <path d="M5 19 19 5M9 5h10v10" stroke="currentColor" strokeWidth="1.8" />
+              </svg>
             </button>
 
-            <span style={{ display: 'inline-block', backgroundColor: '#e0f2fe', color: '#0369a1', padding: '4px 12px', borderRadius: '16px', fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '16px' }}>
-              {event.category}
-            </span>
-
-            <h2 style={{ marginTop: 0, marginBottom: '16px', fontSize: '24px' }}>{event.title}</h2>
-            
-            <div style={{ marginBottom: '24px', fontSize: '15px', lineHeight: '1.6' }}>
-              <p style={{ margin: '6px 0' }}><strong>📍 Location:</strong> {event.location}</p>
-              <p style={{ margin: '6px 0' }}><strong>Duration:</strong> {event.duration}</p>
-              <p style={{ margin: '6px 0' }}><strong>Space Available:</strong> {event.seats} spots remaining</p>
-              <p style={{ marginTop: '16px', color: '#555' }}>{event.description}</p>
+            {/* Modal Content Structure aligned with Marketplace typography */}
+            <div className="workshop-heading-row" style={{ marginBottom: '24px', display: 'block' }}>
+              <p className="eyebrow">{event.category} / {event.location}</p>
+              <h1 style={{ fontSize: '32px', margin: '8px 0 0 0', textTransform: 'uppercase' }}>
+                {event.title}
+              </h1>
             </div>
 
-            <button 
-              onClick={() => {
-                alert(`Registered for ${event.title}!`);
-                setIsOpen(false);
-              }}
-              style={{ width: '100%', padding: '14px', backgroundColor: '#0070f3', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '16px', cursor: 'pointer' }}
-            >
-              Confirm Registration
-            </button>
+            {/* Visual Hero Area matching your card layouts */}
+            <div style={{ position: 'relative', width: '100%', height: '240px', overflow: 'hidden', marginBottom: '24px', border: '1px solid #000' }}>
+              <img
+                src={event.image}
+                alt={`${event.title} preview`}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            </div>
+
+            {/* Description Text matching global styling typography */}
+            <div style={{ marginBottom: '32px', lineHeight: '1.6' }}>
+              <p style={{ color: '#000', fontSize: '16px' }}>{event.description}</p>
+            </div>
+
+            {/* Combined Footer & Meta Row matching the lower card bodies */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', paddingTop: '20px', borderTop: '1px solid #eee' }}>
+              <div className="metadata card-metadata" style={{ margin: 0 }}>
+                <span>
+                  <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+                    <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.7" />
+                    <path d="M12 7v5l3 2" stroke="currentColor" strokeWidth="1.7" />
+                  </svg>
+                  {event.duration}
+                </span>
+                <span>
+                  <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+                    <circle cx="9" cy="9" r="3" stroke="currentColor" strokeWidth="1.7" />
+                    <circle cx="17" cy="10" r="2.2" stroke="currentColor" strokeWidth="1.7" />
+                    <path d="M3.5 19c.5-3.1 2.4-4.8 5.5-4.8s5 1.7 5.5 4.8M15 14.5c2.9-.4 4.7 1.1 5.2 3.5" stroke="currentColor" strokeWidth="1.7" />
+                  </svg>
+                  {event.seats} left
+                </span>
+              </div>
+
+              <button 
+                type="button" 
+                className="button button-solid"
+                onClick={() => {
+                  alert(`Successfully registered for ${event.title}!`);
+                  setIsOpen(false);
+                }}
+              >
+                Confirm Registration <span>↗</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
