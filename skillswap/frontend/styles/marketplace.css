@@ -130,6 +130,10 @@ input:focus-visible {
   gap: 0.5rem;
 }
 
+.site-header > .header-actions {
+  grid-column: 3;
+}
+
 .mock-account {
   display: flex;
   align-items: center;
@@ -1127,6 +1131,10 @@ footer {
 
   .site-header {
     grid-template-columns: 1fr auto;
+  }
+
+  .site-header > .header-actions {
+    grid-column: 2;
   }
 
   .main-nav {
