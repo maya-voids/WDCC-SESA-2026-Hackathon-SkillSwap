@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import EventCard from "../../components/EventCard";
 import iconImage from "../../app/icon.png";
+import creditIcon from "../../app/credit_icon.png";
 import graphicImage from "../../app/graphic.png";
 import {
   CITY,
@@ -201,7 +202,9 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           </div>
           <div className="mock-account" aria-label="Signed in as Alex Morgan">
             <div className="mock-account-summary">
-              <span className="mock-account-avatar" aria-hidden="true">AM</span>
+              <span className="mock-account-avatar" aria-hidden="true">
+                AM
+              </span>
               <span className="mock-account-copy">
                 <span className="mock-account-label">Signed in</span>
                 <strong>Alex Morgan</strong>
@@ -348,7 +351,9 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         </div>
 
         <div className="results-line" aria-live="polite">
-          <span>{String(filteredServices.length).padStart(2, "0")} results</span>
+          <span>
+            {String(filteredServices.length).padStart(2, "0")} results
+          </span>
           <span>Community listings</span>
         </div>
 
@@ -386,7 +391,11 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
             <span>00</span>
             <h2>NO LISTINGS FOUND</h2>
             <p>Try a different search term or reset the filters.</p>
-            <button type="button" className="button button-solid" onClick={resetFilters}>
+            <button
+              type="button"
+              className="button button-solid"
+              onClick={resetFilters}
+            >
               Reset filters
             </button>
           </div>
@@ -475,7 +484,12 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
             >
               <label className="share-skill-field share-skill-field-full">
                 <span>Title</span>
-                <input name="title" type="text" placeholder="e.g. Beginner pottery wheel" required />
+                <input
+                  name="title"
+                  type="text"
+                  placeholder="e.g. Beginner pottery wheel"
+                  required
+                />
               </label>
 
               <label className="share-skill-field">
@@ -491,7 +505,9 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               <label className="share-skill-field">
                 <span>City</span>
                 <select name="city" defaultValue="" required>
-                  <option value="" disabled>Select a city</option>
+                  <option value="" disabled>
+                    Select a city
+                  </option>
                   {CITIES.map((city) => (
                     <option value={city} key={city}>
                       {city}
@@ -542,12 +558,23 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
 
               <label className="share-skill-field">
                 <span>Duration</span>
-                <input name="duration" type="text" placeholder="e.g. 2 hours" required />
+                <input
+                  name="duration"
+                  type="text"
+                  placeholder="e.g. 2 hours"
+                  required
+                />
               </label>
 
               <label className="share-skill-field">
                 <span>Seats available</span>
-                <input name="seats" type="number" min="1" placeholder="e.g. 12" required />
+                <input
+                  name="seats"
+                  type="number"
+                  min="1"
+                  placeholder="e.g. 12"
+                  required
+                />
               </label>
 
               <label className="share-skill-field">
@@ -583,7 +610,10 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               </label>
 
               {shareError && (
-                <p className="share-skill-error share-skill-field-full" role="alert">
+                <p
+                  className="share-skill-error share-skill-field-full"
+                  role="alert"
+                >
                   {shareError}
                 </p>
               )}
@@ -597,7 +627,11 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
                 >
                   Cancel
                 </button>
-                <button className="button button-solid" type="submit" disabled={isPublishing}>
+                <button
+                  className="button button-solid"
+                  type="submit"
+                  disabled={isPublishing}
+                >
                   {isPublishing ? "Publishing…" : "Publish skill"}
                 </button>
               </div>
