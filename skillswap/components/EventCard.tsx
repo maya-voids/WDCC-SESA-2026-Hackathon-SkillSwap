@@ -32,7 +32,7 @@ export default function EventCard({ event, index }: EventCardProps) {
           <img
             src={event.image}
             alt={`${event.title} workshop`}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            sizes="(max-width: 720px) 100vw, (max-width: 1080px) 50vw, 33vw"
           />
           <span className="card-number">{String(index + 1).padStart(2, "0")}</span>
           <button type="button" className="card-arrow" aria-label={`View ${event.title}`}>
@@ -130,7 +130,7 @@ export default function EventCard({ event, index }: EventCardProps) {
               <img
                 src={event.image}
                 alt={`${event.title} preview`}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                sizes="(max-width: 700px) 90vw, 520px"
               />
             </div>
 
