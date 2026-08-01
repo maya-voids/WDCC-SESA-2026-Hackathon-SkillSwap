@@ -1,29 +1,56 @@
 [
   {
     "id": "mock-event-1",
-    "image": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjAwIDQwMCI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiM0NTdiOWQiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5FdmVudCAxPC90ZXh0Pjwvc3ZnPg==",
+    "image": "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=900&h=700&fit=crop&auto=format",
     "title": "Game Jam: 48-hour indie game sprint",
-    "description": "A weekend game jam to prototype a playable game from a mystery theme. Solo or teams welcome — bring a laptop and an idea, and mentors will be on hand for art, code and playtesting.",
+    "description": "A weekend game jam to prototype a playable game from a mystery theme. Solo participants and teams are welcome; bring a laptop and an idea, and mentors will be available for art, code, and playtesting.",
     "location": "Wellington",
     "author": "WDCC Game Dev Club",
     "type": "EVENTS"
   },
   {
     "id": "mock-event-2",
-    "image": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjAwIDQwMCI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiM4MzM4ZWMiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5FdmVudCAyPC90ZXh0Pjwvc3ZnPg==",
-    "title": "Game Art Bootcamp: sprites & animation",
-    "description": "A practical workshop on creating game-ready art — character sprites, tilesets and simple walk-cycle animation in Aseprite. Bring a tablet or mouse; beginners welcome and all assets are yours to keep.",
+    "image": "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=900&h=700&fit=crop&auto=format",
+    "title": "Game Art Bootcamp: sprites and animation",
+    "description": "A practical workshop on creating game-ready art, including character sprites, tilesets, and simple walk-cycle animation in Aseprite. Beginners are welcome and all completed assets are yours to keep.",
     "location": "Auckland",
     "author": "Pixel Garden Studio",
     "type": "EVENTS"
   },
   {
     "id": "mock-event-3",
-    "image": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjAwIDQwMCI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiNkNjI4MjgiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5FdmVudCAzPC90ZXh0Pjwvc3ZnPg==",
+    "image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=900&h=700&fit=crop&auto=format",
     "title": "Hackathon Kickoff: build a project in 24 hours",
-    "description": "A 24-hour hackathon to build something useful or fun — web apps, bots, hardware, or art installations. Pitches start Saturday morning, demos Sunday night, prizes for best overall, best design and most creative.",
+    "description": "A 24-hour hackathon to build something useful or fun, from web apps and bots to hardware and art installations. Pitch on Saturday morning and demonstrate your project on Sunday night.",
     "location": "Christchurch",
     "author": "CHCH Hack Society",
+    "type": "EVENTS"
+  },
+  {
+    "id": "mock-event-4",
+    "image": "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=900&h=700&fit=crop&auto=format",
+    "title": "Build Night: turn your idea into a prototype",
+    "description": "Bring an early-stage idea and work alongside student developers, designers, and makers. Volunteer mentors will help with scoping, technical decisions, and preparing a short end-of-night demo.",
+    "location": "Auckland",
+    "author": "Campus Makers Collective",
+    "type": "EVENTS"
+  },
+  {
+    "id": "mock-event-5",
+    "image": "https://images.unsplash.com/photo-1426927308491-6380b6a9936f?w=900&h=700&fit=crop&auto=format",
+    "title": "Portfolio Clinic: feedback from senior students",
+    "description": "Get practical feedback on your portfolio, CV, or GitHub profile in a friendly small-group session. Reviewers from design, software, engineering, and business backgrounds will be available.",
+    "location": "Wellington",
+    "author": "Student Careers Network",
+    "type": "EVENTS"
+  },
+  {
+    "id": "mock-event-6",
+    "image": "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=900&h=700&fit=crop&auto=format",
+    "title": "Creative Collaboration Mixer",
+    "description": "Meet students looking for collaborators across art, design, technology, music, and entrepreneurship. Share what you can contribute, discover new project ideas, and form a team on the night.",
+    "location": "Dunedin",
+    "author": "Otago Creative Community",
     "type": "EVENTS"
   }
 ]
