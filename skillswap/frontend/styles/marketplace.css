@@ -676,7 +676,7 @@ input:focus-visible {
   color: var(--muted);
 }
 
-.workshop-grid {
+.event-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   background: var(--black);
@@ -684,7 +684,7 @@ input:focus-visible {
   gap: 1px;
 }
 
-.workshop-card {
+.event-card {
   min-width: 0;
   background: var(--white);
 }
@@ -696,7 +696,7 @@ input:focus-visible {
   background: var(--black);
 }
 
-.workshop-card:hover .card-image > img {
+.event-card:hover .card-image > img {
   filter: grayscale(1) contrast(1.25);
   transform: scale(1.045);
 }
@@ -745,7 +745,7 @@ input:focus-visible {
   width: 20px;
 }
 
-.workshop-card:hover .card-arrow,
+.event-card:hover .card-arrow,
 .card-arrow:focus-visible {
   opacity: 1;
   transform: translate(0, 0);
@@ -1008,7 +1008,7 @@ footer {
     gap: 2rem;
   }
 
-  .workshop-grid {
+  .event-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -1162,7 +1162,7 @@ footer {
     display: none;
   }
 
-  .workshop-grid {
+  .event-grid {
     grid-template-columns: 1fr;
   }
 
