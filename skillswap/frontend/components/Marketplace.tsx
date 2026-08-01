@@ -17,6 +17,7 @@ import {
   SERVICETYPE,
   type Service,
 } from "../../backend/DataUtils";
+import { changeCredits, getCredits } from "../../backend/ProfileUtils";
 
 type MarketplaceProps = {
   onLogout: () => void;
@@ -29,6 +30,7 @@ const EDUCATION_LEVELS = Object.values(EDUCATIONTYPE).filter(
 );
 
 const SERVICE_TYPES = Object.values(SERVICETYPE);
+const SERVICE_TAGS = Object.values(SERVICETAGS);
 
 function serviceTypeToLabel(serviceType: SERVICETYPE): string {
   return serviceType
@@ -52,6 +54,8 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
   const [isShareFormOpen, setIsShareFormOpen] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
   const [shareError, setShareError] = useState<string | null>(null);
+  // Starts null so the header shows a placeholder until the stored balance loads.
+  const [credits, setCredits] = useState<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -79,6 +83,22 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
       cancelled = true;
     };
   }, [reloadKey]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    getCredits()
+      .then((value) => {
+        if (!cancelled) setCredits(value);
+      })
+      .catch(() => {
+        // Keep the default balance if the profile cannot be loaded.
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     if (!isShareFormOpen) return;
@@ -151,6 +171,15 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
     }
   }
 
+  async function handleJoin(service: Service): Promise<boolean> {
+    if (credits === null || credits < service.credit) {
+      return false;
+    }
+
+    setCredits(await changeCredits(-service.credit));
+    return true;
+  }
+
   return (
     <main>
       <header className="site-header">
@@ -160,10 +189,16 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         <div className="header-actions">
           <div
             className="mock-credits"
-            aria-label="Current balance: 1,000 credits"
+            aria-label={
+              credits === null
+                ? "Loading credit balance"
+                : `Current balance: ${credits.toLocaleString("en-NZ")} credits`
+            }
           >
-            <strong>1,000</strong>
-            <Image src={creditIcon} alt="Credit icon" width={30} height={30} />
+            <strong>
+              {credits === null ? "···" : credits.toLocaleString("en-NZ")}
+            </strong>
+            <span aria-hidden="true">✦</span>
           </div>
           <div className="mock-account" aria-label="Signed in as Alex Morgan">
             <div className="mock-account-summary">
@@ -343,7 +378,12 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         ) : filteredServices.length ? (
           <div className="event-grid">
             {filteredServices.map((service, index) => (
-              <EventCard event={service} index={index} key={service.id} />
+              <EventCard
+                event={service}
+                index={index}
+                key={service.id}
+                onJoin={handleJoin}
+              />
             ))}
           </div>
         ) : (
@@ -479,14 +519,12 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               <label className="share-skill-field">
                 <span>Category</span>
                 <select name="category" defaultValue="" required>
-                  <option value="" disabled>
-                    Select a category
-                  </option>
-                  <option value={SERVICETAGS.WEB_DEVELOPMENT}>
-                    Web development
-                  </option>
-                  <option value={SERVICETAGS.WEB_DESIGN}>Web design</option>
-                  <option value={SERVICETAGS.TYPESCRIPT}>TypeScript</option>
+                  <option value="" disabled>Select a category</option>
+                  {SERVICE_TAGS.map((tag) => (
+                    <option value={tag} key={tag}>
+                      {tag}
+                    </option>
+                  ))}
                 </select>
               </label>
 

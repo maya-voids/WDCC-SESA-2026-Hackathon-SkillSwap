@@ -32,6 +32,10 @@ export enum SERVICETAGS {
   WEB_DEVELOPMENT = "Web Development",
   WEB_DESIGN = "Web Design",
   TYPESCRIPT = "TypeScript",
+  CREATIVE_DESIGN = "Creative Design",
+  PYTHON = "Python",
+  FIRMWARE = "Firmware",
+  HARDWARE = "Hardware",
 }
 
 /** Cities a service can be located in. */
