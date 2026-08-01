@@ -25,7 +25,7 @@ body {
   margin: 0;
   overflow-x: clip;
   background: var(--white);
-  /*color: var(--black);  */
+  color: var(--black);
   font-family: var(--font-geist-sans), Arial, sans-serif;
 }
 
@@ -50,7 +50,9 @@ a {
 
 button:focus-visible,
 a:focus-visible,
-input:focus-visible {
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 3px;
 }
@@ -72,7 +74,7 @@ input:focus-visible {
   top: 0;
   z-index: 100;
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: auto 1fr;
   align-items: center;
   min-height: 72px;
   padding: 0 4vw;
@@ -137,7 +139,11 @@ input:focus-visible {
 }
 
 .site-header > .header-actions {
-  grid-column: 3;
+  grid-column: 2;
+}
+
+.wordmark img {
+  display: block;
 }
 
 .mock-account {
@@ -147,15 +153,19 @@ input:focus-visible {
 }
 
 .mock-credits {
-  font-size: 1.6 rem;
-  transform: translate(-1830%, 0);
   display: flex;
+  min-height: 42px;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.35rem;
+  padding: 0.65rem 0.85rem;
+  background: var(--yellow);
+  border: 1px solid var(--black);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
 }
 
 .mock-account-summary {
-  transform: translate(-800%, 0);
   display: flex;
   align-items: center;
   gap: 0.65rem;
@@ -316,6 +326,11 @@ input:focus-visible {
 .share-skill-close:hover {
   background: var(--black);
   color: var(--white);
+}
+
+.share-skill-close:disabled {
+  cursor: wait;
+  opacity: 0.55;
 }
 
 .share-skill-form {
@@ -575,7 +590,7 @@ input:focus-visible {
 
 .eyebrow {
   margin: 0 0 2rem;
-  font-size: clamp(2.2rem, 3.6vw, 5.5rem) !important;
+  font-size: 0.67rem !important;
   line-height: 1.05;
 }
 
@@ -884,12 +899,11 @@ input:focus-visible {
 }
 
 .heading-block {
-  position: relative;
-  display: inline-flex;
-  align-items: flex-start;
-  gap: 1.25rem;
-  min-height: 180px;
-  padding-right: clamp(150px, 24vw, 260px);
+  display: grid;
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 320px);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 4rem);
 }
 
 .heading-copy {
@@ -901,30 +915,19 @@ input:focus-visible {
 }
 
 .graphicImage {
-  position: absolute;
-  right: 0;
-  top: 1rem;
-  width: min(400px, 42vw);
+  width: 100%;
   height: auto;
   object-fit: contain;
-  transform: translate(8%, -36%);
-  z-index: 2;
   pointer-events: none;
-  
 }
 
 .workshop-heading-row .eyebrow {
-  margin-bottom: 0.8rem;
-}
-
-.workshop-heading-row .eyebrow {
-  margin-bottom: 1.3rem;
-  font-size: clamp(4rem, 2.6vw, 6rem);
-  line-height: 1.1;
+  margin-bottom: 1rem;
+  font-size: clamp(0.72rem, 1vw, 0.9rem) !important;
+  line-height: 1.2;
 }
 
 .workshop-heading-row h2 {
-  
   font-size: clamp(4rem, 8vw, 8rem);
 }
 
@@ -941,6 +944,7 @@ input:focus-visible {
   letter-spacing: -0.075em;
   line-height: 0.83;
   text-transform: uppercase;
+  color: var(--orange);
 }
 
 .marketplace-tools {
@@ -1763,21 +1767,12 @@ footer {
     font-size: 0.58rem;
   }
 
-  .mock-account-copy {
+  .mock-account-summary {
     display: none;
-  }
-
-  .mock-account-avatar {
-    width: 36px;
-    height: 36px;
   }
 
   .mock-sign-out {
     padding-inline: 0.65rem;
-  }
-
-  .mock-account + .button-solid {
-    display: none;
   }
 
   .hero {
@@ -1862,10 +1857,14 @@ footer {
   }
 
   .workshop-heading-row {
-    align-items: flex-end;
+    align-items: stretch;
     flex-direction: column;
     gap: 1.5rem;
-    color: var(--orange);
+  }
+
+  .heading-block {
+    grid-template-columns: minmax(0, 1fr) minmax(100px, 28vw);
+    gap: 1rem;
   }
 
   .workshop-heading-row h2 {
@@ -1949,6 +1948,12 @@ footer {
   .footer-bottom {
     flex-direction: column;
     gap: 0.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mock-credits {
+    display: none;
   }
 }
 
