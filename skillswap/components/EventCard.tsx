@@ -26,7 +26,7 @@ export default function EventCard({ event, index }: EventCardProps) {
       <article 
         className="workshop-card" 
         onClick={() => setIsOpen(true)} 
-        style={{ cursor: "pointer" }}
+        style={{ cursor: "pointer", backgroundColor: 'white', border: '1px solid currentColor' }}
       >
         <div className="card-image" style={{ position: 'relative', width: '100%', height: '200px', overflow: 'hidden' }}>
           <img
@@ -43,19 +43,19 @@ export default function EventCard({ event, index }: EventCardProps) {
         </div>
         
         <div className="card-body">
-          <p className="card-category" style={{color: 'white'}}>
+          <p className="card-category" style={{color: 'black'}}>
             {event.category} / {event.location}
           </p>
-          <h2 style={{color: 'white'}}>{event.title}</h2>
+          <h2 style={{color: 'black'}}>{event.title}</h2>
           <div className="metadata card-metadata">
-            <span style={{color: 'white'}}>
+            <span style={{color: 'black'}}>
               <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
                 <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.7" />
                 <path d="M12 7v5l3 2" stroke="currentColor" strokeWidth="1.7" />
               </svg>
               {event.duration}
             </span>
-            <span style={{color: 'white'}}>
+            <span style={{color: 'black'}}>
               <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
                 <circle cx="9" cy="9" r="3" stroke="currentColor" strokeWidth="1.7" />
                 <circle cx="17" cy="10" r="2.2" stroke="currentColor" strokeWidth="1.7" />

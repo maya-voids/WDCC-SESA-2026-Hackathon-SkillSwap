@@ -21,7 +21,9 @@ export default function EventList({ events }: EventListProps) {
             display: 'grid', 
             gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', 
             gap: '8px', 
-            width: '100%'
+            width: '100%',
+            backgroundColor: 'white',
+            border: 'none',
           }}
     >
       {events.map((event, index) => (
