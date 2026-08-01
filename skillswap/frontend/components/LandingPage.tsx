@@ -1,5 +1,8 @@
 "use client";
 
+import Image from "next/image";
+import graphicHome from "../../app/home.png";
+
 type LandingPageProps = {
   onLogin: () => void;
 };
@@ -42,7 +45,13 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
             Find a skill near you and learn it together.
           </p>
         </div>
-
+        <Image
+          src={graphicHome}
+          className="landing-home-graphic"
+          alt="SkillSwap home graphic"
+          width={720}
+          height={280}
+        />
         <div
           className="landing-stat-grid"
           aria-label="SkillSwap community statistics"
