@@ -23,11 +23,14 @@ type MarketplaceProps = {
 export default function Marketplace({ onLogout }: MarketplaceProps) {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchValue, setSearchValue] = useState("");
+  const [isShareFormOpen, setIsShareFormOpen] = useState(false);
+  const [submittedSkills, setSubmittedSkills] = useState<EventData[]>([]);
 
   const filteredEvents = useMemo(() => {
+    const marketplaceEvents = [...submittedSkills, ...MOCK_EVENTS];
     const query = searchValue.trim().toLowerCase();
 
-    return MOCK_EVENTS.filter((event) => {
+    return marketplaceEvents.filter((event) => {
       const matchesCategory =
         activeCategory === "All" || event.category === activeCategory;
       const matchesSearch =
@@ -38,7 +41,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
 
       return matchesCategory && matchesSearch;
     });
-  }, [activeCategory, searchValue]);
+  }, [activeCategory, searchValue, submittedSkills]);
 
   return (
     <main>
@@ -64,7 +67,11 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               Sign out
             </button>
           </div>
-          <button className="button button-solid" type="button">
+          <button
+            className="button button-solid"
+            type="button"
+            onClick={() => setIsShareFormOpen(true)}
+          >
             Share a skill
           </button>
         </div>
@@ -116,6 +123,121 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         </div>
         <EventList events={filteredEvents} />
       </section>
+
+      {isShareFormOpen && (
+        <div
+          className="share-skill-overlay"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              setIsShareFormOpen(false);
+            }
+          }}
+        >
+          <section
+            className="share-skill-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="share-skill-heading"
+          >
+            <header className="share-skill-header">
+              <div>
+                <p className="eyebrow">Create a listing</p>
+                <h2 id="share-skill-heading">Share a skill</h2>
+              </div>
+              <button
+                className="share-skill-close"
+                type="button"
+                onClick={() => setIsShareFormOpen(false)}
+                aria-label="Close share a skill form"
+              >
+                ×
+              </button>
+            </header>
+
+            <form
+              className="share-skill-form"
+              onSubmit={(event) => {
+                event.preventDefault();
+                const formData = new FormData(event.currentTarget);
+                const image = formData.get("image");
+
+                setSubmittedSkills((currentSkills) => [
+                  {
+                    id: Date.now(),
+                    title: String(formData.get("title")),
+                    location: String(formData.get("location")),
+                    category: String(formData.get("category")),
+                    duration: String(formData.get("duration")),
+                    seats: Number(formData.get("seats")),
+                    image:
+                      image instanceof File && image.size > 0
+                        ? URL.createObjectURL(image)
+                        : "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=900&h=700&fit=crop&auto=format",
+                    description: String(formData.get("description")),
+                  },
+                  ...currentSkills,
+                ]);
+                setIsShareFormOpen(false);
+              }}
+            >
+              <label className="share-skill-field share-skill-field-full">
+                <span>Title</span>
+                <input name="title" type="text" placeholder="e.g. Beginner pottery wheel" required />
+              </label>
+
+              <label className="share-skill-field">
+                <span>Location</span>
+                <input name="location" type="text" placeholder="e.g. Grey Lynn" required />
+              </label>
+
+              <label className="share-skill-field">
+                <span>Category</span>
+                <select name="category" defaultValue="" required>
+                  <option value="" disabled>Select a category</option>
+                  <option value="Workshops">Workshop</option>
+                  <option value="Hackathons">Hackathon</option>
+                  <option value="Tasks">Task</option>
+                </select>
+              </label>
+
+              <label className="share-skill-field">
+                <span>Duration</span>
+                <input name="duration" type="text" placeholder="e.g. 2 hours" required />
+              </label>
+
+              <label className="share-skill-field">
+                <span>Seats available</span>
+                <input name="seats" type="number" min="1" placeholder="e.g. 12" required />
+              </label>
+
+              <label className="share-skill-field share-skill-field-full">
+                <span>Image</span>
+                <input name="image" type="file" accept="image/*" required />
+              </label>
+
+              <label className="share-skill-field share-skill-field-full">
+                <span>Description</span>
+                <textarea
+                  name="description"
+                  rows={5}
+                  placeholder="Tell people what they will learn and what to bring."
+                  required
+                />
+              </label>
+
+              <div className="share-skill-actions share-skill-field-full">
+                <button className="button button-ghost" type="button" onClick={() => setIsShareFormOpen(false)}>
+                  Cancel
+                </button>
+                <button className="button button-solid" type="submit">
+                  Publish skill
+                </button>
+              </div>
+            </form>
+          </section>
+        </div>
+      )}
     </main>
   );
 }
