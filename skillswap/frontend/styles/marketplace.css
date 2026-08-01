@@ -696,6 +696,21 @@ input:focus-visible {
   background: var(--black);
 }
 
+.event-modal-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 7;
+  overflow: hidden;
+  margin-bottom: 24px;
+  background: #eeeeee;
+  border: 1px solid var(--black);
+}
+
+.event-modal-image > img {
+  object-fit: cover;
+  object-position: center;
+}
+
 .event-card:hover .card-image > img {
   filter: grayscale(1) contrast(1.25);
   transform: scale(1.045);

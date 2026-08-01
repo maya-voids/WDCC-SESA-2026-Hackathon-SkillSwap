@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from 'react';
 
 export interface EventData {
@@ -30,10 +31,11 @@ export default function EventCard({ event, index }: EventCardProps) {
         style={{ cursor: "pointer" }}
       >
         <div className="card-image" style={{ position: 'relative', width: '100%', height: '200px', overflow: 'hidden', borderRadius: '8px' }}>
-          <img
+          <Image
             src={event.image}
             alt={`${event.title} workshop`}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            fill
+            sizes="(max-width: 720px) 100vw, (max-width: 1080px) 50vw, 33vw"
           />
           <span className="card-number">{String(index + 1).padStart(2, "0")}</span>
           <button type="button" className="card-arrow" aria-label={`View ${event.title}`}>
@@ -102,6 +104,8 @@ export default function EventCard({ event, index }: EventCardProps) {
               border: '2px solid #000', // Matches clean line styling design aesthetics
               width: '90%',
               maxWidth: '600px',
+              maxHeight: 'calc(100vh - 32px)',
+              overflowY: 'auto',
               boxShadow: '10px 10px 0px #000', // Sharp brut-minimalist shadow offset 
               position: 'relative',
             }}
@@ -131,11 +135,12 @@ export default function EventCard({ event, index }: EventCardProps) {
             </div>
 
             {/* Visual Hero Area matching your card layouts */}
-            <div style={{ position: 'relative', width: '100%', height: '240px', overflow: 'hidden', marginBottom: '24px', border: '1px solid #000' }}>
-              <img
+            <div className="event-modal-image">
+              <Image
                 src={event.image}
                 alt={`${event.title} preview`}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                fill
+                sizes="(max-width: 700px) 90vw, 520px"
               />
             </div>
 

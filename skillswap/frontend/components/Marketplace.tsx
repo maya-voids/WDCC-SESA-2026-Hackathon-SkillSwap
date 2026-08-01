@@ -3,6 +3,8 @@
 import { useMemo, useState } from "react";
 import MockLogin from "./mock-login"; // Keeping your structural imports intact
 import EventList from "@/components/EventList";
+import type { EventData } from "@/components/EventCard";
+import mockEvents from "../../backend/mockdata.json";
 
 const CATEGORIES = [
   "All",
@@ -11,38 +13,7 @@ const CATEGORIES = [
   "Tasks",
 ];
 
-const INITIAL_EVENTS = [
-  {
-    id: 1,
-    title: 'Meet&Greet',
-    location: "Auckland CBD",
-    category: "Workshops",
-    duration: "2 hrs",
-    seats: 30,
-    image: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=900&h=700&fit=crop&auto=format",
-    description: "Come along to meet your fellow peers! Network, socialize, and learn about upcoming tech community gatherings."
-  },
-  {
-    id: 2,
-    title: 'WDCCxSESA',
-    location: "GridAKL",
-    category: "Hackathons",
-    duration: "18 hrs",
-    seats: 80,
-    image: "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=900&h=700&fit=crop&auto=format",
-    description: "An intensive collaborative building event. Team up, innovate, and hack out real-world software proofs of concept."
-  },
-  {
-    id: 3,
-    title: 'HTML&CSS',
-    location: "Grey Lynn",
-    category: "Workshops",
-    duration: "3 hrs",
-    seats: 25,
-    image: "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=900&h=700&fit=crop&auto=format",
-    description: "A beginner-friendly practical dive into structural markup basics and modern responsive layout styling workflows."
-  },
-];
+const MOCK_EVENTS: EventData[] = mockEvents;
 
 export default function Marketplace() {
   const [activeCategory, setActiveCategory] = useState("All");
@@ -51,7 +22,7 @@ export default function Marketplace() {
   const filteredEvents = useMemo(() => {
     const query = searchValue.trim().toLowerCase();
 
-    return INITIAL_EVENTS.filter((event) => {
+    return MOCK_EVENTS.filter((event) => {
       const matchesCategory = activeCategory === "All" || event.category === activeCategory;
       const matchesSearch =
         !query ||
