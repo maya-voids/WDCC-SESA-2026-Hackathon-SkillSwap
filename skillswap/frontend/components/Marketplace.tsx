@@ -391,10 +391,11 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
                 <span>City</span>
                 <select name="city" defaultValue="" required>
                   <option value="" disabled>Select a city</option>
-                  <option value={CITY.AUCKLAND}>Auckland</option>
-                  <option value={CITY.HAMILTON}>Hamilton</option>
-                  <option value={CITY.CHRISTCHURCH}>Christchurch</option>
-                  <option value={CITY.WELLINGTON}>Wellington</option>
+                  {CITIES.map((city) => (
+                    <option value={city} key={city}>
+                      {city}
+                    </option>
+                  ))}
                 </select>
               </label>
 

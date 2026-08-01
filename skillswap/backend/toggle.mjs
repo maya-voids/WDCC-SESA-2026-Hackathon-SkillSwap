@@ -1,18 +1,15 @@
 // HOW TO RUN THE TOGGLE (from the skillswap/ project root):
 //
-//   npm run toggle -- mock        # DataUtils reads/writes the mock datasets
-//                                 #   (backend/dataStorage/tasksMock.json & backend/dataStorage/eventsMock.json)
-//   npm run toggle -- standard    # DataUtils reads/writes the real datasets
-//                                 #   (backend/dataStorage/tasks.json & backend/dataStorage/events.json)
+//   npm run toggle -- mock        # Read seeded mock data plus published events
+//   npm run toggle -- standard    # Read only the standard datasets
 //   npm run toggle                # no argument: just print the current data source
 //
 // You can also call the script directly, e.g.:
 //   node backend/toggle.mjs mock
 //
 // What it does: rewrites backend/dataSource.ts. DataUtils imports DATA_SOURCE from
-// that file to decide which endpoints it talks to (/tasks.json vs /tasksMock.json,
-// /events.json vs /eventsMock.json). With `next dev` running, refresh the browser
-// after toggling so the page reloads against the new endpoints.
+// that file to choose its read endpoints. New listings always publish to
+// /events.json. With `next dev` running, refresh the browser after toggling.
 
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -34,7 +31,7 @@ export const DATA_SOURCE: "mock" | "standard" = "${source}";
 }
 
 /**
- * Switch which dataset DataUtils reads/writes.
+ * Switch which datasets DataUtils reads.
  * @param {"mock"|"standard"} dataSource
  */
 export async function toggle(dataSource) {
@@ -47,10 +44,11 @@ export async function toggle(dataSource) {
 
   const files =
     dataSource === "mock"
-      ? "backend/dataStorage/tasksMock.json & backend/dataStorage/eventsMock.json"
+      ? "tasksMock.json, eventsMock.json, and published events.json"
       : "backend/dataStorage/tasks.json & backend/dataStorage/events.json";
   console.log(`DataUtils data source → ${dataSource}`);
-  console.log(`DataUtils will now read/write: ${files}`);
+  console.log(`DataUtils will now read: ${files}`);
+  console.log("New listings will publish to backend/dataStorage/events.json.");
   console.log("Refresh the browser if the dev server is running.");
 }
 
@@ -73,10 +71,10 @@ async function main() {
     console.log("");
     console.log("Usage:");
     console.log(
-      "  npm run toggle -- mock        → use mock data (backend/dataStorage/tasksMock.json, backend/dataStorage/eventsMock.json)",
+      "  npm run toggle -- mock        → read mock data plus published events",
     );
     console.log(
-      "  npm run toggle -- standard    → use real data (backend/dataStorage/tasks.json, backend/dataStorage/events.json)",
+      "  npm run toggle -- standard    → read the standard datasets",
     );
     return;
   }
