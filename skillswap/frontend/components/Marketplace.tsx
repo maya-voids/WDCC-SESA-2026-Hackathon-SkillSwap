@@ -134,7 +134,7 @@ function PeopleIcon(props: IconProps) {
   );
 }
 
-export default function Home() {
+export default function Marketplace() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchValue, setSearchValue] = useState("");
 
