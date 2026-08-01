@@ -1,7 +1,8 @@
-import EventCard, { EventData } from './EventCard';
+import type { Service } from "../backend/DataUtils";
+import EventCard from "./EventCard";
 
 interface EventListProps {
-  events: EventData[];
+  events: Service[];
 }
 
 export default function EventList({ events }: EventListProps) {
@@ -16,16 +17,7 @@ export default function EventList({ events }: EventListProps) {
   }
 
   return (
-    <div className="event-grid" 
-          style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', 
-            gap: '8px', 
-            width: '100%',
-            backgroundColor: 'white',
-            border: 'none',
-          }}
-    >
+    <div className="event-grid">
       {events.map((event, index) => (
         <EventCard key={event.id} event={event} index={index} />
       ))}

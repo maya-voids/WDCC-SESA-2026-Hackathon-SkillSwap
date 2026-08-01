@@ -1,175 +1,174 @@
 "use client";
 
-import { useState } from 'react';
-
-export interface EventData {
-  id: number;
-  title: string;
-  location: string;
-  category: string;
-  duration: string;
-  seats: number;
-  image: string;
-  description: string;
-}
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { educationTypeToLabel, type Service } from "../backend/DataUtils";
 
 interface EventCardProps {
-  event: EventData;
+  event: Service;
   index: number;
 }
 
+function formatEventTime(time: string): string {
+  const date = new Date(time);
+
+  if (Number.isNaN(date.getTime())) return "Date to be confirmed";
+
+  return new Intl.DateTimeFormat("en-NZ", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(date);
+}
+
 export default function EventCard({ event, index }: EventCardProps) {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const eventTime = formatEventTime(event.time);
+  const educationLevel = educationTypeToLabel(event.eduType);
+  const skillLabel = event.tags.join(" / ");
+  const listingLabel = event.type
+    .toLowerCase()
+    .replace(/\b\w/g, (character) => character.toUpperCase());
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    function closeOnEscape(keyEvent: KeyboardEvent) {
+      if (keyEvent.key === "Escape") setIsOpen(false);
+    }
+
+    window.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [isOpen]);
 
   return (
     <>
-      <article 
-        className="workshop-card" 
-        onClick={() => setIsOpen(true)} 
-        style={{ cursor: "pointer", backgroundColor: 'white', border: '1px solid currentColor' }}
-      >
-        <div className="card-image" style={{ position: 'relative', width: '100%', height: '200px', overflow: 'hidden' }}>
-          <img
+      <article className="event-card">
+        <div
+          className="card-image"
+          onClick={() => setIsOpen(true)}
+          onKeyDown={(keyEvent) => {
+            if (keyEvent.key === "Enter" || keyEvent.key === " ") {
+              keyEvent.preventDefault();
+              setIsOpen(true);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label={`View ${listingLabel.toLowerCase()} details for ${event.title}`}
+        >
+          <Image
             src={event.image}
-            alt={`${event.title}`}
-            sizes="(max-width: 720px) 100vw, (max-width: 1080px) 50vw, 33vw"
-            style={{color: 'white', opacity: '0.5', textAlign: 'center'}}
+            alt={`${event.title} ${listingLabel.toLowerCase()}`}
+            fill
+            sizes="(max-width: 720px) 100vw, (max-width: 1080px) 50vw, 25vw"
           />
-          <span className="card-number">{String(index + 1).padStart(2, "0")}</span>
-          <button type="button" className="card-arrow" aria-label={`View ${event.title}`}>
+          <span className="card-number">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+          <span className="card-tag">{listingLabel}</span>
+          <span className="card-arrow" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
-              <path d="M5 19 19 5M9 5h10v10" stroke="currentColor" strokeWidth="1.8" />
+              <path
+                d="M5 19 19 5M9 5h10v10"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              />
             </svg>
-          </button>
+          </span>
         </div>
-        
+
         <div className="card-body">
-          <p className="card-category" style={{color: 'black'}}>
-            {event.category} / {event.location}
+          <p className="card-category">
+            {skillLabel} / {event.location}
           </p>
-          <h2 style={{color: 'black'}}>{event.title}</h2>
+          <h2>{event.title}</h2>
+          <p className="instructor">Hosted by {event.author}</p>
+          <p className="event-description">{event.description}</p>
           <div className="metadata card-metadata">
-            <span style={{color: 'black'}}>
-              <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
-                <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.7" />
-                <path d="M12 7v5l3 2" stroke="currentColor" strokeWidth="1.7" />
-              </svg>
-              {event.duration}
-            </span>
-            <span style={{color: 'black'}}>
-              <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
-                <circle cx="9" cy="9" r="3" stroke="currentColor" strokeWidth="1.7" />
-                <circle cx="17" cy="10" r="2.2" stroke="currentColor" strokeWidth="1.7" />
-                <path d="M3.5 19c.5-3.1 2.4-4.8 5.5-4.8s5 1.7 5.5 4.8M15 14.5c2.9-.4 4.7 1.1 5.2 3.5" stroke="currentColor" strokeWidth="1.7" />
-              </svg>
-              {event.seats} left
-            </span>
+            <span>{eventTime}</span>
+            <span>{event.credit} credits</span>
           </div>
           <div className="card-footer">
-            <button type="button" className="button button-solid">
-              Register <span>↗</span>
+            <strong>{event.location}</strong>
+            <button
+              type="button"
+              className="button button-solid"
+              onClick={() => setIsOpen(true)}
+            >
+              View {listingLabel.toLowerCase()} <span>↗</span>
             </button>
           </div>
         </div>
       </article>
 
-
       {isOpen && (
-        <div 
+        <div
+          className="event-modal-overlay"
           onClick={() => setIsOpen(false)}
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: 'rgba(0, 0, 0, 0.4)', 
-            backdropFilter: 'blur(4px)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 2000,
-          }}
+          role="presentation"
         >
-          <div 
-            onClick={(e) => e.stopPropagation()}
-            className="workshop-section"
-            style={{
-              backgroundColor: '#fff',
-              padding: '40px',
-              borderRadius: '0px',
-              border: '2px solid #000', 
-              width: '90%',
-              maxWidth: '600px',
-              boxShadow: '10px 10px 0px #000', 
-              position: 'relative',
-            }}
+          <section
+            className="event-modal-dialog"
+            onClick={(clickEvent) => clickEvent.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={`event-dialog-title-${event.id}`}
           >
-            <button 
+            <button
+              type="button"
+              className="event-modal-close"
               onClick={() => setIsOpen(false)}
-              className="card-arrow"
-              style={{
-                position: 'absolute',
-                top: '24px',
-                right: '24px',
-                transform: 'rotate(45deg)' 
-              }}
+              aria-label="Close event details"
             >
-              <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
-                <path d="M5 19 19 5M9 5h10v10" stroke="currentColor" strokeWidth="1.8" />
-              </svg>
+              ×
             </button>
 
-            <div className="workshop-heading-row" style={{ marginBottom: '24px', display: 'block' }}>
-              <p className="eyebrow">{event.category} / {event.location}</p>
-              <h1 style={{ fontSize: '32px', margin: '8px 0 0 0', textTransform: 'uppercase' }}>
-                {event.title}
-              </h1>
-            </div>
+            <header className="event-modal-heading">
+              <p className="eyebrow">
+                {skillLabel} / {event.location}
+              </p>
+              <h2 id={`event-dialog-title-${event.id}`}>{event.title}</h2>
+            </header>
 
-            <div style={{ position: 'relative', width: '100%', height: '240px', overflow: 'hidden', marginBottom: '24px', border: '1px solid #000' }}>
-              <img
+            <div className="event-modal-image">
+              <Image
                 src={event.image}
                 alt={`${event.title} preview`}
                 sizes="(max-width: 700px) 90vw, 520px"
               />
             </div>
 
-            <div style={{ marginBottom: '32px', lineHeight: '1.6' }}>
-              <p style={{ color: '#000', fontSize: '16px' }}>{event.description}</p>
+            <div className="event-modal-description">
+              <p>{event.description}</p>
+              <p className="instructor">Hosted by {event.author}</p>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', paddingTop: '20px', borderTop: '1px solid #eee' }}>
-              <div className="metadata card-metadata" style={{ margin: 0 }}>
-                <span>
-                  <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
-                    <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.7" />
-                    <path d="M12 7v5l3 2" stroke="currentColor" strokeWidth="1.7" />
-                  </svg>
-                  {event.duration}
-                </span>
-                <span>
-                  <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
-                    <circle cx="9" cy="9" r="3" stroke="currentColor" strokeWidth="1.7" />
-                    <circle cx="17" cy="10" r="2.2" stroke="currentColor" strokeWidth="1.7" />
-                    <path d="M3.5 19c.5-3.1 2.4-4.8 5.5-4.8s5 1.7 5.5 4.8M15 14.5c2.9-.4 4.7 1.1 5.2 3.5" stroke="currentColor" strokeWidth="1.7" />
-                  </svg>
-                  {event.seats} left
-                </span>
+            <div className="event-modal-footer">
+              <div className="metadata card-metadata">
+                <span>{eventTime}</span>
+                <span>{event.credit} credits</span>
+                <span>{educationLevel}</span>
               </div>
-
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="button button-solid"
                 onClick={() => {
-                  alert(`Successfully registered for ${event.title}!`);
+                  alert(`Successfully joined ${event.title}!`);
                   setIsOpen(false);
                 }}
               >
-                Confirm Registration <span>↗</span>
+                Confirm participation{" "}
+                <span>↗</span>
               </button>
             </div>
-          </div>
+          </section>
         </div>
       )}
     </>
