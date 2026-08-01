@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import {
   educationTypeToLabel,
+  SERVICETYPE,
   type Service,
 } from "../backend/DataUtils";
 
@@ -28,6 +29,8 @@ export default function EventCard({ event, index }: EventCardProps) {
   const eventTime = formatEventTime(event.time);
   const educationLevel = educationTypeToLabel(event.eduType);
   const skillLabel = event.tags.join(" / ");
+  const listingLabel =
+    event.type === SERVICETYPE.EVENT ? "Event" : "Task";
 
   useEffect(() => {
     if (!isOpen) return;
@@ -61,18 +64,18 @@ export default function EventCard({ event, index }: EventCardProps) {
           }}
           role="button"
           tabIndex={0}
-          aria-label={`View details for ${event.title}`}
+          aria-label={`View ${listingLabel.toLowerCase()} details for ${event.title}`}
         >
           <Image
             src={event.image}
-            alt={`${event.title} event`}
+            alt={`${event.title} ${listingLabel.toLowerCase()}`}
             fill
             sizes="(max-width: 720px) 100vw, (max-width: 1080px) 50vw, 25vw"
           />
           <span className="card-number">
             {String(index + 1).padStart(2, "0")}
           </span>
-          <span className="card-tag">Event</span>
+          <span className="card-tag">{listingLabel}</span>
           <span className="card-arrow" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
               <path
@@ -102,7 +105,7 @@ export default function EventCard({ event, index }: EventCardProps) {
               className="button button-solid"
               onClick={() => setIsOpen(true)}
             >
-              View event <span>↗</span>
+              View {listingLabel.toLowerCase()} <span>↗</span>
             </button>
           </div>
         </div>
@@ -161,11 +164,18 @@ export default function EventCard({ event, index }: EventCardProps) {
                 type="button"
                 className="button button-solid"
                 onClick={() => {
-                  alert(`Successfully registered for ${event.title}!`);
+                  alert(
+                    event.type === SERVICETYPE.EVENT
+                      ? `Successfully registered for ${event.title}!`
+                      : `Successfully accepted ${event.title}!`,
+                  );
                   setIsOpen(false);
                 }}
               >
-                Confirm registration <span>↗</span>
+                {event.type === SERVICETYPE.EVENT
+                  ? "Confirm registration"
+                  : "Accept task"}{" "}
+                <span>↗</span>
               </button>
             </div>
           </section>

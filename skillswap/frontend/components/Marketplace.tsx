@@ -5,7 +5,9 @@ import { useEffect, useMemo, useState } from "react";
 import EventCard from "../../components/EventCard";
 import {
   EDUCATIONTYPE,
+  educationTypeToLabel,
   getEventsFromServer,
+  getTasksFromServer,
   sendServiceToServer,
   SERVICETAGS,
   SERVICETYPE,
@@ -16,18 +18,21 @@ type MarketplaceProps = {
   onLogout: () => void;
 };
 
-const LOCATION_TAB_COLOURS = [
-  "tab-all",
-  "tab-age",
-  "tab-time",
-  "tab-location",
-  "tab-skill",
-  "tab-iq",
+const EDUCATION_LEVELS = [
+  EDUCATIONTYPE.FIRST_YEAR,
+  EDUCATIONTYPE.SECOND_YEAR,
+  EDUCATIONTYPE.GRADUATE,
 ] as const;
 
 export default function Marketplace({ onLogout }: MarketplaceProps) {
-  const [events, setEvents] = useState<Service[]>([]);
-  const [activeLocation, setActiveLocation] = useState("All");
+  const [services, setServices] = useState<Service[]>([]);
+  const [activeCity, setActiveCity] = useState("All");
+  const [activeServiceType, setActiveServiceType] = useState<
+    SERVICETYPE | "All"
+  >("All");
+  const [activeEducationType, setActiveEducationType] = useState<
+    EDUCATIONTYPE | "All"
+  >("All");
   const [searchValue, setSearchValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -39,54 +44,76 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
   useEffect(() => {
     let cancelled = false;
 
-    async function loadEvents() {
+    async function loadServices() {
       setIsLoading(true);
       setError(null);
 
       try {
-        const loadedEvents = await getEventsFromServer();
-        if (!cancelled) setEvents(loadedEvents);
+        const [loadedEvents, loadedTasks] = await Promise.all([
+          getEventsFromServer(),
+          getTasksFromServer(),
+        ]);
+        if (!cancelled) setServices([...loadedEvents, ...loadedTasks]);
       } catch {
-        if (!cancelled) setError("The events could not be loaded.");
+        if (!cancelled) setError("The marketplace could not be loaded.");
       } finally {
         if (!cancelled) setIsLoading(false);
       }
     }
 
-    void loadEvents();
+    void loadServices();
 
     return () => {
       cancelled = true;
     };
   }, [reloadKey]);
 
-  const locations = useMemo(
-    () => ["All", ...new Set(events.map((event) => event.location))],
-    [events],
+  const cities = useMemo(
+    () => [...new Set(services.map((service) => service.location))].sort(),
+    [services],
   );
 
-  const filteredEvents = useMemo(() => {
+  const filteredServices = useMemo(() => {
     const query = searchValue.trim().toLowerCase();
 
-    return events.filter((event) => {
-      const matchesLocation =
-        activeLocation === "All" || event.location === activeLocation;
+    return services.filter((service) => {
+      const matchesCity =
+        activeCity === "All" || service.location === activeCity;
+      const matchesServiceType =
+        activeServiceType === "All" || service.type === activeServiceType;
+      const matchesEducationType =
+        activeEducationType === "All" ||
+        service.eduType === activeEducationType;
       const matchesSearch =
         !query ||
         [
-          event.title,
-          event.description,
-          event.author,
-          event.location,
+          service.title,
+          service.description,
+          service.author,
+          service.location,
+          ...service.tags,
         ].some((value) => value.toLowerCase().includes(query));
 
-      return matchesLocation && matchesSearch;
+      return (
+        matchesCity &&
+        matchesServiceType &&
+        matchesEducationType &&
+        matchesSearch
+      );
     });
-  }, [activeLocation, events, searchValue]);
+  }, [
+    activeCity,
+    activeEducationType,
+    activeServiceType,
+    searchValue,
+    services,
+  ]);
 
   function resetFilters() {
     setSearchValue("");
-    setActiveLocation("All");
+    setActiveCity("All");
+    setActiveServiceType("All");
+    setActiveEducationType("All");
   }
 
   return (
@@ -138,48 +165,110 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         </div>
 
         <div className="marketplace-tools">
-          <label htmlFor="marketplace-search">Search events</label>
+          <label htmlFor="marketplace-search">Search the marketplace</label>
           <input
             id="marketplace-search"
             type="search"
-            placeholder="Search events, hosts, or locations"
+            placeholder="Search skills, hosts, or locations"
             value={searchValue}
             onChange={(event) => setSearchValue(event.target.value)}
           />
         </div>
 
-        <div
-          className="category-tabs"
-          role="group"
-          aria-label="Filter by location"
-        >
-          {locations.map((location, index) => (
-            <button
-              key={location}
-              className={`${LOCATION_TAB_COLOURS[index % LOCATION_TAB_COLOURS.length]} ${activeLocation === location ? "active" : ""}`.trim()}
-              type="button"
-              onClick={() => setActiveLocation(location)}
-              aria-pressed={activeLocation === location}
+        <div className="marketplace-filters" aria-label="Marketplace filters">
+          <button
+            className={`marketplace-filter-all ${
+              activeCity === "All" &&
+              activeServiceType === "All" &&
+              activeEducationType === "All"
+                ? "active"
+                : ""
+            }`}
+            type="button"
+            onClick={resetFilters}
+            aria-pressed={
+              activeCity === "All" &&
+              activeServiceType === "All" &&
+              activeEducationType === "All"
+            }
+          >
+            All
+          </button>
+
+          <label
+            className={`marketplace-filter marketplace-filter-city ${activeCity !== "All" ? "active" : ""}`}
+          >
+            <span>City</span>
+            <select
+              value={activeCity}
+              onChange={(event) => setActiveCity(event.target.value)}
+              aria-label="Filter by city"
             >
-              {location}
-            </button>
-          ))}
+              <option value="All">All cities</option>
+              {cities.map((city) => (
+                <option value={city} key={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label
+            className={`marketplace-filter marketplace-filter-event ${activeServiceType !== "All" ? "active" : ""}`}
+          >
+            <span>Event</span>
+            <select
+              value={activeServiceType}
+              onChange={(event) =>
+                setActiveServiceType(event.target.value as SERVICETYPE | "All")
+              }
+              aria-label="Filter by service type"
+            >
+              <option value="All">All types</option>
+              <option value={SERVICETYPE.EVENT}>Events</option>
+              <option value={SERVICETYPE.TASK}>Tasks</option>
+            </select>
+          </label>
+
+          <label
+            className={`marketplace-filter marketplace-filter-level ${activeEducationType !== "All" ? "active" : ""}`}
+          >
+            <span>Level</span>
+            <select
+              value={activeEducationType}
+              onChange={(event) =>
+                setActiveEducationType(
+                  event.target.value === "All"
+                    ? "All"
+                    : (Number(event.target.value) as EDUCATIONTYPE),
+                )
+              }
+              aria-label="Filter by education level"
+            >
+              <option value="All">All levels</option>
+              {EDUCATION_LEVELS.map((educationType) => (
+                <option value={educationType} key={educationType}>
+                  {educationTypeToLabel(educationType)}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
 
         <div className="results-line" aria-live="polite">
-          <span>{String(filteredEvents.length).padStart(2, "0")} results</span>
-          <span>Community events</span>
+          <span>{String(filteredServices.length).padStart(2, "0")} results</span>
+          <span>Community listings</span>
         </div>
 
         {isLoading ? (
           <div className="empty-state" aria-live="polite">
             <span>...</span>
-            <h2>LOADING EVENTS</h2>
+            <h2>LOADING MARKETPLACE</h2>
           </div>
         ) : error ? (
           <div className="empty-state" role="alert">
             <span>!</span>
-            <h2>EVENTS UNAVAILABLE</h2>
+            <h2>MARKETPLACE UNAVAILABLE</h2>
             <p>{error}</p>
             <button
               type="button"
@@ -189,17 +278,17 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               Try again
             </button>
           </div>
-        ) : filteredEvents.length ? (
+        ) : filteredServices.length ? (
           <div className="event-grid">
-            {filteredEvents.map((event, index) => (
-              <EventCard event={event} index={index} key={event.id} />
+            {filteredServices.map((service, index) => (
+              <EventCard event={service} index={index} key={service.id} />
             ))}
           </div>
         ) : (
           <div className="empty-state">
             <span>00</span>
-            <h2>NO EVENTS FOUND</h2>
-            <p>Try a different search term or browse every location.</p>
+            <h2>NO LISTINGS FOUND</h2>
+            <p>Try a different search term or reset the filters.</p>
             <button type="button" className="button button-solid" onClick={resetFilters}>
               Reset filters
             </button>
