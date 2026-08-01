@@ -67,7 +67,7 @@ export default function EventCard({ event, index }: EventCardProps) {
             src={event.image}
             alt={`${event.title} event`}
             fill
-            sizes="(max-width: 720px) 100vw, (max-width: 1080px) 50vw, 33vw"
+            sizes="(max-width: 720px) 100vw, (max-width: 1080px) 50vw, 25vw"
           />
           <span className="card-number">
             {String(index + 1).padStart(2, "0")}
