@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SkillSwap — Learn locally, teach generously",
+  title: "SkillSwap",
   description:
     "Discover workshops, share practical skills, and learn from people across Auckland.",
 };

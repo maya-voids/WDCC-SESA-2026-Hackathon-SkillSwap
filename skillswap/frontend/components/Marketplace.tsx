@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import EventCard from "../../components/EventCard";
+import iconImage from "../../app/icon.png";
+import graphicImage from "../../app/graphic.png";
 import {
   CITY,
   EDUCATIONTYPE,
@@ -77,6 +79,26 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
     };
   }, [reloadKey]);
 
+  useEffect(() => {
+    if (!isShareFormOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    function closeOnEscape(keyEvent: KeyboardEvent) {
+      if (keyEvent.key === "Escape" && !isPublishing) {
+        setIsShareFormOpen(false);
+      }
+    }
+
+    window.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [isPublishing, isShareFormOpen]);
+
   const filteredServices = useMemo(() => {
     const query = searchValue.trim().toLowerCase();
 
@@ -95,6 +117,8 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           service.description,
           service.author,
           service.location,
+          service.address,
+          service.type,
           ...service.tags,
         ].some((value) => value.toLowerCase().includes(query));
 
@@ -120,13 +144,23 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
     setActiveEducationType("All");
   }
 
+  function closeShareForm() {
+    if (!isPublishing) {
+      setIsShareFormOpen(false);
+    }
+  }
+
   return (
     <main>
       <header className="site-header">
         <a className="wordmark" href="#workshops" aria-label="SkillSwap home">
-          <Image src="/icon.png" alt="SkillSwap" width={50} height={50} />
+          <Image src={iconImage} alt="SkillSwap" width={50} height={50} />
         </a>
         <div className="header-actions">
+          <div className="mock-credits" aria-label="Current balance: 1,000 credits">
+            <strong>1,000</strong>
+            <span aria-hidden="true">✦</span>
+          </div>
           <div className="mock-account" aria-label="Signed in as Alex Morgan">
             <div className="mock-account-summary">
               <span className="mock-account-avatar" aria-hidden="true">AM</span>
@@ -162,9 +196,20 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         aria-labelledby="workshops-heading"
       >
         <div className="workshop-heading-row">
-          <div>
-            <h3 className="eyebrow" >Explore the marketplace</h3>
-            <h1 id="workshops-heading">SKILLS NEAR YOU</h1>
+          <div className="heading-block">
+            <div className="heading-copy">
+              <p className="eyebrow">Explore the marketplace</p>
+              <h1 id="workshops-heading">SKILLS NEAR YOU</h1>
+            </div>
+            <Image
+              src={graphicImage}
+              className="graphicImage"
+              alt=""
+              width={320}
+              height={220}
+              sizes="(max-width: 720px) 30vw, 320px"
+              style={{ height: "auto" }}
+            />
           </div>
         </div>
 
@@ -311,7 +356,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           role="presentation"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) {
-              setIsShareFormOpen(false);
+              closeShareForm();
             }
           }}
         >
@@ -329,8 +374,9 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               <button
                 className="share-skill-close"
                 type="button"
-                onClick={() => setIsShareFormOpen(false)}
+                onClick={closeShareForm}
                 aria-label="Close share a skill form"
+                disabled={isPublishing}
               >
                 ×
               </button>
@@ -344,6 +390,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
                 const image = formData.get("image");
                 const duration = String(formData.get("duration"));
                 const seats = Number(formData.get("seats"));
+                const scheduledTime = String(formData.get("time"));
 
                 if (!(image instanceof File) || image.size === 0) {
                   setShareError("Please select an image for your skill.");
@@ -359,19 +406,25 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
                     image,
                     title: String(formData.get("title")),
                     location: formData.get("city") as CITY,
-                    address: String(formData.get("location")),
+                    address: String(formData.get("address")),
                     description: `${String(formData.get("description"))}\n\n${duration} · ${seats} seats available`,
                     author: "Alex Morgan",
-                    type: SERVICETYPE.WORKSHOP,
-                    credit: 0,
+                    type: formData.get("serviceType") as SERVICETYPE,
+                    credit: Number(formData.get("credit")),
                     tags: [String(formData.get("category")) as SERVICETAGS],
-                    time: new Date().toISOString(),
-                    eduType: EDUCATIONTYPE.FIRST_YEAR,
+                    time: new Date(scheduledTime).toISOString(),
+                    eduType: Number(
+                      formData.get("educationType"),
+                    ) as EDUCATIONTYPE,
                   });
                   setIsShareFormOpen(false);
                   setReloadKey((key) => key + 1);
-                } catch {
-                  setShareError("Your skill could not be published. Please try again.");
+                } catch (publishError) {
+                  setShareError(
+                    publishError instanceof Error
+                      ? publishError.message
+                      : "Your skill could not be published. Please try again.",
+                  );
                 } finally {
                   setIsPublishing(false);
                 }
@@ -384,17 +437,23 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
 
               <label className="share-skill-field">
                 <span>Address</span>
-                <input name="location" type="text" placeholder="e.g. 12 Cuba Street" required />
+                <input
+                  name="address"
+                  type="text"
+                  placeholder="e.g. 12 Cuba Street"
+                  required
+                />
               </label>
 
               <label className="share-skill-field">
                 <span>City</span>
                 <select name="city" defaultValue="" required>
                   <option value="" disabled>Select a city</option>
-                  <option value={CITY.AUCKLAND}>Auckland</option>
-                  <option value={CITY.HAMILTON}>Hamilton</option>
-                  <option value={CITY.CHRISTCHURCH}>Christchurch</option>
-                  <option value={CITY.WELLINGTON}>Wellington</option>
+                  {CITIES.map((city) => (
+                    <option value={city} key={city}>
+                      {city}
+                    </option>
+                  ))}
                 </select>
               </label>
 
@@ -409,6 +468,34 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               </label>
 
               <label className="share-skill-field">
+                <span>Service type</span>
+                <select name="serviceType" defaultValue="" required>
+                  <option value="" disabled>
+                    Select a service type
+                  </option>
+                  {SERVICE_TYPES.map((serviceType) => (
+                    <option value={serviceType} key={serviceType}>
+                      {serviceTypeToLabel(serviceType)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="share-skill-field">
+                <span>Education level</span>
+                <select name="educationType" defaultValue="" required>
+                  <option value="" disabled>
+                    Select an education level
+                  </option>
+                  {EDUCATION_LEVELS.map((educationType) => (
+                    <option value={educationType} key={educationType}>
+                      {educationTypeToLabel(educationType)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="share-skill-field">
                 <span>Duration</span>
                 <input name="duration" type="text" placeholder="e.g. 2 hours" required />
               </label>
@@ -416,6 +503,23 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               <label className="share-skill-field">
                 <span>Seats available</span>
                 <input name="seats" type="number" min="1" placeholder="e.g. 12" required />
+              </label>
+
+              <label className="share-skill-field">
+                <span>Date and time</span>
+                <input name="time" type="datetime-local" required />
+              </label>
+
+              <label className="share-skill-field">
+                <span>Credits</span>
+                <input
+                  name="credit"
+                  type="number"
+                  min="0"
+                  step="1"
+                  defaultValue="0"
+                  required
+                />
               </label>
 
               <label className="share-skill-field share-skill-field-full">
@@ -443,7 +547,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
                 <button
                   className="button button-ghost"
                   type="button"
-                  onClick={() => setIsShareFormOpen(false)}
+                  onClick={closeShareForm}
                   disabled={isPublishing}
                 >
                   Cancel

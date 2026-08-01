@@ -4,19 +4,21 @@
 //
 
 // !!!!!!!!!!!!!!!!! TO RUN MOCK DATA !!!!!!!!!!!!!!!!!
-// Where these functions read/write data is controlled by DATA_SOURCE in ./dataSource.ts.
+// Which datasets are read is controlled by DATA_SOURCE in ./dataSource.ts.
+// New marketplace listings are always published to events.json.
 // Toggle it from the command line with `node backend/toggle.mjs <mock|standard>`
 // (see backend/toggle.mjs for full usage).
 
 import { DATA_SOURCE } from "./dataSource";
 
-// Endpoints DataUtils talks to. In "mock" mode they point at the mock datasets
-// (backend/dataStorage/tasksMock.json & backend/dataStorage/eventsMock.json);
-// in "standard" mode at the real datasets (backend/dataStorage/tasks.json &
-// backend/dataStorage/events.json).
+// Read endpoints DataUtils talks to. Mock mode combines seeded mock events with
+// events.json so newly published listings remain visible after a reload.
 const TASKS_ENDPOINT = DATA_SOURCE === "mock" ? "/tasksMock.json" : "/tasks.json";
-const EVENTS_ENDPOINT =
-  DATA_SOURCE === "mock" ? "/eventsMock.json" : "/events.json";
+const PUBLISHED_EVENTS_ENDPOINT = "/events.json";
+const EVENT_READ_ENDPOINTS =
+  DATA_SOURCE === "mock"
+    ? ["/eventsMock.json", PUBLISHED_EVENTS_ENDPOINT]
+    : [PUBLISHED_EVENTS_ENDPOINT];
 
 export enum SERVICETYPE {
   WORKSHOP = "WORKSHOP",
@@ -38,6 +40,8 @@ export enum CITY {
   AUCKLAND = "Auckland",
   CHRISTCHURCH = "Christchurch",
   WELLINGTON = "Wellington",
+  DUNEDIN = "Dunedin",
+  PUKEKOHE = "Pukekohe",
 }
 
 /** Education level, ordered by a numbered index (1 = first-year … 3 = graduate). */
@@ -115,14 +119,29 @@ export async function sendServiceToServer(data: PostData): Promise<void> {
     formData.append("time", data.time);
     formData.append("eduType", String(data.eduType));
 
-    // SERVICETYPE no longer distinguishes tasks from events, so every posting is
-    // a marketplace listing and goes to the events endpoint.
-    const destination = EVENTS_ENDPOINT;
-
-    await fetch(destination, {
+    // Published listings always go to the real events dataset. In mock mode the
+    // marketplace reads both seeded mock events and these published events.
+    const response = await fetch(PUBLISHED_EVENTS_ENDPOINT, {
       method: "POST",
       body: formData,
     });
+
+    if (!response.ok) {
+      let serverMessage = "";
+
+      try {
+        const payload = (await response.json()) as { error?: unknown };
+        if (typeof payload.error === "string") {
+          serverMessage = `: ${payload.error}`;
+        }
+      } catch {
+        // The status code still provides a useful error when the body is not JSON.
+      }
+
+      throw new Error(
+        `Failed to publish service (${response.status})${serverMessage}`,
+      );
+    }
   } catch (error) {
     console.error("Error sending data to server:", error);
     throw error;
@@ -138,11 +157,23 @@ export async function getTasksFromServer(): Promise<Service[]> {
 }
 
 export async function getEventsFromServer(): Promise<Service[]> {
-  const response = await fetch(EVENTS_ENDPOINT);
-  if (!response.ok) {
-    throw new Error(`Failed to load events (${response.status})`);
+  const responses = await Promise.all(
+    EVENT_READ_ENDPOINTS.map((endpoint) => fetch(endpoint)),
+  );
+
+  const failedResponse = responses.find((response) => !response.ok);
+  if (failedResponse) {
+    throw new Error(`Failed to load events (${failedResponse.status})`);
   }
-  return response.json();
+
+  const eventGroups = await Promise.all(
+    responses.map((response) => response.json() as Promise<Service[]>),
+  );
+  const eventsById = new Map(
+    eventGroups.flat().map((service) => [service.id, service]),
+  );
+
+  return [...eventsById.values()];
 }
 
 export async function deleteTaskInServer(id: string): Promise<void> {

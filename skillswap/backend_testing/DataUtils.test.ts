@@ -11,6 +11,13 @@ import {
   SERVICETYPE,
   type PostData,
 } from "../backend/DataUtils";
+import { DATA_SOURCE } from "../backend/dataSource";
+
+const TASKS_ENDPOINT = DATA_SOURCE === "mock" ? "/tasksMock.json" : "/tasks.json";
+const EVENT_READ_ENDPOINTS =
+  DATA_SOURCE === "mock"
+    ? ["/eventsMock.json", "/events.json"]
+    : ["/events.json"];
 
 describe("DataUtils", () => {
   const fetchMock = vi.fn();
@@ -48,10 +55,12 @@ describe("DataUtils", () => {
       await expect(sendServiceToServer(makePost())).resolves.toBeUndefined();
     });
 
-    it("resolves even when the server returns an error status", async () => {
+    it("rejects when the server returns an error status", async () => {
       fetchMock.mockResolvedValue(new Response("boom", { status: 500 }));
 
-      await expect(sendServiceToServer(makePost())).resolves.toBeUndefined();
+      await expect(sendServiceToServer(makePost())).rejects.toThrow(
+        "Failed to publish service (500)",
+      );
     });
 
     it("rejects with the original error and logs it when the request fails", async () => {
@@ -139,14 +148,14 @@ describe("DataUtils", () => {
       await expect(getTasksFromServer()).resolves.toEqual([]);
     });
 
-    it("fetches /tasks.json with a GET request", async () => {
+    it("fetches the configured tasks endpoint with a GET request", async () => {
       fetchMock.mockResolvedValue(new Response("[]", { status: 200 }));
 
       await getTasksFromServer();
 
       expect(fetchMock).toHaveBeenCalledTimes(1);
       const [url, init] = fetchMock.mock.calls[0];
-      expect(url).toBe("/tasks.json");
+      expect(url).toBe(TASKS_ENDPOINT);
       expect(init?.method ?? "GET").toBe("GET");
     });
 
@@ -175,28 +184,35 @@ describe("DataUtils", () => {
           eduType: EDUCATIONTYPE.GRADUATE,
         },
       ];
-      fetchMock.mockResolvedValue(
-        new Response(JSON.stringify(events), { status: 200 }),
+      fetchMock.mockImplementation(
+        () => Promise.resolve(new Response(JSON.stringify(events), { status: 200 })),
       );
 
       await expect(getEventsFromServer()).resolves.toEqual(events);
     });
 
     it("returns an empty array when the server has no events", async () => {
-      fetchMock.mockResolvedValue(new Response("[]", { status: 200 }));
+      fetchMock.mockImplementation(
+        () => Promise.resolve(new Response("[]", { status: 200 })),
+      );
 
       await expect(getEventsFromServer()).resolves.toEqual([]);
     });
 
-    it("fetches /events.json with a GET request", async () => {
-      fetchMock.mockResolvedValue(new Response("[]", { status: 200 }));
+    it("fetches the configured event endpoints with GET requests", async () => {
+      fetchMock.mockImplementation(
+        () => Promise.resolve(new Response("[]", { status: 200 })),
+      );
 
       await getEventsFromServer();
 
-      expect(fetchMock).toHaveBeenCalledTimes(1);
-      const [url, init] = fetchMock.mock.calls[0];
-      expect(url).toBe("/events.json");
-      expect(init?.method ?? "GET").toBe("GET");
+      expect(fetchMock).toHaveBeenCalledTimes(EVENT_READ_ENDPOINTS.length);
+      expect(fetchMock.mock.calls.map(([url]) => url)).toEqual(
+        EVENT_READ_ENDPOINTS,
+      );
+      fetchMock.mock.calls.forEach(([, init]) => {
+        expect(init?.method ?? "GET").toBe("GET");
+      });
     });
 
     it("throws when the request fails", async () => {
@@ -226,7 +242,7 @@ describe("DataUtils", () => {
 
       expect(fetchMock).toHaveBeenCalledTimes(1);
       const [url, init] = fetchMock.mock.calls[0];
-      expect(url).toBe("/tasks.json");
+      expect(url).toBe(TASKS_ENDPOINT);
       expect(init.method).toBe("DELETE");
 
       const formData = init.body as FormData;
