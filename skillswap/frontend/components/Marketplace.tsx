@@ -5,7 +5,14 @@ import EventList from "@/components/EventList";
 import type { EventData } from "@/components/EventCard";
 import mockEvents from "../../backend/mockdata.json";
 
-const CATEGORIES = ["All", "Workshops", "Hackathons", "Tasks"];
+const CATEGORIES = [
+  { label: "All", color: "tab-all" },
+  { label: "Age", color: "tab-age" },
+  { label: "Time/Date", color: "tab-time" },
+  { label: "Location", color: "tab-location" },
+  { label: "Skill Level", color: "tab-skill" },
+  { label: "IQ Amount", color: "tab-iq" },
+];
 
 const MOCK_EVENTS: EventData[] = mockEvents;
 
@@ -37,7 +44,8 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
     <main>
       <header className="site-header">
         <a className="wordmark" href="#workshops" aria-label="SkillSwap home">
-          SKILL<span>↔</span>SWAP
+                <img src="./icon.png" width="50"/>
+          
         </a>
         <div className="header-actions">
           <div className="mock-account" aria-label="Signed in as Alex Morgan">
@@ -69,8 +77,8 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
       >
         <div className="workshop-heading-row">
           <div>
-            <p className="eyebrow">Explore the marketplace</p>
-            <h1 id="workshops-heading">EVENTS NEAR YOU</h1>
+            <h3 className="eyebrow" >Explore the marketplace</h3>
+            <h1 id="workshops-heading">SKILLS NEAR YOU</h1>
           </div>
         </div>
 
@@ -92,13 +100,13 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         >
           {CATEGORIES.map((category) => (
             <button
-              key={category}
-              className={activeCategory === category ? "active" : ""}
+              key={category.label}
+              className={`${category.color} ${activeCategory === category.label ? "active" : ""}`.trim()}
               type="button"
-              onClick={() => setActiveCategory(category)}
-              aria-pressed={activeCategory === category}
+              onClick={() => setActiveCategory(category.label)}
+              aria-pressed={activeCategory === category.label}
             >
-              {category}
+              {category.label}
             </button>
           ))}
         </div>
