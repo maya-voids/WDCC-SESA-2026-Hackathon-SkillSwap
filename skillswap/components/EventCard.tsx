@@ -141,6 +141,7 @@ export default function EventCard({ event, index }: EventCardProps) {
               <Image
                 src={event.image}
                 alt={`${event.title} preview`}
+                fill
                 sizes="(max-width: 700px) 90vw, 520px"
               />
             </div>
