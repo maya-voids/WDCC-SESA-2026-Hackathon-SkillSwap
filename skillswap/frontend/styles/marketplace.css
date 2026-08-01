@@ -125,8 +125,56 @@ input:focus-visible {
 
 .header-actions {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   gap: 0.5rem;
+}
+
+.mock-account {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mock-account-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.mock-account-avatar {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  place-items: center;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.mock-account-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  white-space: nowrap;
+}
+
+.mock-account-copy strong,
+.mock-account-label {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.mock-account-label {
+  color: var(--muted);
+  font-size: 0.52rem;
 }
 
 .button {
@@ -989,14 +1037,27 @@ footer {
     padding: 0 1rem;
   }
 
-  .header-actions .button-ghost {
-    display: none;
-  }
-
   .header-actions .button-solid {
     min-height: 36px;
     padding: 0.65rem 0.8rem;
     font-size: 0.58rem;
+  }
+
+  .mock-account-copy {
+    display: none;
+  }
+
+  .mock-account-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .mock-sign-out {
+    padding-inline: 0.65rem;
+  }
+
+  .mock-account + .button-solid {
+    display: none;
   }
 
   .hero {
