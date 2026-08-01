@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   filterServicesByCredit,
+  filterServicesByEnumValue,
   sortServicesByCreditAscending,
   sortServicesByEduTypeAscending,
   sortServicesByTimeAscending,
@@ -85,6 +86,54 @@ describe("DataQueries", () => {
       expect(
         filterServicesByCredit([pos, neg, zero], 0).map((s) => s.id),
       ).toEqual(["pos", "zero"]);
+    });
+  });
+
+  describe("filterServicesByEnumValue", () => {
+    it("returns only services carrying a given SERVICETAG", () => {
+      const webDev = makeService({
+        id: "web",
+        tags: [SERVICETAGS.WEB_DEVELOPMENT, SERVICETAGS.TYPESCRIPT],
+      });
+      const design = makeService({ id: "design", tags: [SERVICETAGS.WEB_DESIGN] });
+
+      expect(
+        filterServicesByEnumValue(
+          [webDev, design],
+          SERVICETAGS.WEB_DEVELOPMENT,
+        ).map((s) => s.id),
+      ).toEqual(["web"]);
+    });
+
+    it("returns only services of a given SERVICETYPE", () => {
+      const task = makeService({ id: "task", type: SERVICETYPE.TASK });
+      const event = makeService({ id: "event", type: SERVICETYPE.EVENT });
+
+      expect(
+        filterServicesByEnumValue([task, event], SERVICETYPE.EVENT).map(
+          (s) => s.id,
+        ),
+      ).toEqual(["event"]);
+    });
+
+    it("returns only services of a given EDUCATIONTYPE", () => {
+      const first = makeService({
+        id: "first",
+        eduType: EDUCATIONTYPE.FIRST_YEAR,
+      });
+      const grad = makeService({ id: "grad", eduType: EDUCATIONTYPE.GRADUATE });
+
+      expect(
+        filterServicesByEnumValue([first, grad], EDUCATIONTYPE.GRADUATE).map(
+          (s) => s.id,
+        ),
+      ).toEqual(["grad"]);
+    });
+
+    it("returns an empty array when no service matches", () => {
+      const task = makeService({ id: "task", type: SERVICETYPE.TASK });
+
+      expect(filterServicesByEnumValue([task], SERVICETYPE.EVENT)).toEqual([]);
     });
   });
 });
