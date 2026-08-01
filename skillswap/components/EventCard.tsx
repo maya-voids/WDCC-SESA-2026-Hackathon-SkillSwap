@@ -23,13 +23,12 @@ export default function EventCard({ event, index }: EventCardProps) {
 
   return (
     <>
-      {/* 1. Main Marketplace Event Card Design */}
       <article 
         className="workshop-card" 
         onClick={() => setIsOpen(true)} 
         style={{ cursor: "pointer" }}
       >
-        <div className="card-image" style={{ position: 'relative', width: '100%', height: '200px', overflow: 'hidden', borderRadius: '8px' }}>
+        <div className="card-image" style={{ position: 'relative', width: '100%', height: '200px', overflow: 'hidden' }}>
           <img
             src={event.image}
             alt={`${event.title} workshop`}
@@ -44,19 +43,19 @@ export default function EventCard({ event, index }: EventCardProps) {
         </div>
         
         <div className="card-body">
-          <p className="card-category">
+          <p className="card-category" style={{color: 'white'}}>
             {event.category} / {event.location}
           </p>
-          <h2>{event.title}</h2>
+          <h2 style={{color: 'white'}}>{event.title}</h2>
           <div className="metadata card-metadata">
-            <span>
+            <span style={{color: 'white'}}>
               <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
                 <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.7" />
                 <path d="M12 7v5l3 2" stroke="currentColor" strokeWidth="1.7" />
               </svg>
               {event.duration}
             </span>
-            <span>
+            <span style={{color: 'white'}}>
               <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
                 <circle cx="9" cy="9" r="3" stroke="currentColor" strokeWidth="1.7" />
                 <circle cx="17" cy="10" r="2.2" stroke="currentColor" strokeWidth="1.7" />
@@ -73,7 +72,7 @@ export default function EventCard({ event, index }: EventCardProps) {
         </div>
       </article>
 
-      {/* 2. Redesigned Modifying Modal Overlay */}
+
       {isOpen && (
         <div 
           onClick={() => setIsOpen(false)}
@@ -83,30 +82,28 @@ export default function EventCard({ event, index }: EventCardProps) {
             left: 0,
             width: '100vw',
             height: '100vh',
-            backgroundColor: 'rgba(0, 0, 0, 0.4)', // Muted, clean dimming backdrop
-            backdropFilter: 'blur(4px)', // Optional: modern premium layout blurring
+            backgroundColor: 'rgba(0, 0, 0, 0.4)', 
+            backdropFilter: 'blur(4px)',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             zIndex: 2000,
           }}
         >
-          {/* Main Container leveraging your page's structural section blocks */}
           <div 
             onClick={(e) => e.stopPropagation()}
             className="workshop-section"
             style={{
               backgroundColor: '#fff',
               padding: '40px',
-              borderRadius: '0px', // Matches the sharp architectural style of the header tabs
-              border: '2px solid #000', // Matches clean line styling design aesthetics
+              borderRadius: '0px',
+              border: '2px solid #000', 
               width: '90%',
               maxWidth: '600px',
-              boxShadow: '10px 10px 0px #000', // Sharp brut-minimalist shadow offset 
+              boxShadow: '10px 10px 0px #000', 
               position: 'relative',
             }}
           >
-            {/* Native Close Button Trigger matching card-arrow styles */}
             <button 
               onClick={() => setIsOpen(false)}
               className="card-arrow"
@@ -114,7 +111,7 @@ export default function EventCard({ event, index }: EventCardProps) {
                 position: 'absolute',
                 top: '24px',
                 right: '24px',
-                transform: 'rotate(45deg)' // Simple transform trick to make your arrow turn into a close sign
+                transform: 'rotate(45deg)' 
               }}
             >
               <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
@@ -122,7 +119,6 @@ export default function EventCard({ event, index }: EventCardProps) {
               </svg>
             </button>
 
-            {/* Modal Content Structure aligned with Marketplace typography */}
             <div className="workshop-heading-row" style={{ marginBottom: '24px', display: 'block' }}>
               <p className="eyebrow">{event.category} / {event.location}</p>
               <h1 style={{ fontSize: '32px', margin: '8px 0 0 0', textTransform: 'uppercase' }}>
@@ -130,7 +126,6 @@ export default function EventCard({ event, index }: EventCardProps) {
               </h1>
             </div>
 
-            {/* Visual Hero Area matching your card layouts */}
             <div style={{ position: 'relative', width: '100%', height: '240px', overflow: 'hidden', marginBottom: '24px', border: '1px solid #000' }}>
               <img
                 src={event.image}
@@ -139,12 +134,10 @@ export default function EventCard({ event, index }: EventCardProps) {
               />
             </div>
 
-            {/* Description Text matching global styling typography */}
             <div style={{ marginBottom: '32px', lineHeight: '1.6' }}>
               <p style={{ color: '#000', fontSize: '16px' }}>{event.description}</p>
             </div>
 
-            {/* Combined Footer & Meta Row matching the lower card bodies */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', paddingTop: '20px', borderTop: '1px solid #eee' }}>
               <div className="metadata card-metadata" style={{ margin: 0 }}>
                 <span>

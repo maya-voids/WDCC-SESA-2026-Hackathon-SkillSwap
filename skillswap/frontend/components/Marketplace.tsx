@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import MockLogin from "./mock-login"; // Keeping your structural imports intact
+import MockLogin from "./mock-login";
 import EventList from "@/components/EventList";
 
 const CATEGORIES = [
