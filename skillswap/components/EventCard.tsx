@@ -2,11 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import {
-  educationTypeToLabel,
-  SERVICETYPE,
-  type Service,
-} from "../backend/DataUtils";
+import { educationTypeToLabel, type Service } from "../backend/DataUtils";
 
 interface EventCardProps {
   event: Service;
@@ -29,8 +25,9 @@ export default function EventCard({ event, index }: EventCardProps) {
   const eventTime = formatEventTime(event.time);
   const educationLevel = educationTypeToLabel(event.eduType);
   const skillLabel = event.tags.join(" / ");
-  const listingLabel =
-    event.type === SERVICETYPE.EVENT ? "Event" : "Task";
+  const listingLabel = event.type
+    .toLowerCase()
+    .replace(/\b\w/g, (character) => character.toUpperCase());
 
   useEffect(() => {
     if (!isOpen) return;
@@ -164,17 +161,11 @@ export default function EventCard({ event, index }: EventCardProps) {
                 type="button"
                 className="button button-solid"
                 onClick={() => {
-                  alert(
-                    event.type === SERVICETYPE.EVENT
-                      ? `Successfully registered for ${event.title}!`
-                      : `Successfully accepted ${event.title}!`,
-                  );
+                  alert(`Successfully joined ${event.title}!`);
                   setIsOpen(false);
                 }}
               >
-                {event.type === SERVICETYPE.EVENT
-                  ? "Confirm registration"
-                  : "Accept task"}{" "}
+                Confirm participation{" "}
                 <span>↗</span>
               </button>
             </div>

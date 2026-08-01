@@ -19,15 +19,23 @@ type MarketplaceProps = {
   onLogout: () => void;
 };
 
-const EDUCATION_LEVELS = [
-  EDUCATIONTYPE.FIRST_YEAR,
-  EDUCATIONTYPE.SECOND_YEAR,
-  EDUCATIONTYPE.GRADUATE,
-] as const;
+const CITIES = Object.values(CITY);
+
+const EDUCATION_LEVELS = Object.values(EDUCATIONTYPE).filter(
+  (value): value is EDUCATIONTYPE => typeof value === "number",
+);
+
+const SERVICE_TYPES = Object.values(SERVICETYPE);
+
+function serviceTypeToLabel(serviceType: SERVICETYPE): string {
+  return serviceType
+    .toLowerCase()
+    .replace(/\b\w/g, (character) => character.toUpperCase());
+}
 
 export default function Marketplace({ onLogout }: MarketplaceProps) {
   const [services, setServices] = useState<Service[]>([]);
-  const [activeCity, setActiveCity] = useState("All");
+  const [activeCity, setActiveCity] = useState<CITY | "All">("All");
   const [activeServiceType, setActiveServiceType] = useState<
     SERVICETYPE | "All"
   >("All");
@@ -68,11 +76,6 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
       cancelled = true;
     };
   }, [reloadKey]);
-
-  const cities = useMemo(
-    () => [...new Set(services.map((service) => service.location))].sort(),
-    [services],
-  );
 
   const filteredServices = useMemo(() => {
     const query = searchValue.trim().toLowerCase();
@@ -202,11 +205,13 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
             <span>City</span>
             <select
               value={activeCity}
-              onChange={(event) => setActiveCity(event.target.value)}
+              onChange={(event) =>
+                setActiveCity(event.target.value as CITY | "All")
+              }
               aria-label="Filter by city"
             >
               <option value="All">All cities</option>
-              {cities.map((city) => (
+              {CITIES.map((city) => (
                 <option value={city} key={city}>
                   {city}
                 </option>
@@ -226,8 +231,11 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               aria-label="Filter by service type"
             >
               <option value="All">All types</option>
-              <option value={SERVICETYPE.EVENT}>Events</option>
-              <option value={SERVICETYPE.TASK}>Tasks</option>
+              {SERVICE_TYPES.map((serviceType) => (
+                <option value={serviceType} key={serviceType}>
+                  {serviceTypeToLabel(serviceType)}
+                </option>
+              ))}
             </select>
           </label>
 
