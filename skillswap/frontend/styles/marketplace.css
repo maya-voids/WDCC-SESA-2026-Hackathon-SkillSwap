@@ -203,7 +203,10 @@ input:focus-visible {
   letter-spacing: 0.06em;
   line-height: 1;
   text-transform: uppercase;
-  transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
 }
 
 .button:hover {
@@ -296,7 +299,9 @@ input:focus-visible {
   cursor: pointer;
   font-size: 1.9rem;
   line-height: 1;
-  transition: background 160ms ease, color 160ms ease;
+  transition:
+    background 160ms ease,
+    color 160ms ease;
 }
 
 .share-skill-close:hover {
@@ -602,7 +607,9 @@ input:focus-visible {
   font-weight: 700;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  transition: background 160ms ease, color 160ms ease;
+  transition:
+    background 160ms ease,
+    color 160ms ease;
 }
 
 .search-form button:hover {
@@ -705,7 +712,11 @@ input:focus-visible {
 .featured-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.04) 70%);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.92),
+    rgba(0, 0, 0, 0.04) 70%
+  );
 }
 
 .featured-content {
@@ -781,7 +792,7 @@ input:focus-visible {
   display: flex;
   flex-wrap: wrap;
   gap: 1.2rem;
-  font-family: var(--font-geist-mono), monospace;
+  font-family: var(--font-geist-sans), arial, sans-serif;
   font-size: 0.66rem;
   text-transform: uppercase;
 }
@@ -1011,7 +1022,9 @@ input:focus-visible {
   font-size: 0.65rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  transition: background 140ms ease, color 140ms ease;
+  transition:
+    background 140ms ease,
+    color 140ms ease;
 }
 
 .category-tabs button:last-child {
@@ -1194,7 +1207,7 @@ input:focus-visible {
 .event-modal-footer .card-metadata {
   min-height: 0;
   padding: 0;
-  color: var(--black);
+  color: var(--gray);
 }
 
 .event-card:hover .card-image > img {
@@ -1239,7 +1252,9 @@ input:focus-visible {
   cursor: pointer;
   opacity: 0;
   transform: translate(-5px, 5px);
-  transition: opacity 180ms ease, transform 180ms ease;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
 }
 
 .card-arrow svg {
@@ -1299,19 +1314,23 @@ input:focus-visible {
 .card-metadata {
   min-height: 34px;
   padding-bottom: 1.5rem;
-  color: var(--muted);
+  color: var(--gray);
 }
 
 .card-footer {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 1.25rem;
   padding-top: 1.5rem;
-  border-top: 1px solid var(--line);
   margin-top: auto;
 }
 
 .card-footer > strong {
+  display: block;
+  width: 100%;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--line);
   font-family: "Arial Narrow", var(--font-geist-sans), sans-serif;
   font-size: 1.4rem;
   letter-spacing: -0.04em;
