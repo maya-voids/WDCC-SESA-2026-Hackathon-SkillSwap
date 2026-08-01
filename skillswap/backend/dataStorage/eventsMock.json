@@ -135,5 +135,99 @@
     ],
     "time": "2026-08-01T07:58:16.338Z",
     "eduType": 1
+  },
+  {
+    "id": "mock-event-7",
+    "image": "/events/partly-wdcc-hackathon.jpg",
+    "title": "Partly x WDCC Hackathon",
+    "description": "Come along to meet your fellow students, grow your network, and learn about upcoming technology community events.\n\n24 hrs · 30 seats available",
+    "location": "Auckland CBD",
+    "author": "Partly x WDCC",
+    "type": "EVENTS",
+    "credit": 100,
+    "tags": [
+      "Web Development",
+      "TypeScript"
+    ],
+    "time": "2026-08-15T08:00:00.000Z",
+    "eduType": 1
+  },
+  {
+    "id": "mock-event-8",
+    "image": "/events/wdcc-sesa-hackathon.jpg",
+    "title": "WDCC x SESA Hackathon",
+    "description": "Team up, innovate, and build a real-world software proof of concept during an intensive collaborative event.\n\n24 hrs · 80 seats available",
+    "location": "GridAKL",
+    "author": "WDCC x SESA",
+    "type": "EVENTS",
+    "credit": 100,
+    "tags": [
+      "Web Development",
+      "Web Design"
+    ],
+    "time": "2026-08-29T08:00:00.000Z",
+    "eduType": 1
+  },
+  {
+    "id": "mock-event-9",
+    "image": "https://www.aut.ac.nz/__data/assets/image/0011/1143578/hackathon-2026.jpg",
+    "title": "AUT AI Hackathon",
+    "description": "A beginner-friendly practical introduction to semantic HTML and modern responsive CSS layout techniques.\n\n24 hrs · 25 seats available",
+    "location": "South Campus",
+    "author": "Auckland University of Technology",
+    "type": "EVENTS",
+    "credit": 100,
+    "tags": [
+      "Web Development",
+      "TypeScript"
+    ],
+    "time": "2026-09-19T08:00:00.000Z",
+    "eduType": 2
+  },
+  {
+    "id": "mock-event-10",
+    "image": "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=900&h=700&fit=crop&auto=format",
+    "title": "Build Night: Prototype Your Idea",
+    "description": "Bring an early-stage idea and work alongside student developers, designers, and makers to create a working prototype.\n\n4 hrs · 20 seats available",
+    "location": "Auckland",
+    "author": "Campus Makers Collective",
+    "type": "EVENTS",
+    "credit": 80,
+    "tags": [
+      "Web Development",
+      "Web Design"
+    ],
+    "time": "2026-09-08T17:00:00.000Z",
+    "eduType": 1
+  },
+  {
+    "id": "mock-event-11",
+    "image": "https://images.unsplash.com/photo-1426927308491-6380b6a9936f?w=900&h=700&fit=crop&auto=format",
+    "title": "Portfolio and CV Clinic",
+    "description": "Get practical feedback on your portfolio, CV, or GitHub profile from senior students across design, software, and business.\n\n2 hrs · 16 seats available",
+    "location": "Wellington",
+    "author": "Student Careers Network",
+    "type": "EVENTS",
+    "credit": 20,
+    "tags": [
+      "Web Design"
+    ],
+    "time": "2026-09-12T10:00:00.000Z",
+    "eduType": 3
+  },
+  {
+    "id": "mock-event-12",
+    "image": "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=900&h=700&fit=crop&auto=format",
+    "title": "Creative Collaboration Mixer",
+    "description": "Meet students across art, design, technology, music, and entrepreneurship, share your skills, and find a project team.\n\n2 hrs · 40 seats available",
+    "location": "Dunedin",
+    "author": "Otago Creative Community",
+    "type": "EVENTS",
+    "credit": 30,
+    "tags": [
+      "Web Design"
+    ],
+    "time": "2026-09-15T18:30:00.000Z",
+    "eduType": 2
   }
 ]
