@@ -1,17 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import MockLogin from "./mock-login"; // Keeping your structural imports intact
 import EventList from "@/components/EventList";
 import type { EventData } from "@/components/EventCard";
 import mockEvents from "../../backend/mockdata.json";
 
-const CATEGORIES = [
-  "All",
-  "Workshops",
-  "Hackathons",
-  "Tasks",
-];
+const CATEGORIES = ["All", "Workshops", "Hackathons", "Tasks"];
 
 const MOCK_EVENTS: EventData[] = mockEvents;
 
@@ -27,19 +21,17 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
     const query = searchValue.trim().toLowerCase();
 
     return MOCK_EVENTS.filter((event) => {
-      const matchesCategory = activeCategory === "All" || event.category === activeCategory;
+      const matchesCategory =
+        activeCategory === "All" || event.category === activeCategory;
       const matchesSearch =
         !query ||
-        [
-          event.title,
-          event.category,
-          event.location,
-        ].some((value) => value.toLowerCase().includes(query));
+        [event.title, event.category, event.location].some((value) =>
+          value.toLowerCase().includes(query),
+        );
 
       return matchesCategory && matchesSearch;
     });
   }, [activeCategory, searchValue]);
-
 
   return (
     <main>
@@ -48,12 +40,33 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           SKILL<span>↔</span>SWAP
         </a>
         <div className="header-actions">
-          <MockLogin />
-          <button className="button button-solid" type="button">Share a skill</button>
+          <div className="mock-account" aria-label="Signed in as Alex Morgan">
+            <div className="mock-account-summary">
+              <span className="mock-account-avatar" aria-hidden="true">AM</span>
+              <span className="mock-account-copy">
+                <span className="mock-account-label">Signed in</span>
+                <strong>Alex Morgan</strong>
+              </span>
+            </div>
+            <button
+              className="button button-ghost mock-sign-out"
+              type="button"
+              onClick={onLogout}
+            >
+              Sign out
+            </button>
+          </div>
+          <button className="button button-solid" type="button">
+            Share a skill
+          </button>
         </div>
       </header>
 
-      <section className="workshop-section marketplace-only" id="workshops" aria-labelledby="workshops-heading">
+      <section
+        className="workshop-section marketplace-only"
+        id="workshops"
+        aria-labelledby="workshops-heading"
+      >
         <div className="workshop-heading-row">
           <div>
             <p className="eyebrow">Explore the marketplace</p>
@@ -72,7 +85,11 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           />
         </div>
 
-        <div className="category-tabs" role="group" aria-label="Filter by category">
+        <div
+          className="category-tabs"
+          role="group"
+          aria-label="Filter by category"
+        >
           {CATEGORIES.map((category) => (
             <button
               key={category}
