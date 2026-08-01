@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { SVGProps, useMemo, useState } from "react";
-import MockLogin from "./mock-login";
 
 const CATEGORIES = [
   "All",
@@ -135,7 +134,11 @@ function PeopleIcon(props: IconProps) {
   );
 }
 
-export default function Marketplace() {
+type MarketplaceProps = {
+  onLogout: () => void;
+};
+
+export default function Marketplace({ onLogout }: MarketplaceProps) {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchValue, setSearchValue] = useState("");
 
@@ -176,7 +179,18 @@ export default function Marketplace() {
           <a href="#workshops">About</a>
         </nav>
         <div className="header-actions">
-          <MockLogin />
+          <div className="mock-account" aria-label="Signed in as Alex Morgan">
+            <div className="mock-account-summary">
+              <span className="mock-account-avatar" aria-hidden="true">AM</span>
+              <span className="mock-account-copy">
+                <span className="mock-account-label">Signed in</span>
+                <strong>Alex Morgan</strong>
+              </span>
+            </div>
+            <button className="button button-ghost mock-sign-out" type="button" onClick={onLogout}>
+              Sign out
+            </button>
+          </div>
           <button className="button button-solid" type="button">
             Share a skill
           </button>
