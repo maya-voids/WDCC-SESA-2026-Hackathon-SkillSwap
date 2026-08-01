@@ -1,16 +1,24 @@
 import EventCard, { EventData } from './EventCard';
 
-export default function EventList() {
-  const events: EventData[] = [
-    { id: 1, title: 'Meet&Greet', location: 'Auckland CBD', type: 'workshop' },
-    { id: 2, title: 'WDCCxSESA', location: 'GridAKL', type: 'hackathon' },
-    { id: 3, title: 'HTML&CSS', location: 'Grey Lynn', type: 'workshop' },
-  ];
+interface EventListProps {
+  events: EventData[];
+}
+
+export default function EventList({ events }: EventListProps) {
+  if (events.length === 0) {
+    return (
+      <div className="empty-state">
+        <span>00</span>
+        <h2>NO EVENTS FOUND</h2>
+        <p>Try a different search term or browse every category.</p>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      {events.map((event) => (
-        <EventCard key={event.id} event={event} />
+    <div className="workshop-grid">
+      {events.map((event, index) => (
+        <EventCard key={event.id} event={event} index={index} />
       ))}
     </div>
   );
