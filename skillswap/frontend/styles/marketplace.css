@@ -364,6 +364,19 @@ input:focus-visible {
   border-top: 1px solid var(--line);
 }
 
+.share-skill-error {
+  margin: 0;
+  padding: 0.85rem;
+  border: 1px solid var(--black);
+  font-size: 0.88rem;
+}
+
+.share-skill-actions .button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+  transform: none;
+}
+
 .landing-page {
   min-height: 100vh;
   background: var(--white);

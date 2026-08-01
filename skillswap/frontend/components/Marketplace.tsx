@@ -5,6 +5,7 @@ import { SVGProps, useEffect, useMemo, useState } from "react";
 import {
   EDUCATIONTYPE,
   getEventsFromServer,
+  sendServiceToServer,
   SERVICETAGS,
   SERVICETYPE,
   type Service,
@@ -32,6 +33,8 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
   const [error, setError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
   const [isShareFormOpen, setIsShareFormOpen] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [shareError, setShareError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -113,7 +116,10 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           <button
             className="button button-solid"
             type="button"
-            onClick={() => setIsShareFormOpen(true)}
+            onClick={() => {
+              setShareError(null);
+              setIsShareFormOpen(true);
+            }}
           >
             Share a skill
           </button>
@@ -263,33 +269,42 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
 
             <form
               className="share-skill-form"
-              onSubmit={(event) => {
+              onSubmit={async (event) => {
                 event.preventDefault();
                 const formData = new FormData(event.currentTarget);
                 const image = formData.get("image");
                 const duration = String(formData.get("duration"));
                 const seats = Number(formData.get("seats"));
 
-                setEvents((currentEvents) => [
-                  {
-                    id: String(Date.now()),
+                if (!(image instanceof File) || image.size === 0) {
+                  setShareError("Please select an image for your skill.");
+                  return;
+                }
+
+                setIsPublishing(true);
+                setShareError(null);
+
+                try {
+                  await sendServiceToServer({
+                    id: crypto.randomUUID(),
+                    image,
                     title: String(formData.get("title")),
                     location: String(formData.get("location")),
-                    image:
-                      image instanceof File && image.size > 0
-                        ? URL.createObjectURL(image)
-                        : "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=900&h=700&fit=crop&auto=format",
                     description: `${String(formData.get("description"))}\n\n${duration} · ${seats} seats available`,
                     author: "Alex Morgan",
                     type: SERVICETYPE.EVENT,
-                    credit: seats,
-                    tags: [formData.get("category") as SERVICETAGS],
+                    credit: 0,
+                    tags: [String(formData.get("category")) as SERVICETAGS],
                     time: new Date().toISOString(),
                     eduType: EDUCATIONTYPE.FIRST_YEAR,
-                  },
-                  ...currentEvents,
-                ]);
-                setIsShareFormOpen(false);
+                  });
+                  setIsShareFormOpen(false);
+                  setReloadKey((key) => key + 1);
+                } catch {
+                  setShareError("Your skill could not be published. Please try again.");
+                } finally {
+                  setIsPublishing(false);
+                }
               }}
             >
               <label className="share-skill-field share-skill-field-full">
@@ -337,12 +352,23 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
                 />
               </label>
 
+              {shareError && (
+                <p className="share-skill-error share-skill-field-full" role="alert">
+                  {shareError}
+                </p>
+              )}
+
               <div className="share-skill-actions share-skill-field-full">
-                <button className="button button-ghost" type="button" onClick={() => setIsShareFormOpen(false)}>
+                <button
+                  className="button button-ghost"
+                  type="button"
+                  onClick={() => setIsShareFormOpen(false)}
+                  disabled={isPublishing}
+                >
                   Cancel
                 </button>
-                <button className="button button-solid" type="submit">
-                  Publish skill
+                <button className="button button-solid" type="submit" disabled={isPublishing}>
+                  {isPublishing ? "Publishing…" : "Publish skill"}
                 </button>
               </div>
             </form>
