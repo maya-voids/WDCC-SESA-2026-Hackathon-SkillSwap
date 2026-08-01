@@ -1,8 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --black: #000000;
-  --white: #ffffff;
+  --black: #114026;
+  --secondary: #219a51;
+  --yellow: #f8e16c;
+  --pink: #ffc284;
+  --orange: #fb8f67;
+  --blue: #8dd6fc;
+  --white: #fffaf8;
+
   --line: rgba(0, 0, 0, 0.2);
   --muted: rgba(0, 0, 0, 0.58);
 }
@@ -264,10 +270,12 @@ input:focus-visible {
 
 .eyebrow {
   margin: 0 0 2rem;
+  font-size: clamp(2.2rem, 3.6vw, 5.5rem) !important;
+  line-height: 1.05;
 }
 
 .hero h1,
-.workshop-heading-row h2,
+.workshop-heading-row,
 .featured-content h2,
 .how-heading-row h2,
 .teach-section h2 {
@@ -564,6 +572,8 @@ input:focus-visible {
 
 .workshop-heading-row .eyebrow {
   margin-bottom: 1.3rem;
+  font-size: clamp(4rem, 2.6vw, 6rem);
+  line-height: 1.1;
 }
 
 .workshop-heading-row h2 {
@@ -665,6 +675,46 @@ input:focus-visible {
 
 .category-tabs button:hover,
 .category-tabs button.active {
+  background: var(--blue);
+  color: var(--white);
+}
+
+.category-tabs button.tab-all {
+  background: #f5f5f0;
+}
+
+.category-tabs button.tab-age {
+  background: var(--orange);
+}
+
+.category-tabs button.tab-time {
+  background: var(--yellow);
+}
+
+.category-tabs button.tab-location {
+  background: var(--pink);
+}
+
+.category-tabs button.tab-skill {
+  background: var(--blue);
+}
+
+.category-tabs button.tab-iq {
+  background: var(--secondary);
+}
+
+.category-tabs button.tab-all:hover,
+.category-tabs button.tab-all.active,
+.category-tabs button.tab-age:hover,
+.category-tabs button.tab-age.active,
+.category-tabs button.tab-time:hover,
+.category-tabs button.tab-time.active,
+.category-tabs button.tab-location:hover,
+.category-tabs button.tab-location.active,
+.category-tabs button.tab-skill:hover,
+.category-tabs button.tab-skill.active,
+.category-tabs button.tab-iq:hover,
+.category-tabs button.tab-iq.active {
   background: var(--black);
   color: var(--white);
 }
@@ -1125,6 +1175,10 @@ footer {
 
   .featured-content h2 {
     font-size: 2.7rem;
+  }
+
+  h4 {
+    font-size: 2rem;
   }
 
   .featured-content h2 + p {

@@ -5,12 +5,12 @@ import { SVGProps, useMemo, useState } from "react";
 import MockLogin from "./mock-login";
 
 const CATEGORIES = [
-  "All",
-  "Woodworking",
-  "Ceramics",
-  "Leatherwork",
-  "Metalwork",
-  "Textiles",
+  { label: "All", color: "tab-all" },
+  { label: "Age", color: "tab-age" },
+  { label: "Time/Date", color: "tab-time" },
+  { label: "Location", color: "tab-location" },
+  { label: "Skill Level", color: "tab-skill" },
+  { label: "IQ Amount", color: "tab-iq" },
 ];
 
 const WORKSHOPS = [
@@ -167,7 +167,8 @@ export default function Marketplace() {
     <main>
       <header className="site-header">
         <a className="wordmark" href="#workshops" aria-label="SkillSwap home">
-          SKILL<span>↔</span>SWAP
+                <img src="./icon.png" width="50"/>
+          
         </a>
         <nav className="main-nav" aria-label="Main navigation">
           <a href="#workshops">Discover</a>
@@ -190,7 +191,7 @@ export default function Marketplace() {
       >
         <div className="workshop-heading-row">
           <div>
-            <p className="eyebrow">Explore the marketplace</p>
+            <h3 className="eyebrow" >Explore the marketplace</h3>
             <h1 id="workshops-heading">SKILLS NEAR YOU</h1>
           </div>
           <button className="text-button" type="button" onClick={resetFilters}>
@@ -212,13 +213,13 @@ export default function Marketplace() {
         <div className="category-tabs" role="group" aria-label="Filter by category">
           {CATEGORIES.map((category) => (
             <button
-              key={category}
-              className={activeCategory === category ? "active" : ""}
+              key={category.label}
+              className={`${category.color} ${activeCategory === category.label ? "active" : ""}`.trim()}
               type="button"
-              onClick={() => setActiveCategory(category)}
-              aria-pressed={activeCategory === category}
+              onClick={() => setActiveCategory(category.label)}
+              aria-pressed={activeCategory === category.label}
             >
-              {category}
+              {category.label}
             </button>
           ))}
         </div>
