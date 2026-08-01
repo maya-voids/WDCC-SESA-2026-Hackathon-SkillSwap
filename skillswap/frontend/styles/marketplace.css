@@ -766,6 +766,7 @@ input:focus-visible {
   display: flex;
   overflow-x: auto;
   border: 1px solid var(--black);
+  border-radius: 10px;
   scrollbar-width: none;
 }
 
