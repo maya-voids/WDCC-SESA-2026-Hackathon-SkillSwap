@@ -25,7 +25,7 @@ body {
   margin: 0;
   overflow-x: clip;
   background: var(--white);
-  color: var(--black);
+  /*color: var(--black);  */
   font-family: var(--font-geist-sans), Arial, sans-serif;
 }
 
@@ -146,7 +146,16 @@ input:focus-visible {
   gap: 0.5rem;
 }
 
+.mock-credits {
+  font-size: 1.6 rem;
+  transform: translate(-1830%, 0);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .mock-account-summary {
+  transform: translate(-800%, 0);
   display: flex;
   align-items: center;
   gap: 0.65rem;
@@ -409,18 +418,42 @@ input:focus-visible {
 }
 
 .landing-hero {
+  position: relative;
   display: grid;
   min-height: calc(100vh - 72px);
   grid-template-columns: minmax(0, 1.04fr) minmax(520px, 0.96fr);
+  overflow: hidden;
 }
 
 .landing-hero-copy {
+  position: relative;
+  z-index: 1;
   display: flex;
   min-width: 0;
   flex-direction: column;
   justify-content: center;
   padding: clamp(3.5rem, 7vh, 6.5rem) 2.25vw;
   border-right: 1px solid var(--black);
+}
+
+.landing-home-graphic {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+  width: min(44vw, 620px);
+  max-width: 620px;
+  height: auto;
+  object-fit: contain;
+  transform: translate(-6%, 16%);
+  padding-left: clamp(1.5rem, 3vw, 2.5rem);
+  padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  pointer-events: none;
+}
+
+.landing-stat-grid {
+  position: relative;
+  z-index: 1;
 }
 
 .landing-kicker,
@@ -448,7 +481,7 @@ input:focus-visible {
 .landing-hero h1 span {
   display: inline-block;
   padding: 0.02em 0.08em 0.08em;
-  background: var(--black);
+  background: var(--orange);
   color: var(--white);
 }
 
@@ -474,6 +507,17 @@ input:focus-visible {
   flex-direction: column;
   justify-content: center;
   padding: clamp(2rem, 4vw, 4rem);
+  background-color: var(--white);
+}
+
+.landing-stat:first-child {
+  background-color: var(--black);
+  color: var(--white);
+}
+
+.landing-stat:first-child strong,
+.landing-stat:first-child span {
+  color: var(--white);
 }
 
 .landing-stat:nth-child(even) {
@@ -573,6 +617,7 @@ input:focus-visible {
   grid-template-columns: auto 1fr auto;
   align-items: center;
   border: 1px solid var(--black);
+  border-radius: 10px;
 }
 
 .search-icon {
@@ -585,6 +630,7 @@ input:focus-visible {
   height: 64px;
   padding: 0 1rem;
   border: 0;
+  border-radius: 10px;
   outline: 0;
   background: transparent;
   color: var(--black);
@@ -600,6 +646,7 @@ input:focus-visible {
   background: var(--black);
   color: var(--white);
   border: 0;
+  border-radius: 10px;
   border-left: 1px solid var(--black);
   cursor: pointer;
   font-family: var(--font-geist-mono), monospace;
@@ -836,6 +883,40 @@ input:focus-visible {
   margin-bottom: 3rem;
 }
 
+.heading-block {
+  position: relative;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  min-height: 180px;
+  padding-right: clamp(150px, 24vw, 260px);
+}
+
+.heading-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  position: relative;
+  z-index: 1;
+}
+
+.graphicImage {
+  position: absolute;
+  right: 0;
+  top: 1rem;
+  width: min(400px, 42vw);
+  height: auto;
+  object-fit: contain;
+  transform: translate(8%, -36%);
+  z-index: 2;
+  pointer-events: none;
+  
+}
+
+.workshop-heading-row .eyebrow {
+  margin-bottom: 0.8rem;
+}
+
 .workshop-heading-row .eyebrow {
   margin-bottom: 1.3rem;
   font-size: clamp(4rem, 2.6vw, 6rem);
@@ -843,6 +924,7 @@ input:focus-visible {
 }
 
 .workshop-heading-row h2 {
+  
   font-size: clamp(4rem, 8vw, 8rem);
 }
 
@@ -884,7 +966,7 @@ input:focus-visible {
   background: var(--white);
   color: var(--black);
   border: 1px solid var(--black);
-  border-radius: 0;
+  border-radius: 10px;
 }
 
 .text-button {
@@ -1723,12 +1805,14 @@ footer {
   .search-form input {
     height: 56px;
     font-size: 0.83rem;
+    border-radius: 10px;
   }
 
   .search-form button {
     grid-column: 1 / -1;
     min-height: 48px;
     border-top: 1px solid var(--black);
+    border-radius: 10px;
     border-left: 0;
   }
 
@@ -1778,9 +1862,10 @@ footer {
   }
 
   .workshop-heading-row {
-    align-items: flex-start;
+    align-items: flex-end;
     flex-direction: column;
     gap: 1.5rem;
+    color: var(--orange);
   }
 
   .workshop-heading-row h2 {

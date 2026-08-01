@@ -124,9 +124,11 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
     <main>
       <header className="site-header">
         <a className="wordmark" href="#workshops" aria-label="SkillSwap home">
-          <Image src="/icon.png" alt="SkillSwap" width={50} height={50} />
+          <Image src={iconImage} alt="SkillSwap icon" width={50} height={50} />
         </a>
         <div className="header-actions">
+          <div className="mock-credits" aria-label="^& Credits"><p>1000 ✦</p></div>
+          
           <div className="mock-account" aria-label="Signed in as Alex Morgan">
             <div className="mock-account-summary">
               <span className="mock-account-avatar" aria-hidden="true">AM</span>
@@ -162,9 +164,12 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         aria-labelledby="workshops-heading"
       >
         <div className="workshop-heading-row">
-          <div>
-            <h3 className="eyebrow" >Explore the marketplace</h3>
-            <h1 id="workshops-heading">SKILLS NEAR YOU</h1>
+          <div className="heading-block">
+            <div className="heading-copy">
+              <h3 className="eyebrow">Explore the marketplace</h3>
+              <h1 style={{ color: "var(--orange)" }}>SKILLS NEAR YOU</h1>
+            </div>
+            <Image src={graphicImage} className="graphicImage" alt="SkillSwap marketplace graphic" width={320} height={220} />
           </div>
         </div>
 
