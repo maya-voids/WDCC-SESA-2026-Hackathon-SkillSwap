@@ -3,7 +3,10 @@
 import Image from "next/image";
 import { SVGProps, useEffect, useMemo, useState } from "react";
 import {
+  EDUCATIONTYPE,
   getEventsFromServer,
+  SERVICETAGS,
+  SERVICETYPE,
   type Service,
 } from "../../backend/DataUtils";
 
@@ -17,13 +20,18 @@ function ArrowIcon(props: IconProps) {
   );
 }
 
-export default function Marketplace() {
+type MarketplaceProps = {
+  onLogout: () => void;
+};
+
+export default function Marketplace({ onLogout }: MarketplaceProps) {
   const [events, setEvents] = useState<Service[]>([]);
   const [activeLocation, setActiveLocation] = useState("All");
   const [searchValue, setSearchValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
+  const [isShareFormOpen, setIsShareFormOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -138,17 +146,17 @@ export default function Marketplace() {
         <div
           className="category-tabs"
           role="group"
-          aria-label="Filter by category"
+          aria-label="Filter by location"
         >
-          {CATEGORIES.map((category) => (
+          {locations.map((location) => (
             <button
-              key={category.label}
-              className={`${category.color} ${activeCategory === category.label ? "active" : ""}`.trim()}
+              key={location}
+              className={activeLocation === location ? "active" : ""}
               type="button"
-              onClick={() => setActiveCategory(category.label)}
-              aria-pressed={activeCategory === category.label}
+              onClick={() => setActiveLocation(location)}
+              aria-pressed={activeLocation === location}
             >
-              {category.label}
+              {location}
             </button>
           ))}
         </div>
@@ -259,22 +267,27 @@ export default function Marketplace() {
                 event.preventDefault();
                 const formData = new FormData(event.currentTarget);
                 const image = formData.get("image");
+                const duration = String(formData.get("duration"));
+                const seats = Number(formData.get("seats"));
 
-                setSubmittedSkills((currentSkills) => [
+                setEvents((currentEvents) => [
                   {
-                    id: Date.now(),
+                    id: String(Date.now()),
                     title: String(formData.get("title")),
                     location: String(formData.get("location")),
-                    category: String(formData.get("category")),
-                    duration: String(formData.get("duration")),
-                    seats: Number(formData.get("seats")),
                     image:
                       image instanceof File && image.size > 0
                         ? URL.createObjectURL(image)
                         : "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=900&h=700&fit=crop&auto=format",
-                    description: String(formData.get("description")),
+                    description: `${String(formData.get("description"))}\n\n${duration} · ${seats} seats available`,
+                    author: "Alex Morgan",
+                    type: SERVICETYPE.EVENT,
+                    credit: seats,
+                    tags: [formData.get("category") as SERVICETAGS],
+                    time: new Date().toISOString(),
+                    eduType: EDUCATIONTYPE.FIRST_YEAR,
                   },
-                  ...currentSkills,
+                  ...currentEvents,
                 ]);
                 setIsShareFormOpen(false);
               }}
@@ -293,9 +306,9 @@ export default function Marketplace() {
                 <span>Category</span>
                 <select name="category" defaultValue="" required>
                   <option value="" disabled>Select a category</option>
-                  <option value="Workshops">Workshop</option>
-                  <option value="Hackathons">Hackathon</option>
-                  <option value="Tasks">Task</option>
+                  <option value={SERVICETAGS.WEB_DEVELOPMENT}>Web development</option>
+                  <option value={SERVICETAGS.WEB_DESIGN}>Web design</option>
+                  <option value={SERVICETAGS.TYPESCRIPT}>TypeScript</option>
                 </select>
               </label>
 
