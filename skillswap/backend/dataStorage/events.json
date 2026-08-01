@@ -6,7 +6,7 @@
     "description": "Hello\r\n\r\n2 · 12 seats available",
     "location": "Auckland",
     "author": "Alex Morgan",
-    "type": "EVENTS",
+    "type": "OTHER",
     "credit": 0,
     "tags": [
       "TypeScript"

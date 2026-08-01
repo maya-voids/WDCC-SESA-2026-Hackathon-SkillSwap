@@ -2,6 +2,7 @@
 // the input array and each returns a new array, so they're safe to chain
 // with the retrieval functions in ./DataUtils.ts.
 import {
+  CITY,
   EDUCATIONTYPE,
   SERVICETAGS,
   SERVICETYPE,
@@ -40,13 +41,18 @@ export function filterServicesByCredit(
 }
 
 /** Any value from the Service-related enums in DataUtils. */
-export type ServiceEnumValue = SERVICETYPE | SERVICETAGS | EDUCATIONTYPE;
+export type ServiceEnumValue =
+  | SERVICETYPE
+  | SERVICETAGS
+  | CITY
+  | EDUCATIONTYPE;
 
 /**
  * Keep only the services that match an enum value. The kind of match depends
  * on which enum the value comes from:
  *   - SERVICETYPE   → service.type === value
  *   - SERVICETAGS   → value is one of service.tags
+ *   - CITY          → service.location === value
  *   - EDUCATIONTYPE → service.eduType === value
  * e.g. filterServicesByEnumValue(services, SERVICETAGS.WEB_DEVELOPMENT)
  * returns every service tagged "Web Development".
@@ -65,7 +71,12 @@ export function filterServicesByEnumValue(
     return services.filter((service) => service.type === enumValue);
   }
 
-  // Not a number and not a SERVICETYPE value, so it must be a SERVICETAGS value.
+  const cityValues = Object.values(CITY) as string[];
+  if (cityValues.includes(enumValue)) {
+    return services.filter((service) => service.location === enumValue);
+  }
+
+  // Not a number, SERVICETYPE, or CITY value, so it must be a SERVICETAGS value.
   return services.filter((service) =>
     service.tags.includes(enumValue as SERVICETAGS),
   );

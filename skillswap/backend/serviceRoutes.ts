@@ -3,7 +3,13 @@
 // endpoints (app/tasksMock.json, app/eventsMock.json), so they all behave identically.
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { EDUCATIONTYPE, SERVICETAGS, SERVICETYPE, type Service } from "./DataUtils";
+import {
+  CITY,
+  EDUCATIONTYPE,
+  SERVICETAGS,
+  SERVICETYPE,
+  type Service,
+} from "./DataUtils";
 
 const DATA_DIR = "backend/dataStorage";
 
@@ -54,6 +60,7 @@ export function createServiceRoutes({ file }: { file: string }) {
     const title = formData?.get("title");
     const description = formData?.get("description");
     const location = formData?.get("location");
+    const address = formData?.get("address");
     const author = formData?.get("author");
     const type = formData?.get("type");
     const credit = formData?.get("credit");
@@ -62,6 +69,8 @@ export function createServiceRoutes({ file }: { file: string }) {
     const eduType = formData?.get("eduType");
 
     const validTags = Object.values(SERVICETAGS) as string[];
+    const validCities = Object.values(CITY) as string[];
+    const validServiceTypes = Object.values(SERVICETYPE) as string[];
     const validEducationTypes = Object.values(EDUCATIONTYPE).filter(
       (value): value is number => typeof value === "number",
     );
@@ -72,8 +81,12 @@ export function createServiceRoutes({ file }: { file: string }) {
       typeof title !== "string" ||
       typeof description !== "string" ||
       typeof location !== "string" ||
+      !validCities.includes(location) ||
+      typeof address !== "string" ||
+      address === "" ||
       typeof author !== "string" ||
-      (type !== SERVICETYPE.TASK && type !== SERVICETYPE.EVENT) ||
+      typeof type !== "string" ||
+      !validServiceTypes.includes(type) ||
       credit === null ||
       !Number.isInteger(Number(credit)) ||
       tags.length === 0 ||
@@ -87,7 +100,7 @@ export function createServiceRoutes({ file }: { file: string }) {
       return Response.json(
         {
           error:
-            "id (string), image (file), title (string), description (string), location (string), author (string), type (TASK|EVENTS), credit (integer), at least one tags value from SERVICETAGS, time (UTC ISO 8601 string) and eduType (EDUCATIONTYPE) are required",
+            "id (string), image (file), title (string), description (string), location (one of CITY), address (string), author (string), type (WORKSHOP|EXPO|HACKATHON|STUDENT WORK|OTHER), credit (integer), at least one tags value from SERVICETAGS, time (UTC ISO 8601 string) and eduType (EDUCATIONTYPE) are required",
         },
         { status: 400 },
       );
@@ -102,9 +115,10 @@ export function createServiceRoutes({ file }: { file: string }) {
       image: imageDataUrl,
       title,
       description,
-      location,
+      location: location as CITY,
+      address,
       author,
-      type,
+      type: type as SERVICETYPE,
       credit: Number(credit),
       tags: tags as SERVICETAGS[],
       time,

@@ -5,6 +5,7 @@ import {
   sortServicesByCreditAscending,
 } from "../backend/DataQueries";
 import {
+  CITY,
   EDUCATIONTYPE,
   SERVICETAGS,
   SERVICETYPE,
@@ -18,9 +19,10 @@ function makeService(
     image: "data:image/png;base64,abc",
     title: "T",
     description: "D",
-    location: "Wellington",
+    location: CITY.WELLINGTON,
+    address: "1 Test Street, Wellington",
     author: "Alice",
-    type: SERVICETYPE.TASK,
+    type: SERVICETYPE.WORKSHOP,
     credit: 0,
     tags: [SERVICETAGS.WEB_DEVELOPMENT],
     time: "2026-08-01T00:00:00.000Z",
