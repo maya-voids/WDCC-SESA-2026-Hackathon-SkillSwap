@@ -1,8 +1,8 @@
 import { createServiceRoutes } from "../../backend/serviceRoutes";
 
-// Standard tasks endpoint — reads/writes backend/tasks.json.
+// Standard events endpoint — reads/writes backend/events.json.
 // DataUtils points here unless toggled to mock mode (see backend/toggle.mjs).
-const routes = createServiceRoutes({ file: "tasks.json" });
+const routes = createServiceRoutes({ file: "events.json" });
 
 export const GET = routes.GET;
 export const POST = routes.POST;

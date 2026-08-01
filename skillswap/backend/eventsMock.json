@@ -1,0 +1,29 @@
+[
+  {
+    "id": "mock-event-1",
+    "image": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjAwIDQwMCI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiM0NTdiOWQiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5FdmVudCAxPC90ZXh0Pjwvc3ZnPg==",
+    "title": "Game Jam: 48-hour indie game sprint",
+    "description": "A weekend game jam to prototype a playable game from a mystery theme. Solo or teams welcome — bring a laptop and an idea, and mentors will be on hand for art, code and playtesting.",
+    "location": "Wellington",
+    "author": "WDCC Game Dev Club",
+    "type": "EVENTS"
+  },
+  {
+    "id": "mock-event-2",
+    "image": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjAwIDQwMCI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiM4MzM4ZWMiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5FdmVudCAyPC90ZXh0Pjwvc3ZnPg==",
+    "title": "Game Art Bootcamp: sprites & animation",
+    "description": "A practical workshop on creating game-ready art — character sprites, tilesets and simple walk-cycle animation in Aseprite. Bring a tablet or mouse; beginners welcome and all assets are yours to keep.",
+    "location": "Auckland",
+    "author": "Pixel Garden Studio",
+    "type": "EVENTS"
+  },
+  {
+    "id": "mock-event-3",
+    "image": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgNjAwIDQwMCI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiNkNjI4MjgiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5FdmVudCAzPC90ZXh0Pjwvc3ZnPg==",
+    "title": "Hackathon Kickoff: build a project in 24 hours",
+    "description": "A 24-hour hackathon to build something useful or fun — web apps, bots, hardware, or art installations. Pitches start Saturday morning, demos Sunday night, prizes for best overall, best design and most creative.",
+    "location": "Christchurch",
+    "author": "CHCH Hack Society",
+    "type": "EVENTS"
+  }
+]
