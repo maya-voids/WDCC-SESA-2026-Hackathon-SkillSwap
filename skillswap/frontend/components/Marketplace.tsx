@@ -25,6 +25,15 @@ type MarketplaceProps = {
   onLogout: () => void;
 };
 
+const LOCATION_TAB_COLOURS = [
+  "tab-all",
+  "tab-age",
+  "tab-time",
+  "tab-location",
+  "tab-skill",
+  "tab-iq",
+] as const;
+
 export default function Marketplace({ onLogout }: MarketplaceProps) {
   const [events, setEvents] = useState<Service[]>([]);
   const [activeLocation, setActiveLocation] = useState("All");
@@ -154,10 +163,10 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           role="group"
           aria-label="Filter by location"
         >
-          {locations.map((location) => (
+          {locations.map((location, index) => (
             <button
               key={location}
-              className={activeLocation === location ? "active" : ""}
+              className={`${LOCATION_TAB_COLOURS[index % LOCATION_TAB_COLOURS.length]} ${activeLocation === location ? "active" : ""}`.trim()}
               type="button"
               onClick={() => setActiveLocation(location)}
               aria-pressed={activeLocation === location}
