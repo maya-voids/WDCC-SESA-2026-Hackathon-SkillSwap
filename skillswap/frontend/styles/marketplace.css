@@ -1048,6 +1048,10 @@ textarea:focus-visible {
   background: var(--yellow);
 }
 
+.marketplace-filter-category {
+  background: var(--pink);
+}
+
 .marketplace-filter-level {
   background: var(--blue);
 }

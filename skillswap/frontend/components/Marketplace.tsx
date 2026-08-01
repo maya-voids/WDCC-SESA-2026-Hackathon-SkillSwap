@@ -28,6 +28,7 @@ const EDUCATION_LEVELS = Object.values(EDUCATIONTYPE).filter(
 );
 
 const SERVICE_TYPES = Object.values(SERVICETYPE);
+const SERVICE_TAGS = Object.values(SERVICETAGS);
 
 function serviceTypeToLabel(serviceType: SERVICETYPE): string {
   return serviceType
@@ -40,6 +41,9 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
   const [activeCity, setActiveCity] = useState<CITY | "All">("All");
   const [activeServiceType, setActiveServiceType] = useState<
     SERVICETYPE | "All"
+  >("All");
+  const [activeServiceTag, setActiveServiceTag] = useState<
+    SERVICETAGS | "All"
   >("All");
   const [activeEducationType, setActiveEducationType] = useState<
     EDUCATIONTYPE | "All"
@@ -107,6 +111,8 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         activeCity === "All" || service.location === activeCity;
       const matchesServiceType =
         activeServiceType === "All" || service.type === activeServiceType;
+      const matchesServiceTag =
+        activeServiceTag === "All" || service.tags.includes(activeServiceTag);
       const matchesEducationType =
         activeEducationType === "All" ||
         service.eduType === activeEducationType;
@@ -125,6 +131,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
       return (
         matchesCity &&
         matchesServiceType &&
+        matchesServiceTag &&
         matchesEducationType &&
         matchesSearch
       );
@@ -132,6 +139,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
   }, [
     activeCity,
     activeEducationType,
+    activeServiceTag,
     activeServiceType,
     searchValue,
     services,
@@ -141,6 +149,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
     setSearchValue("");
     setActiveCity("All");
     setActiveServiceType("All");
+    setActiveServiceTag("All");
     setActiveEducationType("All");
   }
 
@@ -229,6 +238,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
             className={`marketplace-filter-all ${
               activeCity === "All" &&
               activeServiceType === "All" &&
+              activeServiceTag === "All" &&
               activeEducationType === "All"
                 ? "active"
                 : ""
@@ -238,6 +248,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
             aria-pressed={
               activeCity === "All" &&
               activeServiceType === "All" &&
+              activeServiceTag === "All" &&
               activeEducationType === "All"
             }
           >
@@ -279,6 +290,28 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               {SERVICE_TYPES.map((serviceType) => (
                 <option value={serviceType} key={serviceType}>
                   {serviceTypeToLabel(serviceType)}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label
+            className={`marketplace-filter marketplace-filter-category ${activeServiceTag !== "All" ? "active" : ""}`}
+          >
+            <span>Category</span>
+            <select
+              value={activeServiceTag}
+              onChange={(event) =>
+                setActiveServiceTag(
+                  event.target.value as SERVICETAGS | "All",
+                )
+              }
+              aria-label="Filter by category"
+            >
+              <option value="All">All categories</option>
+              {SERVICE_TAGS.map((serviceTag) => (
+                <option value={serviceTag} key={serviceTag}>
+                  {serviceTag}
                 </option>
               ))}
             </select>

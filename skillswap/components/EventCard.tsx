@@ -85,9 +85,7 @@ export default function EventCard({ event, index }: EventCardProps) {
         </div>
 
         <div className="card-body">
-          <p className="card-category">
-            {skillLabel} / {event.location}
-          </p>
+          <p className="card-category">{skillLabel}</p>
           <h2>{event.title}</h2>
           <p className="instructor">Hosted by {event.author}</p>
           <p className="event-description">{event.description}</p>
