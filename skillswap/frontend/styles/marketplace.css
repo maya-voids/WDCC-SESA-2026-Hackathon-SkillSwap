@@ -1087,6 +1087,14 @@ input:focus-visible {
   font-size: 0.88rem;
 }
 
+.event-description {
+  min-height: 7.5em;
+  margin: 0 0 1.6rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
 .card-metadata {
   min-height: 34px;
   padding-bottom: 1.5rem;
@@ -1103,8 +1111,9 @@ input:focus-visible {
 
 .card-footer > strong {
   font-family: "Arial Narrow", var(--font-geist-sans), sans-serif;
-  font-size: 2.25rem;
-  letter-spacing: -0.07em;
+  font-size: 1.4rem;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
 }
 
 .empty-state {
@@ -1118,6 +1127,7 @@ input:focus-visible {
   font-size: 0.7rem;
 }
 
+.empty-state h2,
 .empty-state h3 {
   margin: 1rem 0 0.6rem;
   font-family: "Arial Narrow", var(--font-geist-sans), sans-serif;

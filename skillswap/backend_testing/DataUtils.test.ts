@@ -1,9 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   deleteTaskInServer,
+  educationTypeToLabel,
   getEventsFromServer,
   getTasksFromServer,
   sendServiceToServer,
+  EDUCATIONTYPE,
+  SERVICETAGS,
   SERVICETYPE,
   type PostData,
 } from "../backend/DataUtils";
@@ -19,6 +22,10 @@ describe("DataUtils", () => {
     location: "Wellington",
     author: "Alice",
     type: SERVICETYPE.TASK,
+    credit: 50,
+    tags: [SERVICETAGS.WEB_DEVELOPMENT, SERVICETAGS.TYPESCRIPT],
+    time: "2026-08-01T12:00:00.000Z",
+    eduType: EDUCATIONTYPE.FIRST_YEAR,
   });
 
   beforeEach(() => {
@@ -76,6 +83,10 @@ describe("DataUtils", () => {
       expect(formData.get("location")).toBe(post.location);
       expect(formData.get("author")).toBe(post.author);
       expect(formData.get("type")).toBe(post.type);
+      expect(formData.get("credit")).toBe(String(post.credit));
+      expect(formData.getAll("tags")).toEqual(post.tags);
+      expect(formData.get("time")).toBe(post.time);
+      expect(formData.get("eduType")).toBe(String(post.eduType));
       expect(init.headers).toBeUndefined();
     });
 
@@ -105,6 +116,10 @@ describe("DataUtils", () => {
           location: "Wellington",
           author: "Alice",
           type: SERVICETYPE.TASK,
+          credit: 10,
+          tags: [SERVICETAGS.TYPESCRIPT],
+          time: "2026-08-01T09:00:00.000Z",
+          eduType: EDUCATIONTYPE.SECOND_YEAR,
         },
       ];
       fetchMock.mockResolvedValue(
@@ -149,6 +164,10 @@ describe("DataUtils", () => {
           location: "Wellington",
           author: "Alice",
           type: SERVICETYPE.EVENT,
+          credit: 20,
+          tags: [SERVICETAGS.WEB_DESIGN],
+          time: "2026-08-02T10:00:00.000Z",
+          eduType: EDUCATIONTYPE.GRADUATE,
         },
       ];
       fetchMock.mockResolvedValue(
@@ -179,6 +198,16 @@ describe("DataUtils", () => {
       fetchMock.mockResolvedValue(new Response("error", { status: 500 }));
 
       await expect(getEventsFromServer()).rejects.toThrow();
+    });
+  });
+
+  describe("educationTypeToLabel", () => {
+    it("returns the formally capitalised label for each EDUCATIONTYPE", () => {
+      expect(educationTypeToLabel(EDUCATIONTYPE.FIRST_YEAR)).toBe("First Year");
+      expect(educationTypeToLabel(EDUCATIONTYPE.SECOND_YEAR)).toBe(
+        "Second Year",
+      );
+      expect(educationTypeToLabel(EDUCATIONTYPE.GRADUATE)).toBe("Graduate");
     });
   });
 

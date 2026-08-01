@@ -1,47 +1,82 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import EventList from "@/components/EventList";
-import type { EventData } from "@/components/EventCard";
-import mockEvents from "../../backend/mockdata.json";
+import Image from "next/image";
+import { SVGProps, useEffect, useMemo, useState } from "react";
+import {
+  getEventsFromServer,
+  type Service,
+} from "../../backend/DataUtils";
 
-const CATEGORIES = [
-  { label: "All", color: "tab-all" },
-  { label: "Age", color: "tab-age" },
-  { label: "Time/Date", color: "tab-time" },
-  { label: "Location", color: "tab-location" },
-  { label: "Skill Level", color: "tab-skill" },
-  { label: "IQ Amount", color: "tab-iq" },
-];
+type IconProps = SVGProps<SVGSVGElement>;
 
-const MOCK_EVENTS: EventData[] = mockEvents;
+function ArrowIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>
+      <path d="M5 19 19 5M9 5h10v10" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  );
+}
 
-type MarketplaceProps = {
-  onLogout: () => void;
-};
-
-export default function Marketplace({ onLogout }: MarketplaceProps) {
-  const [activeCategory, setActiveCategory] = useState("All");
+export default function Marketplace() {
+  const [events, setEvents] = useState<Service[]>([]);
+  const [activeLocation, setActiveLocation] = useState("All");
   const [searchValue, setSearchValue] = useState("");
-  const [isShareFormOpen, setIsShareFormOpen] = useState(false);
-  const [submittedSkills, setSubmittedSkills] = useState<EventData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadEvents() {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const loadedEvents = await getEventsFromServer();
+        if (!cancelled) setEvents(loadedEvents);
+      } catch {
+        if (!cancelled) setError("The events could not be loaded.");
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    }
+
+    void loadEvents();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [reloadKey]);
+
+  const locations = useMemo(
+    () => ["All", ...new Set(events.map((event) => event.location))],
+    [events],
+  );
 
   const filteredEvents = useMemo(() => {
-    const marketplaceEvents = [...submittedSkills, ...MOCK_EVENTS];
     const query = searchValue.trim().toLowerCase();
 
-    return marketplaceEvents.filter((event) => {
-      const matchesCategory =
-        activeCategory === "All" || event.category === activeCategory;
+    return events.filter((event) => {
+      const matchesLocation =
+        activeLocation === "All" || event.location === activeLocation;
       const matchesSearch =
         !query ||
-        [event.title, event.category, event.location].some((value) =>
-          value.toLowerCase().includes(query),
-        );
+        [
+          event.title,
+          event.description,
+          event.author,
+          event.location,
+        ].some((value) => value.toLowerCase().includes(query));
 
-      return matchesCategory && matchesSearch;
+      return matchesLocation && matchesSearch;
     });
-  }, [activeCategory, searchValue, submittedSkills]);
+  }, [activeLocation, events, searchValue]);
+
+  function resetFilters() {
+    setSearchValue("");
+    setActiveLocation("All");
+  }
 
   return (
     <main>
@@ -90,11 +125,11 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         </div>
 
         <div className="marketplace-tools">
-          <label htmlFor="marketplace-search">Search the marketplace</label>
+          <label htmlFor="marketplace-search">Search events</label>
           <input
             id="marketplace-search"
             type="search"
-            placeholder="Search skills, hosts, or locations"
+            placeholder="Search events, hosts, or locations"
             value={searchValue}
             onChange={(event) => setSearchValue(event.target.value)}
           />
@@ -120,8 +155,71 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
 
         <div className="results-line" aria-live="polite">
           <span>{String(filteredEvents.length).padStart(2, "0")} results</span>
+          <span>Community events</span>
         </div>
-        <EventList events={filteredEvents} />
+
+        {isLoading ? (
+          <div className="empty-state" aria-live="polite">
+            <span>...</span>
+            <h2>LOADING EVENTS</h2>
+          </div>
+        ) : error ? (
+          <div className="empty-state" role="alert">
+            <span>!</span>
+            <h2>EVENTS UNAVAILABLE</h2>
+            <p>{error}</p>
+            <button
+              type="button"
+              className="button button-solid"
+              onClick={() => setReloadKey((key) => key + 1)}
+            >
+              Try again
+            </button>
+          </div>
+        ) : filteredEvents.length ? (
+          <div className="workshop-grid">
+            {filteredEvents.map((event, index) => (
+              <article className="workshop-card" key={event.id}>
+                <div className="card-image">
+                  <Image
+                    src={event.image}
+                    alt={`${event.title} event`}
+                    fill
+                    sizes="(max-width: 700px) 100vw, (max-width: 1050px) 50vw, 33vw"
+                  />
+                  <span className="card-number">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="card-tag">Event</span>
+                  <button type="button" className="card-arrow" aria-label={`View ${event.title}`}>
+                    <ArrowIcon />
+                  </button>
+                </div>
+                <div className="card-body">
+                  <p className="card-category">
+                    {event.type} / {event.location}
+                  </p>
+                  <h2>{event.title}</h2>
+                  <p className="instructor">Hosted by {event.author}</p>
+                  <p className="event-description">{event.description}</p>
+                  <div className="card-footer">
+                    <strong>{event.location}</strong>
+                    <button type="button" className="button button-solid">
+                      View event <span>↗</span>
+                    </button>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="empty-state">
+            <span>00</span>
+            <h2>NO EVENTS FOUND</h2>
+            <p>Try a different search term or browse every location.</p>
+            <button type="button" className="button button-solid" onClick={resetFilters}>
+              Reset filters
+            </button>
+          </div>
+        )}
       </section>
 
       {isShareFormOpen && (
