@@ -15,7 +15,11 @@ const CATEGORIES = [
 
 const MOCK_EVENTS: EventData[] = mockEvents;
 
-export default function Marketplace() {
+type MarketplaceProps = {
+  onLogout: () => void;
+};
+
+export default function Marketplace({ onLogout }: MarketplaceProps) {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchValue, setSearchValue] = useState("");
 
