@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { SVGProps, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import EventCard from "../../components/EventCard";
 import {
   EDUCATIONTYPE,
   getEventsFromServer,
@@ -10,16 +11,6 @@ import {
   SERVICETYPE,
   type Service,
 } from "../../backend/DataUtils";
-
-type IconProps = SVGProps<SVGSVGElement>;
-
-function ArrowIcon(props: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>
-      <path d="M5 19 19 5M9 5h10v10" stroke="currentColor" strokeWidth="1.8" />
-    </svg>
-  );
-}
 
 type MarketplaceProps = {
   onLogout: () => void;
@@ -102,8 +93,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
     <main>
       <header className="site-header">
         <a className="wordmark" href="#workshops" aria-label="SkillSwap home">
-                <img src="./icon.png" width="50"/>
-          
+          <Image src="/icon.png" alt="SkillSwap" width={50} height={50} />
         </a>
         <div className="header-actions">
           <div className="mock-account" aria-label="Signed in as Alex Morgan">
@@ -202,35 +192,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         ) : filteredEvents.length ? (
           <div className="event-grid">
             {filteredEvents.map((event, index) => (
-              <article className="event-card" key={event.id}>
-                <div className="card-image">
-                  <Image
-                    src={event.image}
-                    alt={`${event.title} event`}
-                    fill
-                    sizes="(max-width: 700px) 100vw, (max-width: 1050px) 50vw, 33vw"
-                  />
-                  <span className="card-number">{String(index + 1).padStart(2, "0")}</span>
-                  <span className="card-tag">Event</span>
-                  <button type="button" className="card-arrow" aria-label={`View ${event.title}`}>
-                    <ArrowIcon />
-                  </button>
-                </div>
-                <div className="card-body">
-                  <p className="card-category">
-                    {event.type} / {event.location}
-                  </p>
-                  <h2>{event.title}</h2>
-                  <p className="instructor">Hosted by {event.author}</p>
-                  <p className="event-description">{event.description}</p>
-                  <div className="card-footer">
-                    <strong>{event.location}</strong>
-                    <button type="button" className="button button-solid">
-                      View event <span>↗</span>
-                    </button>
-                  </div>
-                </div>
-              </article>
+              <EventCard event={event} index={index} key={event.id} />
             ))}
           </div>
         ) : (
