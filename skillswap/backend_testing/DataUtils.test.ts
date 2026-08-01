@@ -5,6 +5,7 @@ import {
   getEventsFromServer,
   getTasksFromServer,
   sendServiceToServer,
+  CITY,
   EDUCATIONTYPE,
   SERVICETAGS,
   SERVICETYPE,
@@ -19,9 +20,10 @@ describe("DataUtils", () => {
     image: new File(["image-bytes"], "photo.png", { type: "image/png" }),
     title: "Sell a bike",
     description: "Needs new brakes.",
-    location: "Wellington",
+    location: CITY.WELLINGTON,
+    address: "123 Willis Street, Wellington",
     author: "Alice",
-    type: SERVICETYPE.TASK,
+    type: SERVICETYPE.WORKSHOP,
     credit: 50,
     tags: [SERVICETAGS.WEB_DEVELOPMENT, SERVICETAGS.TYPESCRIPT],
     time: "2026-08-01T12:00:00.000Z",
@@ -63,7 +65,7 @@ describe("DataUtils", () => {
       );
     });
 
-    it("posts all fields including location, author and type to /tasks.json", async () => {
+    it("posts all fields including location, author and type to /events.json", async () => {
       fetchMock.mockResolvedValue(new Response(null, { status: 200 }));
       const post = makePost();
 
@@ -71,7 +73,7 @@ describe("DataUtils", () => {
 
       expect(fetchMock).toHaveBeenCalledTimes(1);
       const [url, init] = fetchMock.mock.calls[0];
-      expect(url).toBe("/tasks.json");
+      expect(url).toBe("/events.json");
       expect(init.method).toBe("POST");
       expect(init.body).toBeInstanceOf(FormData);
 
@@ -81,6 +83,7 @@ describe("DataUtils", () => {
       expect(formData.get("title")).toBe(post.title);
       expect(formData.get("description")).toBe(post.description);
       expect(formData.get("location")).toBe(post.location);
+      expect(formData.get("address")).toBe(post.address);
       expect(formData.get("author")).toBe(post.author);
       expect(formData.get("type")).toBe(post.type);
       expect(formData.get("credit")).toBe(String(post.credit));
@@ -90,9 +93,9 @@ describe("DataUtils", () => {
       expect(init.headers).toBeUndefined();
     });
 
-    it("posts to /events.json when the type is an EVENT", async () => {
+    it("posts the chosen SERVICETYPE to /events.json", async () => {
       fetchMock.mockResolvedValue(new Response(null, { status: 200 }));
-      const post = { ...makePost(), type: SERVICETYPE.EVENT };
+      const post = { ...makePost(), type: SERVICETYPE.HACKATHON };
 
       await sendServiceToServer(post);
 
@@ -101,7 +104,7 @@ describe("DataUtils", () => {
       expect(url).toBe("/events.json");
       expect(init.method).toBe("POST");
       const formData = init.body as FormData;
-      expect(formData.get("type")).toBe(SERVICETYPE.EVENT);
+      expect(formData.get("type")).toBe(SERVICETYPE.HACKATHON);
     });
   });
 
@@ -113,9 +116,10 @@ describe("DataUtils", () => {
           image: "data:image/png;base64,abc",
           title: "T1",
           description: "D1",
-          location: "Wellington",
+          location: CITY.WELLINGTON,
+          address: "123 Willis Street, Wellington",
           author: "Alice",
-          type: SERVICETYPE.TASK,
+          type: SERVICETYPE.STUDENT_WORK,
           credit: 10,
           tags: [SERVICETAGS.TYPESCRIPT],
           time: "2026-08-01T09:00:00.000Z",
@@ -161,9 +165,10 @@ describe("DataUtils", () => {
           image: "data:image/png;base64,abc",
           title: "E1",
           description: "D1",
-          location: "Wellington",
+          location: CITY.WELLINGTON,
+          address: "123 Willis Street, Wellington",
           author: "Alice",
-          type: SERVICETYPE.EVENT,
+          type: SERVICETYPE.WORKSHOP,
           credit: 20,
           tags: [SERVICETAGS.WEB_DESIGN],
           time: "2026-08-02T10:00:00.000Z",

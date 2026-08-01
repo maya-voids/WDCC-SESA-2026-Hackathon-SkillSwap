@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import EventCard from "../../components/EventCard";
 import {
+  CITY,
   EDUCATIONTYPE,
   educationTypeToLabel,
   getEventsFromServer,
@@ -349,10 +350,11 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
                     id: crypto.randomUUID(),
                     image,
                     title: String(formData.get("title")),
-                    location: String(formData.get("location")),
+                    location: formData.get("city") as CITY,
+                    address: String(formData.get("location")),
                     description: `${String(formData.get("description"))}\n\n${duration} · ${seats} seats available`,
                     author: "Alex Morgan",
-                    type: SERVICETYPE.EVENT,
+                    type: SERVICETYPE.WORKSHOP,
                     credit: 0,
                     tags: [String(formData.get("category")) as SERVICETAGS],
                     time: new Date().toISOString(),
@@ -373,8 +375,19 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               </label>
 
               <label className="share-skill-field">
-                <span>Location</span>
-                <input name="location" type="text" placeholder="e.g. Grey Lynn" required />
+                <span>Address</span>
+                <input name="location" type="text" placeholder="e.g. 12 Cuba Street" required />
+              </label>
+
+              <label className="share-skill-field">
+                <span>City</span>
+                <select name="city" defaultValue="" required>
+                  <option value="" disabled>Select a city</option>
+                  <option value={CITY.AUCKLAND}>Auckland</option>
+                  <option value={CITY.HAMILTON}>Hamilton</option>
+                  <option value={CITY.CHRISTCHURCH}>Christchurch</option>
+                  <option value={CITY.WELLINGTON}>Wellington</option>
+                </select>
               </label>
 
               <label className="share-skill-field">

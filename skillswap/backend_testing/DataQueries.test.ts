@@ -7,6 +7,7 @@ import {
   sortServicesByTimeAscending,
 } from "../backend/DataQueries";
 import {
+  CITY,
   EDUCATIONTYPE,
   SERVICETAGS,
   SERVICETYPE,
@@ -20,9 +21,10 @@ function makeService(
     image: "data:image/png;base64,abc",
     title: "T",
     description: "D",
-    location: "Wellington",
+    location: CITY.WELLINGTON,
+    address: "1 Test Street, Wellington",
     author: "Alice",
-    type: SERVICETYPE.TASK,
+    type: SERVICETYPE.WORKSHOP,
     credit: 0,
     tags: [SERVICETAGS.WEB_DEVELOPMENT],
     time: "2026-08-01T00:00:00.000Z",
@@ -106,14 +108,17 @@ describe("DataQueries", () => {
     });
 
     it("returns only services of a given SERVICETYPE", () => {
-      const task = makeService({ id: "task", type: SERVICETYPE.TASK });
-      const event = makeService({ id: "event", type: SERVICETYPE.EVENT });
+      const workshop = makeService({ id: "workshop", type: SERVICETYPE.WORKSHOP });
+      const hackathon = makeService({
+        id: "hackathon",
+        type: SERVICETYPE.HACKATHON,
+      });
 
       expect(
-        filterServicesByEnumValue([task, event], SERVICETYPE.EVENT).map(
+        filterServicesByEnumValue([workshop, hackathon], SERVICETYPE.HACKATHON).map(
           (s) => s.id,
         ),
-      ).toEqual(["event"]);
+      ).toEqual(["hackathon"]);
     });
 
     it("returns only services of a given EDUCATIONTYPE", () => {
@@ -130,10 +135,30 @@ describe("DataQueries", () => {
       ).toEqual(["grad"]);
     });
 
-    it("returns an empty array when no service matches", () => {
-      const task = makeService({ id: "task", type: SERVICETYPE.TASK });
+    it("returns only services located in a given CITY", () => {
+      const wellington = makeService({
+        id: "wellington",
+        location: CITY.WELLINGTON,
+      });
+      const auckland = makeService({
+        id: "auckland",
+        location: CITY.AUCKLAND,
+      });
 
-      expect(filterServicesByEnumValue([task], SERVICETYPE.EVENT)).toEqual([]);
+      expect(
+        filterServicesByEnumValue(
+          [wellington, auckland],
+          CITY.AUCKLAND,
+        ).map((s) => s.id),
+      ).toEqual(["auckland"]);
+    });
+
+    it("returns an empty array when no service matches", () => {
+      const workshop = makeService({ id: "workshop", type: SERVICETYPE.WORKSHOP });
+
+      expect(filterServicesByEnumValue([workshop], SERVICETYPE.HACKATHON)).toEqual(
+        [],
+      );
     });
   });
 });

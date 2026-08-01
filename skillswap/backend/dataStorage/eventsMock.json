@@ -6,13 +6,14 @@
     "description": "A weekend game jam to prototype a playable game from a mystery theme. Solo participants and teams are welcome; bring a laptop and an idea, and mentors will be available for art, code, and playtesting.",
     "location": "Wellington",
     "author": "WDCC Game Dev Club",
-    "type": "EVENTS",
+    "type": "HACKATHON",
     "credit": 50,
     "tags": [
       "Web Development"
     ],
     "time": "2026-08-22T09:00:00.000Z",
-    "eduType": 1
+    "eduType": 1,
+    "address": "Victoria University of Wellington, Kelburn, Wellington"
   },
   {
     "id": "mock-event-2",
@@ -21,13 +22,14 @@
     "description": "A practical workshop on creating game-ready art, including character sprites, tilesets, and simple walk-cycle animation in Aseprite. Beginners are welcome and all completed assets are yours to keep.",
     "location": "Auckland",
     "author": "Pixel Garden Studio",
-    "type": "EVENTS",
+    "type": "WORKSHOP",
     "credit": 40,
     "tags": [
       "Web Design"
     ],
     "time": "2026-08-24T13:00:00.000Z",
-    "eduType": 2
+    "eduType": 2,
+    "address": "AUT City Campus, Auckland"
   },
   {
     "id": "mock-event-3",
@@ -36,14 +38,15 @@
     "description": "A 24-hour hackathon to build something useful or fun, from web apps and bots to hardware and art installations. Pitch on Saturday morning and demonstrate your project on Sunday night.",
     "location": "Christchurch",
     "author": "CHCH Hack Society",
-    "type": "EVENTS",
+    "type": "HACKATHON",
     "credit": 100,
     "tags": [
       "Web Development",
       "TypeScript"
     ],
     "time": "2026-09-05T08:00:00.000Z",
-    "eduType": 3
+    "eduType": 3,
+    "address": "The Piano, Christchurch"
   },
   {
     "id": "mock-event-4",
@@ -52,14 +55,15 @@
     "description": "Bring an early-stage idea and work alongside student developers, designers, and makers. Volunteer mentors will help with scoping, technical decisions, and preparing a short end-of-night demo.",
     "location": "Auckland",
     "author": "Campus Makers Collective",
-    "type": "EVENTS",
+    "type": "WORKSHOP",
     "credit": 80,
     "tags": [
       "Web Design",
       "Web Development"
     ],
     "time": "2026-09-08T17:00:00.000Z",
-    "eduType": 1
+    "eduType": 1,
+    "address": "University of Auckland, Auckland"
   },
   {
     "id": "mock-event-5",
@@ -68,28 +72,30 @@
     "description": "Get practical feedback on your portfolio, CV, or GitHub profile in a friendly small-group session. Reviewers from design, software, engineering, and business backgrounds will be available.",
     "location": "Wellington",
     "author": "Student Careers Network",
-    "type": "EVENTS",
+    "type": "WORKSHOP",
     "credit": -20,
     "tags": [
       "Web Design"
     ],
     "time": "2026-09-12T10:00:00.000Z",
-    "eduType": 3
+    "eduType": 3,
+    "address": "Te Papa, Wellington"
   },
   {
     "id": "mock-event-6",
     "image": "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=900&h=700&fit=crop&auto=format",
     "title": "Creative Collaboration Mixer",
     "description": "Meet students looking for collaborators across art, design, technology, music, and entrepreneurship. Share what you can contribute, discover new project ideas, and form a team on the night.",
-    "location": "Dunedin",
+    "location": "Hamilton",
     "author": "Otago Creative Community",
-    "type": "EVENTS",
+    "type": "OTHER",
     "credit": 30,
     "tags": [
       "Web Design"
     ],
     "time": "2026-09-15T18:30:00.000Z",
-    "eduType": 2
+    "eduType": 2,
+    "address": "University of Waikato, Hamilton"
   },
   {
     "id": "f4672da5-c190-4079-b0eb-1b4e19c3ad7f",
@@ -98,13 +104,14 @@
     "description": "Software course\r\n\r\n4 Hours · 34 seats available",
     "location": "Auckland",
     "author": "Alex Morgan",
-    "type": "EVENTS",
+    "type": "OTHER",
     "credit": 0,
     "tags": [
       "Web Development"
     ],
     "time": "2026-08-01T07:04:29.522Z",
-    "eduType": 1
+    "eduType": 1,
+    "address": "Aotea Square, Auckland"
   },
   {
     "id": "b77aad8b-de69-4962-b503-8a85d3ed9cc1",
@@ -113,7 +120,7 @@
     "description": "Hello\r\n\r\n8 · 12 seats available",
     "location": "Auckland",
     "author": "Alex Morgan",
-    "type": "EVENTS",
+    "type": "OTHER",
     "credit": 0,
     "tags": [
       "Web Design"

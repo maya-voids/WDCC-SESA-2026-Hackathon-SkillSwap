@@ -19,14 +19,25 @@ const EVENTS_ENDPOINT =
   DATA_SOURCE === "mock" ? "/eventsMock.json" : "/events.json";
 
 export enum SERVICETYPE {
-  TASK = "TASK",
-  EVENT = "EVENTS",
+  WORKSHOP = "WORKSHOP",
+  EXPO = "EXPO",
+  HACKATHON = "HACKATHON",
+  STUDENT_WORK = "STUDENT WORK",
+  OTHER = "OTHER",
 }
 
 export enum SERVICETAGS {
   WEB_DEVELOPMENT = "Web Development",
   WEB_DESIGN = "Web Design",
   TYPESCRIPT = "TypeScript",
+}
+
+/** Cities a service can be located in. */
+export enum CITY {
+  HAMILTON = "Hamilton",
+  AUCKLAND = "Auckland",
+  CHRISTCHURCH = "Christchurch",
+  WELLINGTON = "Wellington",
 }
 
 /** Education level, ordered by a numbered index (1 = first-year … 3 = graduate). */
@@ -41,7 +52,9 @@ export type PostData = {
   image: File;
   title: string;
   description: string;
-  location: string;
+  location: CITY;
+  /** Free-form street address. */
+  address: string;
   author: string;
   type: SERVICETYPE;
   /** Positive or negative integer credit value. */
@@ -58,7 +71,9 @@ export type Service = {
   image: string;
   title: string;
   description: string;
-  location: string;
+  location: CITY;
+  /** Free-form street address. */
+  address: string;
   author: string;
   type: SERVICETYPE;
   /** Positive or negative integer credit value. */
@@ -92,6 +107,7 @@ export async function sendServiceToServer(data: PostData): Promise<void> {
     formData.append("title", data.title);
     formData.append("description", data.description);
     formData.append("location", data.location);
+    formData.append("address", data.address);
     formData.append("author", data.author);
     formData.append("type", data.type);
     formData.append("credit", String(data.credit));
@@ -99,8 +115,9 @@ export async function sendServiceToServer(data: PostData): Promise<void> {
     formData.append("time", data.time);
     formData.append("eduType", String(data.eduType));
 
-    const destination =
-      data.type === SERVICETYPE.EVENT ? EVENTS_ENDPOINT : TASKS_ENDPOINT;
+    // SERVICETYPE no longer distinguishes tasks from events, so every posting is
+    // a marketplace listing and goes to the events endpoint.
+    const destination = EVENTS_ENDPOINT;
 
     await fetch(destination, {
       method: "POST",
