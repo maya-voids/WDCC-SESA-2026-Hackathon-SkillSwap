@@ -3,7 +3,7 @@
 // endpoints (app/tasksMock.json, app/eventsMock.json), so they all behave identically.
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { SERVICETYPE, type Service } from "./DataUtils";
+import { SERVICETAGS, SERVICETYPE, type Service } from "./DataUtils";
 
 const DATA_DIR = "backend";
 
@@ -55,7 +55,10 @@ export function createServiceRoutes({ file }: { file: string }) {
     const location = formData?.get("location");
     const author = formData?.get("author");
     const type = formData?.get("type");
+    const credit = formData?.get("credit");
+    const tags = (formData?.getAll("tags") ?? []).map(String);
 
+    const validTags = Object.values(SERVICETAGS) as string[];
     if (
       typeof id !== "string" ||
       id === "" ||
@@ -64,12 +67,16 @@ export function createServiceRoutes({ file }: { file: string }) {
       typeof description !== "string" ||
       typeof location !== "string" ||
       typeof author !== "string" ||
-      (type !== SERVICETYPE.TASK && type !== SERVICETYPE.EVENT)
+      (type !== SERVICETYPE.TASK && type !== SERVICETYPE.EVENT) ||
+      credit === null ||
+      !Number.isInteger(Number(credit)) ||
+      tags.length === 0 ||
+      !tags.every((tag) => validTags.includes(tag))
     ) {
       return Response.json(
         {
           error:
-            "id (string), image (file), title (string), description (string), location (string), author (string) and type (TASK|EVENTS) are required",
+            "id (string), image (file), title (string), description (string), location (string), author (string), type (TASK|EVENTS), credit (integer) and at least one tags value from SERVICETAGS are required",
         },
         { status: 400 },
       );
@@ -87,6 +94,8 @@ export function createServiceRoutes({ file }: { file: string }) {
       location,
       author,
       type,
+      credit: Number(credit),
+      tags: tags as SERVICETAGS[],
     };
 
     const services = await readServices(filePath);

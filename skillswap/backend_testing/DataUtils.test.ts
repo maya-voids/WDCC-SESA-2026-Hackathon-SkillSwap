@@ -4,6 +4,7 @@ import {
   getEventsFromServer,
   getTasksFromServer,
   sendServiceToServer,
+  SERVICETAGS,
   SERVICETYPE,
   type PostData,
 } from "../backend/DataUtils";
@@ -19,6 +20,8 @@ describe("DataUtils", () => {
     location: "Wellington",
     author: "Alice",
     type: SERVICETYPE.TASK,
+    credit: 50,
+    tags: [SERVICETAGS.WEB_DEVELOPMENT, SERVICETAGS.FIRST_YEAR],
   });
 
   beforeEach(() => {
@@ -76,6 +79,8 @@ describe("DataUtils", () => {
       expect(formData.get("location")).toBe(post.location);
       expect(formData.get("author")).toBe(post.author);
       expect(formData.get("type")).toBe(post.type);
+      expect(formData.get("credit")).toBe(String(post.credit));
+      expect(formData.getAll("tags")).toEqual(post.tags);
       expect(init.headers).toBeUndefined();
     });
 
@@ -105,6 +110,8 @@ describe("DataUtils", () => {
           location: "Wellington",
           author: "Alice",
           type: SERVICETYPE.TASK,
+          credit: 10,
+          tags: [SERVICETAGS.FIRST_YEAR],
         },
       ];
       fetchMock.mockResolvedValue(
@@ -149,6 +156,8 @@ describe("DataUtils", () => {
           location: "Wellington",
           author: "Alice",
           type: SERVICETYPE.EVENT,
+          credit: 20,
+          tags: [SERVICETAGS.WEB_DESIGN],
         },
       ];
       fetchMock.mockResolvedValue(

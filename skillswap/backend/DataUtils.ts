@@ -22,6 +22,15 @@ export enum SERVICETYPE {
   EVENT = "EVENTS",
 }
 
+export enum SERVICETAGS {
+  FIRST_YEAR = "First-Year",
+  SECOND_YEAR = "Second-Year",
+  GRADUATE = "Graduate",
+  WEB_DEVELOPMENT = "Web Development",
+  WEB_DESIGN = "Web Design",
+  TYPESCRIPT = "TypeScript",
+}
+
 export type PostData = {
   id: string;
   image: File;
@@ -30,6 +39,9 @@ export type PostData = {
   location: string;
   author: string;
   type: SERVICETYPE;
+  /** Positive or negative integer credit value. */
+  credit: number;
+  tags: SERVICETAGS[];
 };
 
 /** A service (task or event) as stored on the server; the image is a base64 data URL. */
@@ -41,6 +53,9 @@ export type Service = {
   location: string;
   author: string;
   type: SERVICETYPE;
+  /** Positive or negative integer credit value. */
+  credit: number;
+  tags: SERVICETAGS[];
 };
 
 export async function sendServiceToServer(data: PostData): Promise<void> {
@@ -53,6 +68,8 @@ export async function sendServiceToServer(data: PostData): Promise<void> {
     formData.append("location", data.location);
     formData.append("author", data.author);
     formData.append("type", data.type);
+    formData.append("credit", String(data.credit));
+    data.tags.forEach((tag) => formData.append("tags", tag));
 
     const destination =
       data.type === SERVICETYPE.EVENT ? EVENTS_ENDPOINT : TASKS_ENDPOINT;

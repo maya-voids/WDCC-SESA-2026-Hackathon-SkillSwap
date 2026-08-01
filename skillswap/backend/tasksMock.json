@@ -6,7 +6,9 @@
     "description": "I'm a freelance illustrator launching a studio site and need help building a clean one-page landing page (Next.js or plain HTML/CSS is fine). Looking for someone to pair on layout, responsiveness and a simple contact form.",
     "location": "Wellington",
     "author": "Priya Nair",
-    "type": "TASK"
+    "type": "TASK",
+    "credit": 120,
+    "tags": ["Web Development", "Web Design"]
   },
   {
     "id": "mock-task-2",
@@ -15,7 +17,9 @@
     "description": "I'm prototyping a 2D farming sim in Godot and need a batch of pixel-art assets — a player character, crops, tools and tileset. Happy to pay a rate, and keen to learn your process while you work.",
     "location": "Auckland",
     "author": "Tane Williams",
-    "type": "TASK"
+    "type": "TASK",
+    "credit": -60,
+    "tags": ["Graduate"]
   },
   {
     "id": "mock-task-3",
@@ -24,6 +28,8 @@
     "description": "My side project has zero tests and deploys manually. I'd love a session to set up vitest, wire a GitHub Actions CI pipeline and add a basic deploy step — and to understand what's actually worth testing.",
     "location": "Christchurch",
     "author": "Sofia Rossi",
-    "type": "TASK"
+    "type": "TASK",
+    "credit": 90,
+    "tags": ["Web Development", "TypeScript"]
   }
 ]

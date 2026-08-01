@@ -6,7 +6,9 @@
     "description": "A weekend game jam to prototype a playable game from a mystery theme. Solo or teams welcome — bring a laptop and an idea, and mentors will be on hand for art, code and playtesting.",
     "location": "Wellington",
     "author": "WDCC Game Dev Club",
-    "type": "EVENTS"
+    "type": "EVENTS",
+    "credit": 25,
+    "tags": ["First-Year"]
   },
   {
     "id": "mock-event-2",
@@ -15,7 +17,9 @@
     "description": "A practical workshop on creating game-ready art — character sprites, tilesets and simple walk-cycle animation in Aseprite. Bring a tablet or mouse; beginners welcome and all assets are yours to keep.",
     "location": "Auckland",
     "author": "Pixel Garden Studio",
-    "type": "EVENTS"
+    "type": "EVENTS",
+    "credit": 40,
+    "tags": ["First-Year", "Second-Year"]
   },
   {
     "id": "mock-event-3",
@@ -24,6 +28,8 @@
     "description": "A 24-hour hackathon to build something useful or fun — web apps, bots, hardware, or art installations. Pitches start Saturday morning, demos Sunday night, prizes for best overall, best design and most creative.",
     "location": "Christchurch",
     "author": "CHCH Hack Society",
-    "type": "EVENTS"
+    "type": "EVENTS",
+    "credit": 100,
+    "tags": ["Web Development", "TypeScript"]
   }
 ]
