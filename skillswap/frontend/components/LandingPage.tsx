@@ -33,16 +33,16 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
         aria-labelledby="landing-heading"
       >
         <div className="landing-hero-copy">
-          <p className="landing-kicker">Student skill-sharing marketplace</p>
+          <p className="landing-kicker">Student Tech Discovery & Connection platform</p>
           <h1 id="landing-heading">
             LEARN TO
             <br />
             <span>MAKE</span>
             <br />
-            ANYTHING.
+            FOR REAL
           </h1>
           <p className="landing-intro">
-            Find a skill near you and learn it together.
+           Find physical tech events and student connections with no distractions
           </p>
         </div>
         <Image
