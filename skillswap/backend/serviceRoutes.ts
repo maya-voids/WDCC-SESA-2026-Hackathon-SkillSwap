@@ -3,9 +3,9 @@
 // endpoints (app/tasksMock.json, app/eventsMock.json), so they all behave identically.
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { SERVICETAGS, SERVICETYPE, type Service } from "./DataUtils";
+import { EDUCATIONTYPE, SERVICETAGS, SERVICETYPE, type Service } from "./DataUtils";
 
-const DATA_DIR = "backend";
+const DATA_DIR = "backend/dataStorage";
 
 async function readServices(filePath: string): Promise<Service[]> {
   let raw: string;
@@ -37,7 +37,8 @@ async function readFormData(request: Request): Promise<FormData | null> {
 
 /**
  * Create GET/POST/DELETE route handlers that read/write a JSON file inside
- * backend/. `file` is the file name, e.g. "tasks.json" or "tasksMock.json".
+ * backend/dataStorage/. `file` is the file name, e.g. "tasks.json" or
+ * "tasksMock.json".
  */
 export function createServiceRoutes({ file }: { file: string }) {
   const filePath = path.join(process.cwd(), DATA_DIR, file);
@@ -57,8 +58,13 @@ export function createServiceRoutes({ file }: { file: string }) {
     const type = formData?.get("type");
     const credit = formData?.get("credit");
     const tags = (formData?.getAll("tags") ?? []).map(String);
+    const time = formData?.get("time");
+    const eduType = formData?.get("eduType");
 
     const validTags = Object.values(SERVICETAGS) as string[];
+    const validEducationTypes = Object.values(EDUCATIONTYPE).filter(
+      (value): value is number => typeof value === "number",
+    );
     if (
       typeof id !== "string" ||
       id === "" ||
@@ -71,12 +77,17 @@ export function createServiceRoutes({ file }: { file: string }) {
       credit === null ||
       !Number.isInteger(Number(credit)) ||
       tags.length === 0 ||
-      !tags.every((tag) => validTags.includes(tag))
+      !tags.every((tag) => validTags.includes(tag)) ||
+      typeof time !== "string" ||
+      time === "" ||
+      Number.isNaN(Date.parse(time)) ||
+      eduType === null ||
+      !validEducationTypes.includes(Number(eduType))
     ) {
       return Response.json(
         {
           error:
-            "id (string), image (file), title (string), description (string), location (string), author (string), type (TASK|EVENTS), credit (integer) and at least one tags value from SERVICETAGS are required",
+            "id (string), image (file), title (string), description (string), location (string), author (string), type (TASK|EVENTS), credit (integer), at least one tags value from SERVICETAGS, time (UTC ISO 8601 string) and eduType (EDUCATIONTYPE) are required",
         },
         { status: 400 },
       );
@@ -96,6 +107,8 @@ export function createServiceRoutes({ file }: { file: string }) {
       type,
       credit: Number(credit),
       tags: tags as SERVICETAGS[],
+      time,
+      eduType: Number(eduType) as EDUCATIONTYPE,
     };
 
     const services = await readServices(filePath);

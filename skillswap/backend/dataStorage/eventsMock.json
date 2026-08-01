@@ -6,7 +6,11 @@
     "description": "A weekend game jam to prototype a playable game from a mystery theme. Solo participants and teams are welcome; bring a laptop and an idea, and mentors will be available for art, code, and playtesting.",
     "location": "Wellington",
     "author": "WDCC Game Dev Club",
-    "type": "EVENTS"
+    "type": "EVENTS",
+    "credit": 50,
+    "tags": ["Web Development"],
+    "time": "2026-08-22T09:00:00.000Z",
+    "eduType": 1
   },
   {
     "id": "mock-event-2",
@@ -15,7 +19,11 @@
     "description": "A practical workshop on creating game-ready art, including character sprites, tilesets, and simple walk-cycle animation in Aseprite. Beginners are welcome and all completed assets are yours to keep.",
     "location": "Auckland",
     "author": "Pixel Garden Studio",
-    "type": "EVENTS"
+    "type": "EVENTS",
+    "credit": 40,
+    "tags": ["Web Design"],
+    "time": "2026-08-24T13:00:00.000Z",
+    "eduType": 2
   },
   {
     "id": "mock-event-3",
@@ -24,7 +32,11 @@
     "description": "A 24-hour hackathon to build something useful or fun, from web apps and bots to hardware and art installations. Pitch on Saturday morning and demonstrate your project on Sunday night.",
     "location": "Christchurch",
     "author": "CHCH Hack Society",
-    "type": "EVENTS"
+    "type": "EVENTS",
+    "credit": 100,
+    "tags": ["Web Development", "TypeScript"],
+    "time": "2026-09-05T08:00:00.000Z",
+    "eduType": 3
   },
   {
     "id": "mock-event-4",
@@ -33,7 +45,11 @@
     "description": "Bring an early-stage idea and work alongside student developers, designers, and makers. Volunteer mentors will help with scoping, technical decisions, and preparing a short end-of-night demo.",
     "location": "Auckland",
     "author": "Campus Makers Collective",
-    "type": "EVENTS"
+    "type": "EVENTS",
+    "credit": 80,
+    "tags": ["Web Design", "Web Development"],
+    "time": "2026-09-08T17:00:00.000Z",
+    "eduType": 1
   },
   {
     "id": "mock-event-5",
@@ -42,7 +58,11 @@
     "description": "Get practical feedback on your portfolio, CV, or GitHub profile in a friendly small-group session. Reviewers from design, software, engineering, and business backgrounds will be available.",
     "location": "Wellington",
     "author": "Student Careers Network",
-    "type": "EVENTS"
+    "type": "EVENTS",
+    "credit": -20,
+    "tags": ["Web Design"],
+    "time": "2026-09-12T10:00:00.000Z",
+    "eduType": 3
   },
   {
     "id": "mock-event-6",
@@ -51,6 +71,10 @@
     "description": "Meet students looking for collaborators across art, design, technology, music, and entrepreneurship. Share what you can contribute, discover new project ideas, and form a team on the night.",
     "location": "Dunedin",
     "author": "Otago Creative Community",
-    "type": "EVENTS"
+    "type": "EVENTS",
+    "credit": 30,
+    "tags": ["Web Design"],
+    "time": "2026-09-15T18:30:00.000Z",
+    "eduType": 2
   }
 ]

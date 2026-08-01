@@ -8,7 +8,9 @@
     "author": "Priya Nair",
     "type": "TASK",
     "credit": 120,
-    "tags": ["Web Development", "Web Design"]
+    "tags": ["Web Development", "Web Design"],
+    "time": "2026-08-10T09:00:00.000Z",
+    "eduType": 1
   },
   {
     "id": "mock-task-2",
@@ -19,7 +21,9 @@
     "author": "Tane Williams",
     "type": "TASK",
     "credit": -60,
-    "tags": ["Graduate"]
+    "tags": ["Web Design"],
+    "time": "2026-08-12T14:30:00.000Z",
+    "eduType": 2
   },
   {
     "id": "mock-task-3",
@@ -30,6 +34,8 @@
     "author": "Sofia Rossi",
     "type": "TASK",
     "credit": 90,
-    "tags": ["Web Development", "TypeScript"]
+    "tags": ["Web Development", "TypeScript"],
+    "time": "2026-08-15T10:00:00.000Z",
+    "eduType": 3
   }
 ]

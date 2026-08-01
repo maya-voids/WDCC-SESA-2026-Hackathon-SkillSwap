@@ -11,8 +11,9 @@
 import { DATA_SOURCE } from "./dataSource";
 
 // Endpoints DataUtils talks to. In "mock" mode they point at the mock datasets
-// (backend/tasksMock.json & backend/eventsMock.json); in "standard" mode at the
-// real datasets (backend/tasks.json & backend/events.json).
+// (backend/dataStorage/tasksMock.json & backend/dataStorage/eventsMock.json);
+// in "standard" mode at the real datasets (backend/dataStorage/tasks.json &
+// backend/dataStorage/events.json).
 const TASKS_ENDPOINT = DATA_SOURCE === "mock" ? "/tasksMock.json" : "/tasks.json";
 const EVENTS_ENDPOINT =
   DATA_SOURCE === "mock" ? "/eventsMock.json" : "/events.json";
@@ -23,12 +24,16 @@ export enum SERVICETYPE {
 }
 
 export enum SERVICETAGS {
-  FIRST_YEAR = "First-Year",
-  SECOND_YEAR = "Second-Year",
-  GRADUATE = "Graduate",
   WEB_DEVELOPMENT = "Web Development",
   WEB_DESIGN = "Web Design",
   TYPESCRIPT = "TypeScript",
+}
+
+/** Education level, ordered by a numbered index (1 = first-year … 3 = graduate). */
+export enum EDUCATIONTYPE {
+  FIRST_YEAR = 1,
+  SECOND_YEAR = 2,
+  GRADUATE = 3,
 }
 
 export type PostData = {
@@ -42,6 +47,9 @@ export type PostData = {
   /** Positive or negative integer credit value. */
   credit: number;
   tags: SERVICETAGS[];
+  /** UTC timestamp (ISO 8601). */
+  time: string;
+  eduType: EDUCATIONTYPE;
 };
 
 /** A service (task or event) as stored on the server; the image is a base64 data URL. */
@@ -56,7 +64,25 @@ export type Service = {
   /** Positive or negative integer credit value. */
   credit: number;
   tags: SERVICETAGS[];
+  /** UTC timestamp (ISO 8601). */
+  time: string;
+  eduType: EDUCATIONTYPE;
 };
+
+/** Convert an EDUCATIONTYPE to its formally capitalised display label. Used only by tests. */
+export function educationTypeToLabel(eduType: EDUCATIONTYPE): string {
+  switch (eduType) {
+    case EDUCATIONTYPE.FIRST_YEAR:
+      return "First Year";
+    case EDUCATIONTYPE.SECOND_YEAR:
+      return "Second Year";
+    case EDUCATIONTYPE.GRADUATE:
+      return "Graduate";
+    default:
+      // Unreachable for valid EDUCATIONTYPE values.
+      return "";
+  }
+}
 
 export async function sendServiceToServer(data: PostData): Promise<void> {
   try {
@@ -70,6 +96,8 @@ export async function sendServiceToServer(data: PostData): Promise<void> {
     formData.append("type", data.type);
     formData.append("credit", String(data.credit));
     data.tags.forEach((tag) => formData.append("tags", tag));
+    formData.append("time", data.time);
+    formData.append("eduType", String(data.eduType));
 
     const destination =
       data.type === SERVICETYPE.EVENT ? EVENTS_ENDPOINT : TASKS_ENDPOINT;

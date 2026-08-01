@@ -1,9 +1,9 @@
 // HOW TO RUN THE TOGGLE (from the skillswap/ project root):
 //
 //   npm run toggle -- mock        # DataUtils reads/writes the mock datasets
-//                                 #   (backend/tasksMock.json & backend/eventsMock.json)
+//                                 #   (backend/dataStorage/tasksMock.json & backend/dataStorage/eventsMock.json)
 //   npm run toggle -- standard    # DataUtils reads/writes the real datasets
-//                                 #   (backend/tasks.json & backend/events.json)
+//                                 #   (backend/dataStorage/tasks.json & backend/dataStorage/events.json)
 //   npm run toggle                # no argument: just print the current data source
 //
 // You can also call the script directly, e.g.:
@@ -47,8 +47,8 @@ export async function toggle(dataSource) {
 
   const files =
     dataSource === "mock"
-      ? "backend/tasksMock.json & backend/eventsMock.json"
-      : "backend/tasks.json & backend/events.json";
+      ? "backend/dataStorage/tasksMock.json & backend/dataStorage/eventsMock.json"
+      : "backend/dataStorage/tasks.json & backend/dataStorage/events.json";
   console.log(`DataUtils data source → ${dataSource}`);
   console.log(`DataUtils will now read/write: ${files}`);
   console.log("Refresh the browser if the dev server is running.");
@@ -73,10 +73,10 @@ async function main() {
     console.log("");
     console.log("Usage:");
     console.log(
-      "  npm run toggle -- mock        → use mock data (backend/tasksMock.json, backend/eventsMock.json)",
+      "  npm run toggle -- mock        → use mock data (backend/dataStorage/tasksMock.json, backend/dataStorage/eventsMock.json)",
     );
     console.log(
-      "  npm run toggle -- standard    → use real data (backend/tasks.json, backend/events.json)",
+      "  npm run toggle -- standard    → use real data (backend/dataStorage/tasks.json, backend/dataStorage/events.json)",
     );
     return;
   }

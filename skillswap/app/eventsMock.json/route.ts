@@ -1,6 +1,6 @@
 import { createServiceRoutes } from "../../backend/serviceRoutes";
 
-// Mock events endpoint — reads/writes backend/eventsMock.json.
+// Mock events endpoint — reads/writes backend/dataStorage/eventsMock.json.
 // DataUtils points here when toggled to mock mode (see backend/toggle.mjs).
 const routes = createServiceRoutes({ file: "eventsMock.json" });
 
