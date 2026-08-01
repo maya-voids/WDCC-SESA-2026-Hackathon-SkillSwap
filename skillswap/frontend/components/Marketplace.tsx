@@ -191,9 +191,9 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
             </button>
           </div>
         ) : filteredEvents.length ? (
-          <div className="workshop-grid">
+          <div className="event-grid">
             {filteredEvents.map((event, index) => (
-              <article className="workshop-card" key={event.id}>
+              <article className="event-card" key={event.id}>
                 <div className="card-image">
                   <Image
                     src={event.image}
