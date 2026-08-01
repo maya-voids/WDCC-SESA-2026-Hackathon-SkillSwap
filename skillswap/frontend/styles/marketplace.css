@@ -1279,6 +1279,7 @@ textarea:focus-visible {
 
 .event-modal-description > p:first-child {
   margin-top: 0;
+  margin-bottom: 1rem;
 }
 
 .event-modal-footer {
