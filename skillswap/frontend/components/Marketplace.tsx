@@ -30,6 +30,7 @@ const EDUCATION_LEVELS = Object.values(EDUCATIONTYPE).filter(
 );
 
 const SERVICE_TYPES = Object.values(SERVICETYPE);
+const SERVICE_TAGS = Object.values(SERVICETAGS);
 
 function serviceTypeToLabel(serviceType: SERVICETYPE): string {
   return serviceType
@@ -205,7 +206,14 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
             <strong>
               {credits === null ? "···" : credits.toLocaleString("en-NZ")}
             </strong>
-            <span aria-hidden="true">✦</span>
+            <Image
+              className="credit-icon"
+              src={creditIcon}
+              alt=""
+              width={24}
+              height={24}
+              aria-hidden="true"
+            />
           </div>
           <div className="mock-account" aria-label="Signed in as Alex Morgan">
             <div className="mock-account-summary">
