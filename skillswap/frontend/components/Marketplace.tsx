@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import EventCard from "../../components/EventCard";
 import iconImage from "../../app/icon.png";
+import creditIcon from "../../app/credit_icon.png";
 import graphicImage from "../../app/graphic.png";
 import {
   CITY,
@@ -16,6 +17,7 @@ import {
   SERVICETYPE,
   type Service,
 } from "../../backend/DataUtils";
+import { changeCredits, getCredits } from "../../backend/ProfileUtils";
 
 type MarketplaceProps = {
   onLogout: () => void;
@@ -28,7 +30,6 @@ const EDUCATION_LEVELS = Object.values(EDUCATIONTYPE).filter(
 );
 
 const SERVICE_TYPES = Object.values(SERVICETYPE);
-const SERVICE_TAGS = Object.values(SERVICETAGS);
 
 function serviceTypeToLabel(serviceType: SERVICETYPE): string {
   return serviceType
@@ -55,6 +56,8 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
   const [isShareFormOpen, setIsShareFormOpen] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
   const [shareError, setShareError] = useState<string | null>(null);
+  // Starts null so the header shows a placeholder until the stored balance loads.
+  const [credits, setCredits] = useState<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -82,6 +85,22 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
       cancelled = true;
     };
   }, [reloadKey]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    getCredits()
+      .then((value) => {
+        if (!cancelled) setCredits(value);
+      })
+      .catch(() => {
+        // Keep the default balance if the profile cannot be loaded.
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     if (!isShareFormOpen) return;
@@ -159,6 +178,15 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
     }
   }
 
+  async function handleJoin(service: Service): Promise<boolean> {
+    if (credits === null || credits < service.credit) {
+      return false;
+    }
+
+    setCredits(await changeCredits(-service.credit));
+    return true;
+  }
+
   return (
     <main>
       <header className="site-header">
@@ -166,13 +194,24 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           <Image src={iconImage} alt="SkillSwap" width={50} height={50} />
         </a>
         <div className="header-actions">
-          <div className="mock-credits" aria-label="Current balance: 1,000 credits">
-            <strong>1,000</strong>
+          <div
+            className="mock-credits"
+            aria-label={
+              credits === null
+                ? "Loading credit balance"
+                : `Current balance: ${credits.toLocaleString("en-NZ")} credits`
+            }
+          >
+            <strong>
+              {credits === null ? "···" : credits.toLocaleString("en-NZ")}
+            </strong>
             <span aria-hidden="true">✦</span>
           </div>
           <div className="mock-account" aria-label="Signed in as Alex Morgan">
             <div className="mock-account-summary">
-              <span className="mock-account-avatar" aria-hidden="true">AM</span>
+              <span className="mock-account-avatar" aria-hidden="true">
+                AM
+              </span>
               <span className="mock-account-copy">
                 <span className="mock-account-label">Signed in</span>
                 <strong>Alex Morgan</strong>
@@ -339,7 +378,10 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         </div>
 
         <div className="results-line" aria-live="polite">
-          <span>{String(filteredServices.length).padStart(2, "0")} results</span>
+          <span>
+            {String(filteredServices.length).padStart(2, "0")} results
+          </span>
+          <span>Community listings</span>
         </div>
 
         {isLoading ? (
@@ -363,7 +405,12 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         ) : filteredServices.length ? (
           <div className="event-grid">
             {filteredServices.map((service, index) => (
-              <EventCard event={service} index={index} key={service.id} />
+              <EventCard
+                event={service}
+                index={index}
+                key={service.id}
+                onJoin={handleJoin}
+              />
             ))}
           </div>
         ) : (
@@ -371,7 +418,11 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
             <span>00</span>
             <h2>NO LISTINGS FOUND</h2>
             <p>Try a different search term or reset the filters.</p>
-            <button type="button" className="button button-solid" onClick={resetFilters}>
+            <button
+              type="button"
+              className="button button-solid"
+              onClick={resetFilters}
+            >
               Reset filters
             </button>
           </div>
@@ -460,7 +511,12 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
             >
               <label className="share-skill-field share-skill-field-full">
                 <span>Title</span>
-                <input name="title" type="text" placeholder="e.g. Beginner pottery wheel" required />
+                <input
+                  name="title"
+                  type="text"
+                  placeholder="e.g. Beginner pottery wheel"
+                  required
+                />
               </label>
 
               <label className="share-skill-field">
@@ -476,7 +532,9 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               <label className="share-skill-field">
                 <span>City</span>
                 <select name="city" defaultValue="" required>
-                  <option value="" disabled>Select a city</option>
+                  <option value="" disabled>
+                    Select a city
+                  </option>
                   {CITIES.map((city) => (
                     <option value={city} key={city}>
                       {city}
@@ -489,9 +547,11 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
                 <span>Category</span>
                 <select name="category" defaultValue="" required>
                   <option value="" disabled>Select a category</option>
-                  <option value={SERVICETAGS.WEB_DEVELOPMENT}>Web development</option>
-                  <option value={SERVICETAGS.WEB_DESIGN}>Web design</option>
-                  <option value={SERVICETAGS.TYPESCRIPT}>TypeScript</option>
+                  {SERVICE_TAGS.map((tag) => (
+                    <option value={tag} key={tag}>
+                      {tag}
+                    </option>
+                  ))}
                 </select>
               </label>
 
@@ -525,12 +585,23 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
 
               <label className="share-skill-field">
                 <span>Duration</span>
-                <input name="duration" type="text" placeholder="e.g. 2 hours" required />
+                <input
+                  name="duration"
+                  type="text"
+                  placeholder="e.g. 2 hours"
+                  required
+                />
               </label>
 
               <label className="share-skill-field">
                 <span>Seats available</span>
-                <input name="seats" type="number" min="1" placeholder="e.g. 12" required />
+                <input
+                  name="seats"
+                  type="number"
+                  min="1"
+                  placeholder="e.g. 12"
+                  required
+                />
               </label>
 
               <label className="share-skill-field">
@@ -566,7 +637,10 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               </label>
 
               {shareError && (
-                <p className="share-skill-error share-skill-field-full" role="alert">
+                <p
+                  className="share-skill-error share-skill-field-full"
+                  role="alert"
+                >
                   {shareError}
                 </p>
               )}
@@ -580,7 +654,11 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
                 >
                   Cancel
                 </button>
-                <button className="button button-solid" type="submit" disabled={isPublishing}>
+                <button
+                  className="button button-solid"
+                  type="submit"
+                  disabled={isPublishing}
+                >
                   {isPublishing ? "Publishing…" : "Publish skill"}
                 </button>
               </div>

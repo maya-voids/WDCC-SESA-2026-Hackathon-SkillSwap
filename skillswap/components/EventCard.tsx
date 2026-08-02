@@ -7,6 +7,12 @@ import { educationTypeToLabel, type Service } from "../backend/DataUtils";
 interface EventCardProps {
   event: Service;
   index: number;
+  /**
+   * Called when the user confirms participation; the marketplace spends/earns
+   * credits. Returns true when the join succeeded, or false when the user has
+   * too few credits.
+   */
+  onJoin?: (event: Service) => Promise<boolean> | boolean;
 }
 
 function formatEventTime(time: string): string {
@@ -20,7 +26,7 @@ function formatEventTime(time: string): string {
   }).format(date);
 }
 
-export default function EventCard({ event, index }: EventCardProps) {
+export default function EventCard({ event, index, onJoin }: EventCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   const eventTime = formatEventTime(event.time);
   const educationLevel = educationTypeToLabel(event.eduType);
@@ -158,8 +164,13 @@ export default function EventCard({ event, index }: EventCardProps) {
               <button
                 type="button"
                 className="button button-solid"
-                onClick={() => {
-                  alert(`Successfully joined ${event.title}!`);
+                onClick={async () => {
+                  const joined = (await onJoin?.(event)) ?? true;
+                  alert(
+                    joined
+                      ? `Successfully joined ${event.title}!`
+                      : "You don't have enough credits to join this skill.",
+                  );
                   setIsOpen(false);
                 }}
               >
