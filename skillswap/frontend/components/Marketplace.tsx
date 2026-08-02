@@ -77,7 +77,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         ]);
         if (!cancelled) setServices([...loadedEvents, ...loadedTasks]);
       } catch {
-        if (!cancelled) setError("The marketplace could not be loaded.");
+        if (!cancelled) setError("Events could not be loaded.");
       } finally {
         if (!cancelled) setIsLoading(false);
       }
@@ -205,7 +205,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
   }
 
   return (
-    <main>
+    <main className="marketplace-page">
       <header className="site-header">
         <a className="wordmark" href="#workshops" aria-label="SkillSwap home">
           <Image src={iconImage} alt="SkillSwap" width={50} height={50} />
@@ -234,7 +234,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           <div className="mock-account" aria-label="Signed in as Alex Morgan">
             <div className="mock-account-summary">
               <span className="mock-account-avatar" aria-hidden="true">
-                AM
+                MY
               </span>
               <span className="mock-account-copy">
                 <span className="mock-account-label">Signed in</span>
@@ -270,7 +270,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         <div className="workshop-heading-row">
           <div className="heading-block">
             <div className="heading-copy">
-              <p className="eyebrow">Discover New</p>
+              <p className="eyebrow">Explore nearby tech services</p>
               <h1 id="workshops-heading">SKILLS NEAR YOU</h1>
             </div>
             <Image
@@ -286,7 +286,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         </div>
 
         <div className="marketplace-tools">
-          <label htmlFor="marketplace-search">Search for events</label>
+          <label htmlFor="marketplace-search">Search the platform</label>
           <input
             id="marketplace-search"
             type="search"
@@ -428,12 +428,12 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         {isLoading ? (
           <div className="empty-state" aria-live="polite">
             <span>...</span>
-            <h2>LOADING MARKETPLACE</h2>
+            <h2>LOADING EVENTS</h2>
           </div>
         ) : error ? (
           <div className="empty-state" role="alert">
             <span>!</span>
-            <h2>MARKETPLACE UNAVAILABLE</h2>
+            <h2>EVENTS UNAVAILABLE</h2>
             <p>{error}</p>
             <button
               type="button"
