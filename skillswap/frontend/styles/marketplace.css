@@ -1354,7 +1354,6 @@ textarea:focus-visible {
     var(--white) 35%,
     var(--white) 100%
   );
-  border: 1px solid var(--black);
   /* Very slight rounding on the service cards. */
   border-radius: 4px;
 }
@@ -1382,15 +1381,18 @@ textarea:focus-visible {
   );
 }
 
-.event-card[data-type="HACKATHON"] .card-tag {
+.event-card[data-type="HACKATHON"] .card-tag,
+.event-card[data-type="HACKATHON"] .card-number {
   background: var(--orange);
 }
 
-.event-card[data-type="WORKSHOP"] .card-tag {
+.event-card[data-type="WORKSHOP"] .card-tag,
+.event-card[data-type="WORKSHOP"] .card-number {
   background: var(--yellow);
 }
 
-.event-card[data-type="STUDENT WORK"] .card-tag {
+.event-card[data-type="STUDENT WORK"] .card-tag,
+.event-card[data-type="STUDENT WORK"] .card-number {
   background: var(--blue);
 }
 
