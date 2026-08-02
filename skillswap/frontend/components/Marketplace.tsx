@@ -270,7 +270,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         <div className="workshop-heading-row">
           <div className="heading-block">
             <div className="heading-copy">
-              <p className="eyebrow">Explore the marketplace</p>
+              <p className="eyebrow">Discover New</p>
               <h1 id="workshops-heading">SKILLS NEAR YOU</h1>
             </div>
             <Image
@@ -286,7 +286,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         </div>
 
         <div className="marketplace-tools">
-          <label htmlFor="marketplace-search">Search the marketplace</label>
+          <label htmlFor="marketplace-search">Search for events</label>
           <input
             id="marketplace-search"
             type="search"

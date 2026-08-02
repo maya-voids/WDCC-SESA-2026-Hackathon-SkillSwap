@@ -348,7 +348,6 @@ textarea:focus-visible {
 }
 
 .share-skill-field {
-  display: grid;
   gap: 0.55rem;
 }
 
@@ -936,7 +935,7 @@ textarea:focus-visible {
 }
 
 .workshop-heading-row .eyebrow {
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
   font-size: clamp(0.72rem, 1vw, 0.9rem) !important;
   line-height: 1.2;
 }
@@ -1222,7 +1221,7 @@ textarea:focus-visible {
 .event-modal-image {
   position: relative;
   width: 100%;
-  aspect-ratio: 9 / 7;
+  height: 35vh;
   overflow: hidden;
   margin-bottom: 24px;
   background: #eeeeee;
@@ -1305,6 +1304,7 @@ textarea:focus-visible {
 
 .event-modal-description > p:first-child {
   margin-top: 0;
+  margin-bottom: 1rem;
 }
 
 .event-modal-footer {
