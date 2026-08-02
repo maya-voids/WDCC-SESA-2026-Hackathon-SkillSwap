@@ -330,7 +330,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               }
               aria-label="Filter by city"
             >
-              <option value="All">All cities</option>
+              <option value="All">All Locations</option>
               {CITIES.map((city) => (
                 <option value={city} key={city}>
                   {city}
