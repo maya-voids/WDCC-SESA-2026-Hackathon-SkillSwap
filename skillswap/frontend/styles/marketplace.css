@@ -469,17 +469,13 @@ textarea:focus-visible {
 }
 
 .landing-home-graphic {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  z-index: 2;
-  width: min(44vw, 620px);
+  display: block;
+  width: min(100%, 620px);
   max-width: 620px;
   height: auto;
+  margin-top: clamp(1.5rem, 3vh, 2.5rem);
+  align-self: flex-start;
   object-fit: contain;
-  transform: translate(-6%, 16%);
-  padding-left: clamp(1.5rem, 3vw, 2.5rem);
-  padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
   pointer-events: none;
 }
 
