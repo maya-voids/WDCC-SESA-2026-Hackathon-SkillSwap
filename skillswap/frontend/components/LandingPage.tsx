@@ -41,9 +41,6 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
             <br />
             FOR REAL
           </h1>
-          <p className="landing-intro">
-           Find physical tech events and student connections with no distractions
-          </p>
         </div>
         <Image
           src={graphicHome}
