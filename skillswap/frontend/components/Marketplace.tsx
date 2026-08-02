@@ -389,7 +389,6 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           <span>
             {String(filteredServices.length).padStart(2, "0")} results
           </span>
-          <span>Community listings</span>
         </div>
 
         {isLoading ? (
