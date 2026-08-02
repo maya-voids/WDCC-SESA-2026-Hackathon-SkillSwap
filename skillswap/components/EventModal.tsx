@@ -88,9 +88,7 @@ export default function EventModal({
         </button>
 
         <header className="event-modal-heading">
-          <p className="eyebrow">
-            {skillLabel} / {event.location}
-          </p>
+          <p className="eyebrow">{skillLabel}</p>
           <h2 id={`event-dialog-title-${event.id}`}>{event.title}</h2>
         </header>
 

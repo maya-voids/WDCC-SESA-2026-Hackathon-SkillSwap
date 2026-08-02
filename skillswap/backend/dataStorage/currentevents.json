@@ -1,1 +1,36 @@
-[]
+[
+  {
+    "id": "seed-workshop-02",
+    "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&h=700&fit=crop&auto=format",
+    "title": "Embedded Systems Build Lab",
+    "description": "Program a microcontroller, connect sensors, and build a working environmental monitor. Hardware kits are supplied and no embedded experience is required.",
+    "location": "Auckland",
+    "address": "AUT City Campus, Auckland",
+    "author": "AUT Engineering Club",
+    "type": "WORKSHOP",
+    "credit": 55,
+    "tags": [
+      "Firmware",
+      "Hardware"
+    ],
+    "time": "2026-08-29T01:00:00.000Z",
+    "eduType": 2
+  },
+  {
+    "id": "seed-workshop-01",
+    "image": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900&h=700&fit=crop&auto=format",
+    "title": "React Foundations Workshop",
+    "description": "Learn how to turn a design into reusable React components. The session includes guided exercises, debugging support, and a small project to take home.",
+    "location": "Wellington",
+    "address": "Victoria University of Wellington, Kelburn, Wellington",
+    "author": "Wellington Web Society",
+    "type": "WORKSHOP",
+    "credit": 35,
+    "tags": [
+      "Web Development",
+      "TypeScript"
+    ],
+    "time": "2026-08-18T06:00:00.000Z",
+    "eduType": 1
+  }
+]

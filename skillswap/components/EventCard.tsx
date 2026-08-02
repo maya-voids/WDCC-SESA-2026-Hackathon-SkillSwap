@@ -98,73 +98,13 @@ export default function EventCard({
         </div>
       </article>
 
-      {isOpen && (
-        <div
-          className="event-modal-overlay"
-          onClick={() => setIsOpen(false)}
-          role="presentation"
-        >
-          <section
-            className="event-modal-dialog"
-            onClick={(clickEvent) => clickEvent.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby={`event-dialog-title-${event.id}`}
-          >
-            <button
-              type="button"
-              className="event-modal-close"
-              onClick={() => setIsOpen(false)}
-              aria-label="Close event details"
-            >
-              ×
-            </button>
-
-            <header className="event-modal-heading">
-              <p className="eyebrow">{skillLabel}</p>
-              <h2 id={`event-dialog-title-${event.id}`}>{event.title}</h2>
-            </header>
-
-            <div className="event-modal-image">
-              <Image
-                src={event.image}
-                alt={`${event.title} preview`}
-                fill
-                sizes="(max-width: 700px) 90vw, 520px"
-              />
-            </div>
-
-            <div className="event-modal-description">
-              <p>{event.description}</p>
-              <p className="instructor">Hosted by {event.author}</p>
-            </div>
-
-            <div className="event-modal-footer">
-              <div className="metadata card-metadata">
-                <span>{eventTime}</span>
-                <span>{event.credit} credits</span>
-                <span>{educationLevel}</span>
-              </div>
-              <button
-                type="button"
-                className="button button-solid"
-                onClick={async () => {
-                  const joined = (await onJoin?.(event)) ?? true;
-                  alert(
-                    joined
-                      ? `Successfully joined ${event.title}!`
-                      : "You don't have enough credits to join this skill.",
-                  );
-                  setIsOpen(false);
-                }}
-              >
-                Confirm participation{" "}
-                <span>↗</span>
-              </button>
-            </div>
-          </section>
-        </div>
-      )}
+      <EventModal
+        event={event}
+        open={isOpen}
+        onClose={handleClose}
+        onJoin={onJoin}
+        onJoinResult={onJoinResult}
+      />
     </>
   );
 }
