@@ -258,7 +258,6 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           <label
             className={`marketplace-filter marketplace-filter-city ${activeCity !== "All" ? "active" : ""}`}
           >
-            <span>City</span>
             <select
               value={activeCity}
               onChange={(event) =>
@@ -278,7 +277,6 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           <label
             className={`marketplace-filter marketplace-filter-event ${activeServiceType !== "All" ? "active" : ""}`}
           >
-            <span>Event</span>
             <select
               value={activeServiceType}
               onChange={(event) =>
@@ -286,7 +284,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               }
               aria-label="Filter by service type"
             >
-              <option value="All">All types</option>
+              <option value="All">All event types</option>
               {SERVICE_TYPES.map((serviceType) => (
                 <option value={serviceType} key={serviceType}>
                   {serviceTypeToLabel(serviceType)}
@@ -298,7 +296,6 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           <label
             className={`marketplace-filter marketplace-filter-category ${activeServiceTag !== "All" ? "active" : ""}`}
           >
-            <span>Category</span>
             <select
               value={activeServiceTag}
               onChange={(event) =>
@@ -320,7 +317,6 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           <label
             className={`marketplace-filter marketplace-filter-level ${activeEducationType !== "All" ? "active" : ""}`}
           >
-            <span>Level</span>
             <select
               value={activeEducationType}
               onChange={(event) =>
@@ -344,7 +340,6 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
 
         <div className="results-line" aria-live="polite">
           <span>{String(filteredServices.length).padStart(2, "0")} results</span>
-          <span>Community listings</span>
         </div>
 
         {isLoading ? (

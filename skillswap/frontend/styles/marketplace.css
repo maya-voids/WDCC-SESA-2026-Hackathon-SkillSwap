@@ -1027,6 +1027,11 @@ textarea:focus-visible {
   text-transform: uppercase;
 }
 
+.marketplace-filter-all.active {
+  background: var(--black);
+  color: var(--white);
+}
+
 .marketplace-filter {
   position: relative;
   display: flex;
@@ -1034,6 +1039,7 @@ textarea:focus-visible {
   justify-content: center;
   gap: 0.2rem;
   padding: 0.55rem 1rem;
+  color: #000;
 }
 
 .marketplace-filter:last-child {
@@ -1056,25 +1062,23 @@ textarea:focus-visible {
   background: var(--blue);
 }
 
-.marketplace-filter > span {
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .marketplace-filter select {
   width: 100%;
-  padding: 0.15rem 0;
+  padding: 0.15rem 1.5rem 0.15rem 0;
   background: transparent;
-  color: var(--black);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%23000' d='M0 0h12L6 8z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.2rem center;
+  background-size: 0.65rem 0.45rem;
+  color: #000;
   border: 0;
   outline: 0;
+  appearance: none;
   cursor: pointer;
-  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-family: var(--font-geist-mono), monospace;
   font-size: 0.85rem;
   font-weight: 700;
+  text-transform: uppercase;
 }
 
 .marketplace-filter select:focus-visible {
