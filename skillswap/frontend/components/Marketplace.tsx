@@ -204,7 +204,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               <span className="mock-account-avatar" aria-hidden="true">AM</span>
               <span className="mock-account-copy">
                 <span className="mock-account-label">Signed in</span>
-                <strong>Alex Morgan</strong>
+                <strong>M Yang</strong>
               </span>
             </div>
             <button
@@ -223,7 +223,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               setIsShareFormOpen(true);
             }}
           >
-            Share a skill
+            Share a service
           </button>
         </div>
       </header>
@@ -412,7 +412,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
             <header className="share-skill-header">
               <div>
                 <p className="eyebrow">Create a listing</p>
-                <h2 id="share-skill-heading">Share a skill</h2>
+                <h2 id="share-skill-heading">CREATE SERVICE</h2>
               </div>
               <button
                 className="share-skill-close"
@@ -434,6 +434,9 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
                 const duration = String(formData.get("duration"));
                 const seats = Number(formData.get("seats"));
                 const scheduledTime = String(formData.get("time"));
+                const categories = formData
+                  .getAll("category")
+                  .map(String) as SERVICETAGS[];
 
                 if (!(image instanceof File) || image.size === 0) {
                   setShareError("Please select an image for your skill.");
@@ -454,7 +457,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
                     author: "Alex Morgan",
                     type: formData.get("serviceType") as SERVICETYPE,
                     credit: Number(formData.get("credit")),
-                    tags: [String(formData.get("category")) as SERVICETAGS],
+                    tags: categories,
                     time: new Date(scheduledTime).toISOString(),
                     eduType: Number(
                       formData.get("educationType"),
@@ -475,7 +478,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
             >
               <label className="share-skill-field share-skill-field-full">
                 <span>Title</span>
-                <input name="title" type="text" placeholder="e.g. Beginner pottery wheel" required />
+                <input name="title" type="text" placeholder="e.g. Entry-level front-end programmer needed" required />
               </label>
 
               <label className="share-skill-field">
@@ -483,7 +486,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
                 <input
                   name="address"
                   type="text"
-                  placeholder="e.g. 12 Cuba Street"
+                  placeholder="e.g. 12 Queen Street"
                   required
                 />
               </label>
@@ -502,14 +505,21 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
 
               <label className="share-skill-field">
                 <span>Category</span>
-                <select name="category" defaultValue="" required>
-                  <option value="" disabled>Select a category</option>
+                <select
+                  name="category"
+                  multiple
+                  size={SERVICE_TAGS.length}
+                  required
+                >
                   {SERVICE_TAGS.map((tag) => (
                     <option value={tag} key={tag}>
                       {tag}
                     </option>
                   ))}
                 </select>
+                <span className="share-skill-hint">
+                  Hold Ctrl (Cmd on Mac) to select multiple categories.
+                </span>
               </label>
 
               <label className="share-skill-field">
