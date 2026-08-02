@@ -93,6 +93,30 @@ export type Service = {
   eduType: EDUCATIONTYPE;
 };
 
+/**
+ * Whether participating in a service rewards credits instead of costing them.
+ */
+export function serviceRewardsCredits(serviceType: SERVICETYPE): boolean {
+  return (
+    serviceType === SERVICETYPE.WORKSHOP ||
+    serviceType === SERVICETYPE.STUDENT_WORK
+  );
+}
+
+/**
+ * Return the balance change applied when a user participates in a service.
+ * Workshops and student work reward participation; every other type costs
+ * credits. The service type, rather than a stored sign, controls the direction.
+ */
+export function participationCreditDelta(
+  serviceType: SERVICETYPE,
+  credit: number,
+): number {
+  const amount = Math.abs(credit);
+
+  return serviceRewardsCredits(serviceType) ? amount : -amount;
+}
+
 /** Convert an EDUCATIONTYPE to its formally capitalised display label. Used only by tests. */
 export function educationTypeToLabel(eduType: EDUCATIONTYPE): string {
   switch (eduType) {

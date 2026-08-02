@@ -2,7 +2,12 @@
 
 import Image from "next/image";
 import { useEffect } from "react";
-import { educationTypeToLabel, type Service } from "../backend/DataUtils";
+import {
+  educationTypeToLabel,
+  participationCreditDelta,
+  serviceRewardsCredits,
+  type Service,
+} from "../backend/DataUtils";
 
 interface EventModalProps {
   event: Service;
@@ -43,6 +48,10 @@ export default function EventModal({
 }: EventModalProps) {
   const eventTime = formatEventTime(event.time);
   const educationLevel = educationTypeToLabel(event.eduType);
+  const creditDelta = participationCreditDelta(event.type, event.credit);
+  const creditLabel = serviceRewardsCredits(event.type)
+    ? `Earn ${creditDelta} credits`
+    : `Cost ${Math.abs(creditDelta)} credits`;
   const skillLabel = event.tags.join(" / ");
 
   useEffect(() => {
@@ -109,7 +118,7 @@ export default function EventModal({
         <div className="event-modal-footer">
           <div className="metadata card-metadata">
             <span>{eventTime}</span>
-            <span>{event.credit} credits</span>
+            <span>{creditLabel}</span>
             <span>{educationLevel}</span>
           </div>
           {onJoin && (

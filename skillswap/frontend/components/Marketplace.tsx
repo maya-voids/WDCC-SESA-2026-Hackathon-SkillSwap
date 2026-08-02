@@ -17,6 +17,7 @@ import {
   getCurrentEventsFromServer,
   getEventsFromServer,
   getTasksFromServer,
+  participationCreditDelta,
   removeCurrentEventFromServer,
   sendServiceToServer,
   SERVICETAGS,
@@ -227,14 +228,16 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
   }
 
   async function handleJoin(service: Service): Promise<boolean> {
-    if (credits === null || credits < service.credit) {
+    const creditDelta = participationCreditDelta(service.type, service.credit);
+
+    if (credits === null || credits + creditDelta < 0) {
       return false;
     }
 
-    setCredits(await changeCredits(-service.credit));
+    setCredits(await changeCredits(creditDelta));
 
     // Best-effort: record the join for the View List drawer. A storage failure
-    // shouldn't undo a join that already spent credits.
+    // shouldn't undo a join that already changed the credit balance.
     try {
       setCurrentEvents(await addCurrentEventToServer(service));
     } catch {
@@ -246,7 +249,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
 
   async function handleRemove(service: Service) {
     // Best-effort: removing an event from the list returns its card to the
-    // main grid. Credits are not refunded (joining already spent them).
+    // main grid. The participation credit change is not reversed.
     try {
       setCurrentEvents(await removeCurrentEventFromServer(service.id));
     } catch {

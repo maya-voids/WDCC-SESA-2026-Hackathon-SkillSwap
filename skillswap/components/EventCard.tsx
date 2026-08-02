@@ -2,7 +2,11 @@
 
 import Image from "next/image";
 import { useCallback, useState } from "react";
-import { type Service } from "../backend/DataUtils";
+import {
+  participationCreditDelta,
+  serviceRewardsCredits,
+  type Service,
+} from "../backend/DataUtils";
 import EventModal, { formatEventTime } from "./EventModal";
 
 interface EventCardProps {
@@ -30,6 +34,10 @@ export default function EventCard({
   const [isOpen, setIsOpen] = useState(false);
   const handleClose = useCallback(() => setIsOpen(false), []);
   const eventTime = formatEventTime(event.time);
+  const creditDelta = participationCreditDelta(event.type, event.credit);
+  const creditLabel = serviceRewardsCredits(event.type)
+    ? `Earn ${creditDelta} credits`
+    : `Cost ${Math.abs(creditDelta)} credits`;
   const skillLabel = event.tags.join(" / ");
   const listingLabel = event.type
     .toLowerCase()
@@ -83,7 +91,7 @@ export default function EventCard({
           <p className="event-description">{event.description}</p>
           <div className="metadata card-metadata">
             <span>{eventTime}</span>
-            <span>{event.credit} credits</span>
+            <span>{creditLabel}</span>
           </div>
           <div className="card-footer">
             <strong>{event.location}</strong>

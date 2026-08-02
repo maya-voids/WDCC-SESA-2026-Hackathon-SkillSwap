@@ -4,6 +4,7 @@ import {
   educationTypeToLabel,
   getEventsFromServer,
   getTasksFromServer,
+  participationCreditDelta,
   sendServiceToServer,
   CITY,
   EDUCATIONTYPE,
@@ -35,6 +36,28 @@ describe("DataUtils", () => {
     tags: [SERVICETAGS.WEB_DEVELOPMENT, SERVICETAGS.TYPESCRIPT],
     time: "2026-08-01T12:00:00.000Z",
     eduType: EDUCATIONTYPE.FIRST_YEAR,
+  });
+
+  describe("participationCreditDelta", () => {
+    it.each([SERVICETYPE.WORKSHOP, SERVICETYPE.STUDENT_WORK])(
+      "rewards credits for %s participation",
+      (serviceType) => {
+        expect(participationCreditDelta(serviceType, 40)).toBe(40);
+      },
+    );
+
+    it.each([
+      SERVICETYPE.EXPO,
+      SERVICETYPE.HACKATHON,
+      SERVICETYPE.OTHER,
+    ])("costs credits for %s participation", (serviceType) => {
+      expect(participationCreditDelta(serviceType, 40)).toBe(-40);
+    });
+
+    it("uses the service type to control the direction", () => {
+      expect(participationCreditDelta(SERVICETYPE.WORKSHOP, -40)).toBe(40);
+      expect(participationCreditDelta(SERVICETYPE.HACKATHON, -40)).toBe(-40);
+    });
   });
 
   beforeEach(() => {
