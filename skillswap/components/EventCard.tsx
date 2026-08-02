@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { educationTypeToLabel, type Service } from "../backend/DataUtils";
+import { useCallback, useState } from "react";
+import { type Service } from "../backend/DataUtils";
+import EventModal, { formatEventTime } from "./EventModal";
 
 interface EventCardProps {
   event: Service;
@@ -13,49 +14,34 @@ interface EventCardProps {
    * too few credits.
    */
   onJoin?: (event: Service) => Promise<boolean> | boolean;
+  /**
+   * Called with the join outcome right before the modal closes, so the parent
+   * can show the confirmation popup.
+   */
+  onJoinResult?: (success: boolean) => void;
 }
 
-function formatEventTime(time: string): string {
-  const date = new Date(time);
-
-  if (Number.isNaN(date.getTime())) return "Date to be confirmed";
-
-  return new Intl.DateTimeFormat("en-NZ", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(date);
-}
-
-export default function EventCard({ event, index, onJoin }: EventCardProps) {
+export default function EventCard({
+  event,
+  index,
+  onJoin,
+  onJoinResult,
+}: EventCardProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const handleClose = useCallback(() => setIsOpen(false), []);
   const eventTime = formatEventTime(event.time);
-  const educationLevel = educationTypeToLabel(event.eduType);
   const skillLabel = event.tags.join(" / ");
   const listingLabel = event.type
     .toLowerCase()
     .replace(/\b\w/g, (character) => character.toUpperCase());
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    function closeOnEscape(keyEvent: KeyboardEvent) {
-      if (keyEvent.key === "Escape") setIsOpen(false);
-    }
-
-    window.addEventListener("keydown", closeOnEscape);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", closeOnEscape);
-    };
-  }, [isOpen]);
-
   return (
     <>
-      <article className="event-card" data-type={event.type}>
+      <article
+        className="event-card"
+        data-type={event.type}
+        style={{ animationDelay: `${Math.min(index, 10) * 45}ms` }}
+      >
         <div
           className="card-image"
           onClick={() => setIsOpen(true)}

@@ -1,6 +1,6 @@
 // This file contains utility functions for sending and receiving data to/from the server.
 // To use these functions/types, import them like this:
-// import { SERVICETYPE, PostData, Service, sendServiceToServer, getTasksFromServer, getEventsFromServer, deleteTaskInServer } from "./DataUtils";
+// import { SERVICETYPE, PostData, Service, sendServiceToServer, getTasksFromServer, getEventsFromServer, deleteTaskInServer, getCurrentEventsFromServer, addCurrentEventToServer, removeCurrentEventFromServer } from "./DataUtils";
 //
 
 // !!!!!!!!!!!!!!!!! TO RUN MOCK DATA !!!!!!!!!!!!!!!!!
@@ -19,6 +19,7 @@ const EVENT_READ_ENDPOINTS =
   DATA_SOURCE === "mock"
     ? ["/eventsMock.json", PUBLISHED_EVENTS_ENDPOINT]
     : [PUBLISHED_EVENTS_ENDPOINT];
+const CURRENT_EVENTS_ENDPOINT = "/currentevents.json";
 
 export enum SERVICETYPE {
   WORKSHOP = "WORKSHOP",
@@ -178,6 +179,80 @@ export async function getEventsFromServer(): Promise<Service[]> {
   );
 
   return [...eventsById.values()];
+}
+
+/** Read the events the signed-in user has confirmed participation in. */
+export async function getCurrentEventsFromServer(): Promise<Service[]> {
+  const response = await fetch(CURRENT_EVENTS_ENDPOINT);
+  if (!response.ok) {
+    throw new Error(`Failed to load current events (${response.status})`);
+  }
+  return response.json();
+}
+
+/**
+ * Record a joined event in the current events list and return the updated list
+ * (de-duplicated by id on the server).
+ */
+export async function addCurrentEventToServer(
+  event: Service,
+): Promise<Service[]> {
+  const response = await fetch(CURRENT_EVENTS_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(event),
+  });
+
+  if (!response.ok) {
+    let serverMessage = "";
+
+    try {
+      const payload = (await response.json()) as { error?: unknown };
+      if (typeof payload.error === "string") {
+        serverMessage = `: ${payload.error}`;
+      }
+    } catch {
+      // The status code still provides a useful error when the body is not JSON.
+    }
+
+    throw new Error(
+      `Failed to save current event (${response.status})${serverMessage}`,
+    );
+  }
+
+  return response.json();
+}
+
+/**
+ * Remove an event from the current events list and return the updated list.
+ */
+export async function removeCurrentEventFromServer(
+  id: string,
+): Promise<Service[]> {
+  const response = await fetch(CURRENT_EVENTS_ENDPOINT, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id }),
+  });
+
+  if (!response.ok) {
+    let serverMessage = "";
+
+    try {
+      const payload = (await response.json()) as { error?: unknown };
+      if (typeof payload.error === "string") {
+        serverMessage = `: ${payload.error}`;
+      }
+    } catch {
+      // The status code still provides a useful error when the body is not JSON.
+    }
+
+    throw new Error(
+      `Failed to remove current event (${response.status})${serverMessage}`,
+    );
+  }
+
+  return response.json();
 }
 
 export async function deleteTaskInServer(id: string): Promise<void> {

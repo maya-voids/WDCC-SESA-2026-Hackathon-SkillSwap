@@ -3,16 +3,21 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import EventCard from "../../components/EventCard";
+import CurrentEventsPanel from "../../components/CurrentEventsPanel";
+import JoinConfirmationPopup from "../../components/JoinConfirmationPopup";
 import iconImage from "../../app/icon.png";
 import creditIcon from "../../app/credit_icon.png";
 import graphicImage from "../../app/graphic.png";
 import skillsbg from "../../app/skillsbg.png";
 import {
+  addCurrentEventToServer,
   CITY,
   EDUCATIONTYPE,
   educationTypeToLabel,
+  getCurrentEventsFromServer,
   getEventsFromServer,
   getTasksFromServer,
+  removeCurrentEventFromServer,
   sendServiceToServer,
   SERVICETAGS,
   SERVICETYPE,
@@ -65,6 +70,10 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
   const [isShareFormOpen, setIsShareFormOpen] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
   const [shareError, setShareError] = useState<string | null>(null);
+  const [isListOpen, setIsListOpen] = useState(false);
+  const [currentEvents, setCurrentEvents] = useState<Service[]>([]);
+  // Join confirmation popup: null = hidden, boolean = whether the join succeeded.
+  const [joinResult, setJoinResult] = useState<boolean | null>(null);
   // Starts null so the header shows a placeholder until the stored balance loads.
   const [credits, setCredits] = useState<number | null>(null);
 
@@ -111,6 +120,24 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
     };
   }, []);
 
+  // Best-effort: load the participated events for the View List drawer without
+  // surfacing a page-level error if the storage cannot be read.
+  useEffect(() => {
+    let cancelled = false;
+
+    getCurrentEventsFromServer()
+      .then((events) => {
+        if (!cancelled) setCurrentEvents(events);
+      })
+      .catch(() => {
+        // Keep an empty list if the current events cannot be loaded.
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   useEffect(() => {
     if (!isShareFormOpen) return;
 
@@ -133,53 +160,52 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
 
   const filteredServices = useMemo(() => {
     const query = searchValue.trim().toLowerCase();
+    const participatedIds = new Set(currentEvents.map((event) => event.id));
 
-    const matchingServices = services.filter((service) => {
-      const matchesCity =
-        activeCity === "All" || service.location === activeCity;
-      const matchesServiceType =
-        activeServiceType === "All" || service.type === activeServiceType;
-      const matchesServiceTag =
-        activeServiceTag === "All" || service.tags.includes(activeServiceTag);
-      const matchesEducationType =
-        activeEducationType === "All" ||
-        service.eduType === activeEducationType;
-      const matchesSearch =
-        !query ||
-        [
-          service.title,
-          service.description,
-          service.author,
-          service.location,
-          service.address,
-          service.type,
-          ...service.tags,
-        ].some((value) => value.toLowerCase().includes(query));
+    return services
+      .filter((service) => {
+        const matchesCity =
+          activeCity === "All" || service.location === activeCity;
+        const matchesServiceType =
+          activeServiceType === "All" || service.type === activeServiceType;
+        const matchesServiceTag =
+          activeServiceTag === "All" || service.tags.includes(activeServiceTag);
+        const matchesEducationType =
+          activeEducationType === "All" ||
+          service.eduType === activeEducationType;
+        const matchesSearch =
+          !query ||
+          [
+            service.title,
+            service.description,
+            service.author,
+            service.location,
+            service.address,
+            service.type,
+            ...service.tags,
+          ].some((value) => value.toLowerCase().includes(query));
 
-      return (
-        matchesCity &&
-        matchesServiceType &&
-        matchesServiceTag &&
-        matchesEducationType &&
-        matchesSearch
+        return (
+          matchesCity &&
+          matchesServiceType &&
+          matchesServiceTag &&
+          matchesEducationType &&
+          matchesSearch &&
+          // Hide events already in the participated list; removing one from the
+          // drawer brings its card back to the main grid.
+          !participatedIds.has(service.id)
+        );
+      })
+      // Soonest-first by default.
+      .sort(
+        (a, b) => new Date(a.time).getTime() - new Date(b.time).getTime(),
       );
-    });
-
-    if (sortOrder === "relevance") return matchingServices;
-
-    return matchingServices.sort((firstService, secondService) => {
-      const firstTime = Date.parse(firstService.time);
-      const secondTime = Date.parse(secondService.time);
-
-      return sortOrder === "most-recent"
-        ? secondTime - firstTime
-        : firstTime - secondTime;
-    });
   }, [
     activeCity,
     activeEducationType,
     activeServiceTag,
     activeServiceType,
+    currentEvents,
     searchValue,
     services,
     sortOrder,
@@ -206,7 +232,26 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
     }
 
     setCredits(await changeCredits(-service.credit));
+
+    // Best-effort: record the join for the View List drawer. A storage failure
+    // shouldn't undo a join that already spent credits.
+    try {
+      setCurrentEvents(await addCurrentEventToServer(service));
+    } catch {
+      // The drawer will show whatever was already persisted.
+    }
+
     return true;
+  }
+
+  async function handleRemove(service: Service) {
+    // Best-effort: removing an event from the list returns its card to the
+    // main grid. Credits are not refunded (joining already spent them).
+    try {
+      setCurrentEvents(await removeCurrentEventFromServer(service.id));
+    } catch {
+      // Keep the list as-is if the removal fails.
+    }
   }
 
   return (
@@ -268,6 +313,20 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         </div>
       </header>
 
+      <CurrentEventsPanel
+        events={currentEvents}
+        open={isListOpen}
+        onClose={() => setIsListOpen(false)}
+        onRemove={handleRemove}
+      />
+
+      {joinResult !== null && (
+        <JoinConfirmationPopup
+          success={joinResult}
+          onClose={() => setJoinResult(null)}
+        />
+      )}
+
       <section
         className="workshop-section marketplace-only"
         id="workshops"
@@ -300,27 +359,28 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         </div>
 
         <div className="marketplace-tools">
-          <label htmlFor="marketplace-search">Search the platform</label>
-          <input
-            id="marketplace-search"
-            type="search"
-            placeholder="Search skills, hosts, or locations"
-            value={searchValue}
-            onChange={(event) => setSearchValue(event.target.value)}
-          />
+          <button
+            type="button"
+            className="button button-ghost view-list-button"
+            onClick={() => setIsListOpen(true)}
+          >
+            View List
+          </button>
+          <div className="marketplace-search">
+            <label htmlFor="marketplace-search">Search the platform</label>
+            <input
+              id="marketplace-search"
+              type="search"
+              placeholder="Search skills, hosts, or locations"
+              value={searchValue}
+              onChange={(event) => setSearchValue(event.target.value)}
+            />
+          </div>
         </div>
 
         <div className="marketplace-filters" aria-label="Marketplace filters">
           <button
-            className={`marketplace-filter-all ${
-              activeCity === "All" &&
-              activeServiceType === "All" &&
-              activeServiceTag === "All" &&
-              activeEducationType === "All" &&
-              sortOrder === "relevance"
-                ? "active"
-                : ""
-            }`}
+            className="marketplace-filter-all"
             type="button"
             onClick={resetFilters}
             aria-pressed={
@@ -465,6 +525,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
                 index={index}
                 key={service.id}
                 onJoin={handleJoin}
+                onJoinResult={setJoinResult}
               />
             ))}
           </div>
