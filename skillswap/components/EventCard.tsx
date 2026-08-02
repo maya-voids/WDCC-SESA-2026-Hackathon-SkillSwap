@@ -55,7 +55,7 @@ export default function EventCard({ event, index, onJoin }: EventCardProps) {
 
   return (
     <>
-      <article className="event-card">
+      <article className="event-card" data-type={event.type}>
         <div
           className="card-image"
           onClick={() => setIsOpen(true)}
