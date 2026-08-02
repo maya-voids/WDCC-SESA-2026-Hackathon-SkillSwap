@@ -41,17 +41,14 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
             <br />
             FOR REAL
           </h1>
-          <p className="landing-intro">
-           Find physical tech events and student connections with no distractions
-          </p>
+          <Image
+            src={graphicHome}
+            className="landing-home-graphic"
+            alt=""
+            width={720}
+            height={280}
+          />
         </div>
-        <Image
-          src={graphicHome}
-          className="landing-home-graphic"
-          alt="SkillSwap home graphic"
-          width={720}
-          height={280}
-        />
         <div
           className="landing-stat-grid"
           aria-label="SkillSwap community statistics"
