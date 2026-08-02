@@ -23,6 +23,8 @@ type MarketplaceProps = {
   onLogout: () => void;
 };
 
+type SortOrder = "relevance" | "most-recent" | "oldest-newest";
+
 const CITIES = Object.values(CITY);
 
 const EDUCATION_LEVELS = Object.values(EDUCATIONTYPE).filter(
@@ -50,6 +52,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
   const [activeEducationType, setActiveEducationType] = useState<
     EDUCATIONTYPE | "All"
   >("All");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("relevance");
   const [searchValue, setSearchValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -126,7 +129,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
   const filteredServices = useMemo(() => {
     const query = searchValue.trim().toLowerCase();
 
-    return services.filter((service) => {
+    const matchingServices = services.filter((service) => {
       const matchesCity =
         activeCity === "All" || service.location === activeCity;
       const matchesServiceType =
@@ -156,6 +159,17 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         matchesSearch
       );
     });
+
+    if (sortOrder === "relevance") return matchingServices;
+
+    return matchingServices.sort((firstService, secondService) => {
+      const firstTime = Date.parse(firstService.time);
+      const secondTime = Date.parse(secondService.time);
+
+      return sortOrder === "most-recent"
+        ? secondTime - firstTime
+        : firstTime - secondTime;
+    });
   }, [
     activeCity,
     activeEducationType,
@@ -163,6 +177,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
     activeServiceType,
     searchValue,
     services,
+    sortOrder,
   ]);
 
   function resetFilters() {
@@ -171,6 +186,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
     setActiveServiceType("All");
     setActiveServiceTag("All");
     setActiveEducationType("All");
+    setSortOrder("relevance");
   }
 
   function closeShareForm() {
@@ -286,7 +302,8 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               activeCity === "All" &&
               activeServiceType === "All" &&
               activeServiceTag === "All" &&
-              activeEducationType === "All"
+              activeEducationType === "All" &&
+              sortOrder === "relevance"
                 ? "active"
                 : ""
             }`}
@@ -296,7 +313,8 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               activeCity === "All" &&
               activeServiceType === "All" &&
               activeServiceTag === "All" &&
-              activeEducationType === "All"
+              activeEducationType === "All" &&
+              sortOrder === "relevance"
             }
           >
             All
@@ -381,6 +399,22 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
                   {educationTypeToLabel(educationType)}
                 </option>
               ))}
+            </select>
+          </label>
+
+          <label
+            className={`marketplace-filter marketplace-filter-sort ${sortOrder !== "relevance" ? "active" : ""}`}
+          >
+            <select
+              value={sortOrder}
+              onChange={(event) =>
+                setSortOrder(event.target.value as SortOrder)
+              }
+              aria-label="Sort marketplace listings"
+            >
+              <option value="relevance">Relevance</option>
+              <option value="most-recent">Most recent</option>
+              <option value="oldest-newest">Oldest - newest</option>
             </select>
           </label>
         </div>
