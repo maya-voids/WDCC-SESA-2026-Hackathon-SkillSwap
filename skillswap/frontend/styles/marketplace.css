@@ -135,7 +135,7 @@ textarea:focus-visible {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 0.5rem;
+  gap: 1.5rem;
 }
 
 .site-header > .header-actions {
@@ -156,13 +156,20 @@ textarea:focus-visible {
   display: flex;
   min-height: 42px;
   align-items: center;
-  gap: 0.08rem;
+  gap: 0.2rem;
   padding: 0.65rem 0.85rem;
   background: white;
 
   font-family: var(--font-geist-sans), arial, sans-serif;
   font-size: 0.68rem;
   letter-spacing: 0.04em;
+}
+
+.credit-icon {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  object-fit: contain;
 }
 
 .mock-account-summary {
@@ -349,7 +356,7 @@ textarea:focus-visible {
   grid-column: 1 / -1;
 }
 
-.share-skill-field > span {
+.share-skill-field > span:not(.share-skill-hint) {
   font-family: var(--font-geist-mono), monospace;
   font-size: 0.65rem;
   font-weight: 700;
@@ -398,6 +405,17 @@ textarea:focus-visible {
   padding: 0.85rem;
   border: 1px solid var(--black);
   font-size: 0.88rem;
+}
+
+.share-skill-field select[multiple] {
+  height: auto;
+  min-height: 8rem;
+  padding: 0.55rem;
+}
+
+.share-skill-hint {
+  font-size: 0.78rem;
+  opacity: 0.7;
 }
 
 .share-skill-actions .button:disabled {
@@ -1027,6 +1045,11 @@ textarea:focus-visible {
   text-transform: uppercase;
 }
 
+.marketplace-filter-all.active {
+  background: var(--black);
+  color: var(--white);
+}
+
 .marketplace-filter {
   position: relative;
   display: flex;
@@ -1034,6 +1057,7 @@ textarea:focus-visible {
   justify-content: center;
   gap: 0.2rem;
   padding: 0.55rem 1rem;
+  color: #000;
 }
 
 .marketplace-filter:last-child {
@@ -1048,29 +1072,31 @@ textarea:focus-visible {
   background: var(--yellow);
 }
 
+.marketplace-filter-category {
+  background: var(--pink);
+}
+
 .marketplace-filter-level {
   background: var(--blue);
 }
 
-.marketplace-filter > span {
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .marketplace-filter select {
   width: 100%;
-  padding: 0.15rem 0;
+  padding: 0.15rem 1.5rem 0.15rem 0;
   background: transparent;
-  color: var(--black);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%23000' d='M0 0h12L6 8z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.2rem center;
+  background-size: 0.65rem 0.45rem;
+  color: #000;
   border: 0;
   outline: 0;
+  appearance: none;
   cursor: pointer;
-  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-family: var(--font-geist-mono), monospace;
   font-size: 0.85rem;
   font-weight: 700;
+  text-transform: uppercase;
 }
 
 .marketplace-filter select:focus-visible {

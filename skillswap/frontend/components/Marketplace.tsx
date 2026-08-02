@@ -44,6 +44,9 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
   const [activeServiceType, setActiveServiceType] = useState<
     SERVICETYPE | "All"
   >("All");
+  const [activeServiceTag, setActiveServiceTag] = useState<
+    SERVICETAGS | "All"
+  >("All");
   const [activeEducationType, setActiveEducationType] = useState<
     EDUCATIONTYPE | "All"
   >("All");
@@ -128,6 +131,8 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         activeCity === "All" || service.location === activeCity;
       const matchesServiceType =
         activeServiceType === "All" || service.type === activeServiceType;
+      const matchesServiceTag =
+        activeServiceTag === "All" || service.tags.includes(activeServiceTag);
       const matchesEducationType =
         activeEducationType === "All" ||
         service.eduType === activeEducationType;
@@ -146,6 +151,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
       return (
         matchesCity &&
         matchesServiceType &&
+        matchesServiceTag &&
         matchesEducationType &&
         matchesSearch
       );
@@ -153,6 +159,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
   }, [
     activeCity,
     activeEducationType,
+    activeServiceTag,
     activeServiceType,
     searchValue,
     services,
@@ -162,6 +169,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
     setSearchValue("");
     setActiveCity("All");
     setActiveServiceType("All");
+    setActiveServiceTag("All");
     setActiveEducationType("All");
   }
 
@@ -198,7 +206,14 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
             <strong>
               {credits === null ? "···" : credits.toLocaleString("en-NZ")}
             </strong>
-            <span aria-hidden="true">✦</span>
+            <Image
+              className="credit-icon"
+              src={creditIcon}
+              alt=""
+              width={24}
+              height={24}
+              aria-hidden="true"
+            />
           </div>
           <div className="mock-account" aria-label="Signed in as Alex Morgan">
             <div className="mock-account-summary">
@@ -207,7 +222,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               </span>
               <span className="mock-account-copy">
                 <span className="mock-account-label">Signed in</span>
-                <strong>Alex Morgan</strong>
+                <strong>M Yang</strong>
               </span>
             </div>
             <button
@@ -226,7 +241,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               setIsShareFormOpen(true);
             }}
           >
-            Share a skill
+            Share a service
           </button>
         </div>
       </header>
@@ -270,6 +285,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
             className={`marketplace-filter-all ${
               activeCity === "All" &&
               activeServiceType === "All" &&
+              activeServiceTag === "All" &&
               activeEducationType === "All"
                 ? "active"
                 : ""
@@ -279,6 +295,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
             aria-pressed={
               activeCity === "All" &&
               activeServiceType === "All" &&
+              activeServiceTag === "All" &&
               activeEducationType === "All"
             }
           >
@@ -288,7 +305,6 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           <label
             className={`marketplace-filter marketplace-filter-city ${activeCity !== "All" ? "active" : ""}`}
           >
-            <span>City</span>
             <select
               value={activeCity}
               onChange={(event) =>
@@ -308,7 +324,6 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           <label
             className={`marketplace-filter marketplace-filter-event ${activeServiceType !== "All" ? "active" : ""}`}
           >
-            <span>Event</span>
             <select
               value={activeServiceType}
               onChange={(event) =>
@@ -316,7 +331,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               }
               aria-label="Filter by service type"
             >
-              <option value="All">All types</option>
+              <option value="All">All event types</option>
               {SERVICE_TYPES.map((serviceType) => (
                 <option value={serviceType} key={serviceType}>
                   {serviceTypeToLabel(serviceType)}
@@ -326,9 +341,29 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           </label>
 
           <label
+            className={`marketplace-filter marketplace-filter-category ${activeServiceTag !== "All" ? "active" : ""}`}
+          >
+            <select
+              value={activeServiceTag}
+              onChange={(event) =>
+                setActiveServiceTag(
+                  event.target.value as SERVICETAGS | "All",
+                )
+              }
+              aria-label="Filter by category"
+            >
+              <option value="All">All categories</option>
+              {SERVICE_TAGS.map((serviceTag) => (
+                <option value={serviceTag} key={serviceTag}>
+                  {serviceTag}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label
             className={`marketplace-filter marketplace-filter-level ${activeEducationType !== "All" ? "active" : ""}`}
           >
-            <span>Level</span>
             <select
               value={activeEducationType}
               onChange={(event) =>
@@ -354,7 +389,6 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           <span>
             {String(filteredServices.length).padStart(2, "0")} results
           </span>
-          <span>Community listings</span>
         </div>
 
         {isLoading ? (
@@ -421,7 +455,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
             <header className="share-skill-header">
               <div>
                 <p className="eyebrow">Create a listing</p>
-                <h2 id="share-skill-heading">Share a skill</h2>
+                <h2 id="share-skill-heading">CREATE SERVICE</h2>
               </div>
               <button
                 className="share-skill-close"
@@ -443,6 +477,9 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
                 const duration = String(formData.get("duration"));
                 const seats = Number(formData.get("seats"));
                 const scheduledTime = String(formData.get("time"));
+                const categories = formData
+                  .getAll("category")
+                  .map(String) as SERVICETAGS[];
 
                 if (!(image instanceof File) || image.size === 0) {
                   setShareError("Please select an image for your skill.");
@@ -463,7 +500,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
                     author: "Alex Morgan",
                     type: formData.get("serviceType") as SERVICETYPE,
                     credit: Number(formData.get("credit")),
-                    tags: [String(formData.get("category")) as SERVICETAGS],
+                    tags: categories,
                     time: new Date(scheduledTime).toISOString(),
                     eduType: Number(
                       formData.get("educationType"),
@@ -484,12 +521,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
             >
               <label className="share-skill-field share-skill-field-full">
                 <span>Title</span>
-                <input
-                  name="title"
-                  type="text"
-                  placeholder="e.g. Beginner pottery wheel"
-                  required
-                />
+                <input name="title" type="text" placeholder="e.g. Entry-level front-end programmer needed" required />
               </label>
 
               <label className="share-skill-field">
@@ -497,7 +529,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
                 <input
                   name="address"
                   type="text"
-                  placeholder="e.g. 12 Cuba Street"
+                  placeholder="e.g. 12 Queen Street"
                   required
                 />
               </label>
@@ -518,14 +550,21 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
 
               <label className="share-skill-field">
                 <span>Category</span>
-                <select name="category" defaultValue="" required>
-                  <option value="" disabled>Select a category</option>
+                <select
+                  name="category"
+                  multiple
+                  size={SERVICE_TAGS.length}
+                  required
+                >
                   {SERVICE_TAGS.map((tag) => (
                     <option value={tag} key={tag}>
                       {tag}
                     </option>
                   ))}
                 </select>
+                <span className="share-skill-hint">
+                  Hold Ctrl (Cmd on Mac) to select multiple categories.
+                </span>
               </label>
 
               <label className="share-skill-field">
