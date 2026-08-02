@@ -106,7 +106,7 @@ export default function EventCard({ event, index, onJoin }: EventCardProps) {
               className="button button-solid"
               onClick={() => setIsOpen(true)}
             >
-              View {listingLabel.toLowerCase()} <span>↗</span>
+              View <span>↗</span>
             </button>
           </div>
         </div>

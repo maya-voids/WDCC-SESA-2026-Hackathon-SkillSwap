@@ -1079,6 +1079,10 @@ textarea:focus-visible {
   background: var(--blue);
 }
 
+.marketplace-filter-sort {
+  background: var(--secondary);
+}
+
 .marketplace-filter select {
   width: 100%;
   padding: 0.15rem 1.5rem 0.15rem 0;
