@@ -44,6 +44,9 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
   const [activeServiceType, setActiveServiceType] = useState<
     SERVICETYPE | "All"
   >("All");
+  const [activeServiceTag, setActiveServiceTag] = useState<
+    SERVICETAGS | "All"
+  >("All");
   const [activeEducationType, setActiveEducationType] = useState<
     EDUCATIONTYPE | "All"
   >("All");
@@ -128,6 +131,8 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         activeCity === "All" || service.location === activeCity;
       const matchesServiceType =
         activeServiceType === "All" || service.type === activeServiceType;
+      const matchesServiceTag =
+        activeServiceTag === "All" || service.tags.includes(activeServiceTag);
       const matchesEducationType =
         activeEducationType === "All" ||
         service.eduType === activeEducationType;
@@ -146,6 +151,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
       return (
         matchesCity &&
         matchesServiceType &&
+        matchesServiceTag &&
         matchesEducationType &&
         matchesSearch
       );
@@ -153,6 +159,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
   }, [
     activeCity,
     activeEducationType,
+    activeServiceTag,
     activeServiceType,
     searchValue,
     services,
@@ -162,6 +169,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
     setSearchValue("");
     setActiveCity("All");
     setActiveServiceType("All");
+    setActiveServiceTag("All");
     setActiveEducationType("All");
   }
 
@@ -198,7 +206,14 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
             <strong>
               {credits === null ? "···" : credits.toLocaleString("en-NZ")}
             </strong>
-            <span aria-hidden="true">✦</span>
+            <Image
+              className="credit-icon"
+              src={creditIcon}
+              alt=""
+              width={24}
+              height={24}
+              aria-hidden="true"
+            />
           </div>
           <div className="mock-account" aria-label="Signed in as Alex Morgan">
             <div className="mock-account-summary">
@@ -270,6 +285,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
             className={`marketplace-filter-all ${
               activeCity === "All" &&
               activeServiceType === "All" &&
+              activeServiceTag === "All" &&
               activeEducationType === "All"
                 ? "active"
                 : ""
@@ -279,6 +295,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
             aria-pressed={
               activeCity === "All" &&
               activeServiceType === "All" &&
+              activeServiceTag === "All" &&
               activeEducationType === "All"
             }
           >
@@ -288,7 +305,6 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           <label
             className={`marketplace-filter marketplace-filter-city ${activeCity !== "All" ? "active" : ""}`}
           >
-            <span>City</span>
             <select
               value={activeCity}
               onChange={(event) =>
@@ -308,7 +324,6 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           <label
             className={`marketplace-filter marketplace-filter-event ${activeServiceType !== "All" ? "active" : ""}`}
           >
-            <span>Event</span>
             <select
               value={activeServiceType}
               onChange={(event) =>
@@ -316,7 +331,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               }
               aria-label="Filter by service type"
             >
-              <option value="All">All types</option>
+              <option value="All">All event types</option>
               {SERVICE_TYPES.map((serviceType) => (
                 <option value={serviceType} key={serviceType}>
                   {serviceTypeToLabel(serviceType)}
@@ -326,9 +341,29 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
           </label>
 
           <label
+            className={`marketplace-filter marketplace-filter-category ${activeServiceTag !== "All" ? "active" : ""}`}
+          >
+            <select
+              value={activeServiceTag}
+              onChange={(event) =>
+                setActiveServiceTag(
+                  event.target.value as SERVICETAGS | "All",
+                )
+              }
+              aria-label="Filter by category"
+            >
+              <option value="All">All categories</option>
+              {SERVICE_TAGS.map((serviceTag) => (
+                <option value={serviceTag} key={serviceTag}>
+                  {serviceTag}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label
             className={`marketplace-filter marketplace-filter-level ${activeEducationType !== "All" ? "active" : ""}`}
           >
-            <span>Level</span>
             <select
               value={activeEducationType}
               onChange={(event) =>
