@@ -1222,7 +1222,7 @@ textarea:focus-visible {
 .event-modal-image {
   position: relative;
   width: 100%;
-  aspect-ratio: 9 / 7;
+  height: 35vh;
   overflow: hidden;
   margin-bottom: 24px;
   background: #eeeeee;
