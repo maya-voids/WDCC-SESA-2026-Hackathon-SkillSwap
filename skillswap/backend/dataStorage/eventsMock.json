@@ -48,6 +48,57 @@
     "eduType": 3,
     "address": "The Piano, Christchurch"
   },
+    {
+    "id": "mock-event-7",
+    "image": "/events/partly-wdcc-hackathon.jpg",
+    "title": "Partly x WDCC Hackathon",
+    "description": "Come along to meet your fellow students, grow your network, and learn about upcoming technology community events.\n\n24 hrs · 30 seats available",
+    "location": "Auckland",
+    "address": "Auckland CBD",
+    "author": "Partly x WDCC",
+    "type": "HACKATHON",
+    "credit": 100,
+    "tags": [
+      "Web Development",
+      "TypeScript"
+    ],
+    "time": "2026-08-15T08:00:00.000Z",
+    "eduType": 1
+  },
+  {
+    "id": "mock-event-8",
+    "image": "/events/wdcc-sesa-hackathon.jpg",
+    "title": "WDCC x SESA Hackathon",
+    "description": "Team up, innovate, and build a real-world software proof of concept during an intensive collaborative event.\n\n24 hrs · 80 seats available",
+    "location": "Auckland",
+    "address": "GridAKL, Auckland",
+    "author": "WDCC x SESA",
+    "type": "HACKATHON",
+    "credit": 100,
+    "tags": [
+      "Web Development",
+      "Web Design"
+    ],
+    "time": "2026-08-29T08:00:00.000Z",
+    "eduType": 1
+  },
+  {
+    "id": "mock-event-9",
+    "image": "https://www.aut.ac.nz/__data/assets/image/0011/1143578/hackathon-2026.jpg",
+    "title": "AUT AI Hackathon",
+    "description": "A beginner-friendly practical introduction to semantic HTML and modern responsive CSS layout techniques.\n\n24 hrs · 25 seats available",
+    "location": "Auckland",
+    "address": "AUT South Campus, Auckland",
+    "author": "Auckland University of Technology",
+    "type": "HACKATHON",
+    "credit": 100,
+    "tags": [
+      "Web Development",
+      "TypeScript"
+    ],
+    "time": "2026-09-19T08:00:00.000Z",
+    "eduType": 2
+  },
   {
     "id": "mock-event-4",
     "image": "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=900&h=700&fit=crop&auto=format",
@@ -145,57 +196,6 @@
     ],
     "time": "2026-08-01T07:58:16.338Z",
     "eduType": 1
-  },
-  {
-    "id": "mock-event-7",
-    "image": "/events/partly-wdcc-hackathon.jpg",
-    "title": "Partly x WDCC Hackathon",
-    "description": "Come along to meet your fellow students, grow your network, and learn about upcoming technology community events.\n\n24 hrs · 30 seats available",
-    "location": "Auckland",
-    "address": "Auckland CBD",
-    "author": "Partly x WDCC",
-    "type": "HACKATHON",
-    "credit": 100,
-    "tags": [
-      "Web Development",
-      "TypeScript"
-    ],
-    "time": "2026-08-15T08:00:00.000Z",
-    "eduType": 1
-  },
-  {
-    "id": "mock-event-8",
-    "image": "/events/wdcc-sesa-hackathon.jpg",
-    "title": "WDCC x SESA Hackathon",
-    "description": "Team up, innovate, and build a real-world software proof of concept during an intensive collaborative event.\n\n24 hrs · 80 seats available",
-    "location": "Auckland",
-    "address": "GridAKL, Auckland",
-    "author": "WDCC x SESA",
-    "type": "HACKATHON",
-    "credit": 100,
-    "tags": [
-      "Web Development",
-      "Web Design"
-    ],
-    "time": "2026-08-29T08:00:00.000Z",
-    "eduType": 1
-  },
-  {
-    "id": "mock-event-9",
-    "image": "https://www.aut.ac.nz/__data/assets/image/0011/1143578/hackathon-2026.jpg",
-    "title": "AUT AI Hackathon",
-    "description": "A beginner-friendly practical introduction to semantic HTML and modern responsive CSS layout techniques.\n\n24 hrs · 25 seats available",
-    "location": "Auckland",
-    "address": "AUT South Campus, Auckland",
-    "author": "Auckland University of Technology",
-    "type": "HACKATHON",
-    "credit": 100,
-    "tags": [
-      "Web Development",
-      "TypeScript"
-    ],
-    "time": "2026-09-19T08:00:00.000Z",
-    "eduType": 2
   },
   {
     "id": "mock-event-10",
