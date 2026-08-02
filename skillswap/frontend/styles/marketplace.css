@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --black: #114026;
+  --black: #470116;
   --secondary: #219a51;
   --yellow: #f8e16c;
   --pink: #ffc284;
@@ -70,6 +70,8 @@ textarea:focus-visible {
 }
 
 .site-header {
+  /* Back to the original Geist Sans for the nav bar. */
+  font-family: var(--font-geist-sans), Arial, sans-serif;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -86,8 +88,9 @@ textarea:focus-visible {
 .wordmark {
   width: max-content;
   font-size: 1.35rem;
-  font-weight: 900;
-  letter-spacing: -0.07em;
+  font-weight: 500;
+  /* Temporary: Ferron trial, more tracking. */
+  letter-spacing: 0.02em;
 }
 
 .wordmark span {
@@ -188,7 +191,7 @@ textarea:focus-visible {
   color: var(--white);
   font-family: var(--font-geist-mono), monospace;
   font-size: 0.65rem;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.05em;
 }
 
@@ -225,7 +228,7 @@ textarea:focus-visible {
   cursor: pointer;
   font-family: var(--font-geist-mono), monospace;
   font-size: 0.68rem;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.06em;
   line-height: 1;
   text-transform: uppercase;
@@ -282,6 +285,8 @@ textarea:focus-visible {
 }
 
 .share-skill-dialog {
+  /* Back to the original Geist Sans for the share form. */
+  font-family: var(--font-geist-sans), Arial, sans-serif;
   width: min(720px, 100%);
   max-height: min(860px, calc(100vh - 4rem));
   overflow-y: auto;
@@ -307,8 +312,9 @@ textarea:focus-visible {
   margin: 0;
   font-family: "Arial Narrow", var(--font-geist-sans), sans-serif;
   font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 900;
-  letter-spacing: -0.07em;
+  font-weight: 500;
+  /* Temporary: Ferron trial, more tracking. */
+  letter-spacing: 0.02em;
   line-height: 0.85;
   text-transform: uppercase;
 }
@@ -359,7 +365,7 @@ textarea:focus-visible {
 .share-skill-field > span:not(.share-skill-hint) {
   font-family: var(--font-geist-mono), monospace;
   font-size: 0.65rem;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -369,7 +375,8 @@ textarea:focus-visible {
 .share-skill-field textarea {
   width: 100%;
   border: 1px solid var(--black);
-  border-radius: 0;
+  /* Very slight rounding on the form entry boxes. */
+  border-radius: 4px;
   background: var(--white);
   color: var(--black);
   font: inherit;
@@ -427,9 +434,13 @@ textarea:focus-visible {
 .landing-page {
   min-height: 100vh;
   background: var(--white);
+  /* Temporary: Zyzol in place of Geist Sans. */
+  font-family: var(--font-ferron), var(--font-geist-sans), Arial, sans-serif;
 }
 
 .landing-topbar {
+  /* Back to the original Geist Sans for the nav bar. */
+  font-family: var(--font-geist-sans), Arial, sans-serif;
   display: grid;
   min-height: 72px;
   grid-template-columns: 1fr auto 1fr;
@@ -503,10 +514,12 @@ textarea:focus-visible {
 
 .landing-hero h1 {
   margin: 0;
-  font-family: "Arial Narrow", var(--font-geist-sans), sans-serif;
+  /* Temporary: Zyzol in place of Geist Sans. */
+  font-family: var(--font-ferron), "Arial Narrow", var(--font-geist-sans), sans-serif;
   font-size: clamp(4.3rem, 7.8vw, 9.8rem);
-  font-weight: 900;
-  letter-spacing: -0.075em;
+  font-weight: 500;
+  /* Temporary: Ferron trial, more tracking. */
+  letter-spacing: 0.02em;
   line-height: 0.86;
   text-transform: uppercase;
 }
@@ -563,10 +576,12 @@ textarea:focus-visible {
 
 .landing-stat strong {
   margin-bottom: 0.5rem;
-  font-family: "Arial Narrow", var(--font-geist-sans), sans-serif;
+  /* Temporary: Zyzol in place of Geist Sans. */
+  font-family: var(--font-ferron), "Arial Narrow", var(--font-geist-sans), sans-serif;
   font-size: clamp(3.4rem, 5.6vw, 7rem);
-  font-weight: 900;
-  letter-spacing: -0.07em;
+  font-weight: 500;
+  /* Temporary: Ferron trial, more tracking. */
+  letter-spacing: 0.02em;
   line-height: 0.9;
 }
 
@@ -619,8 +634,9 @@ textarea:focus-visible {
 .teach-section h2 {
   margin: 0;
   font-family: "Arial Narrow", var(--font-geist-sans), sans-serif;
-  font-weight: 900;
-  letter-spacing: -0.075em;
+  font-weight: 500;
+  /* Temporary: Ferron trial, more tracking. */
+  letter-spacing: 0.02em;
   line-height: 0.83;
   text-transform: uppercase;
 }
@@ -684,7 +700,7 @@ textarea:focus-visible {
   cursor: pointer;
   font-family: var(--font-geist-mono), monospace;
   font-size: 0.7rem;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.07em;
   text-transform: uppercase;
   transition:
@@ -725,8 +741,9 @@ textarea:focus-visible {
 .stat strong {
   font-family: "Arial Narrow", var(--font-geist-sans), sans-serif;
   font-size: clamp(3rem, 5.2vw, 5.5rem);
-  font-weight: 900;
-  letter-spacing: -0.07em;
+  font-weight: 500;
+  /* Temporary: Ferron trial, more tracking. */
+  letter-spacing: 0.02em;
   line-height: 0.9;
 }
 
@@ -821,7 +838,7 @@ textarea:focus-visible {
   padding: 0.55rem 0.7rem;
   font-family: var(--font-geist-mono), monospace;
   font-size: 0.62rem;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
@@ -904,7 +921,8 @@ textarea:focus-visible {
 .rating-row strong {
   font-family: "Arial Narrow", var(--font-geist-sans), sans-serif;
   font-size: 2.5rem;
-  letter-spacing: -0.07em;
+  /* Temporary: Ferron trial, more tracking. */
+  letter-spacing: 0.02em;
 }
 
 .workshop-heading-row,
@@ -954,12 +972,19 @@ textarea:focus-visible {
   border-bottom: 0;
 }
 
+.marketplace-page {
+  /* Temporary: Zyzol in place of Geist Sans. */
+  font-family: var(--font-ferron), var(--font-geist-sans), Arial, sans-serif;
+}
+
 .marketplace-only .workshop-heading-row h1 {
   margin: 0;
-  font-family: "Arial Narrow", var(--font-geist-sans), sans-serif;
+  /* Temporary: Zyzol in place of Geist Sans. */
+  font-family: var(--font-ferron), "Arial Narrow", var(--font-geist-sans), sans-serif;
   font-size: clamp(4rem, 8vw, 8rem);
-  font-weight: 900;
-  letter-spacing: -0.075em;
+  font-weight: 500;
+  /* Temporary: Ferron trial, more tracking. */
+  letter-spacing: 0.02em;
   line-height: 0.83;
   text-transform: uppercase;
   color: var(--orange);
@@ -1016,7 +1041,8 @@ textarea:focus-visible {
 .marketplace-filters {
   display: flex;
   overflow-x: auto;
-  border: 1px solid var(--black);
+  /* No visible frame around the filter buttons. */
+  border: 1px solid transparent;
   border-radius: 10px;
   scrollbar-width: none;
 }
@@ -1031,7 +1057,6 @@ textarea:focus-visible {
   min-height: 64px;
   flex: 1 0 150px;
   border: 0;
-  border-right: 1px solid var(--black);
   color: var(--black);
 }
 
@@ -1040,7 +1065,7 @@ textarea:focus-visible {
   cursor: pointer;
   font-family: var(--font-geist-mono), monospace;
   font-size: 0.7rem;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.07em;
   text-transform: uppercase;
 }
@@ -1060,10 +1085,6 @@ textarea:focus-visible {
   color: #000;
 }
 
-.marketplace-filter:last-child {
-  border-right: 0;
-}
-
 .marketplace-filter-city {
   background: var(--orange);
 }
@@ -1074,6 +1095,12 @@ textarea:focus-visible {
 
 .marketplace-filter-category {
   background: var(--pink);
+}
+
+/* Temporary: Zyzol on the category filter dropdown. */
+.marketplace-filter-category select,
+.marketplace-filter-category option {
+  font-family: var(--font-zyzol), var(--font-geist-sans), sans-serif;
 }
 
 .marketplace-filter-level {
@@ -1095,7 +1122,7 @@ textarea:focus-visible {
   cursor: pointer;
   font-family: var(--font-geist-mono), monospace;
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 500;
   text-transform: uppercase;
 }
 
@@ -1209,6 +1236,8 @@ textarea:focus-visible {
   flex-direction: column;
   background: var(--white);
   border: 1px solid var(--black);
+  /* Very slight rounding on the service cards. */
+  border-radius: 4px;
 }
 
 .card-image {
@@ -1292,13 +1321,17 @@ textarea:focus-visible {
   margin: 0;
   font-family: "Arial Narrow", var(--font-geist-sans), sans-serif;
   font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: 900;
-  letter-spacing: -0.055em;
+  font-weight: 500;
+  /* Temporary: Ferron trial, more tracking. */
+  letter-spacing: 0.02em;
   line-height: 0.95;
   text-transform: uppercase;
 }
 
 .event-modal-description {
+  /* Temporary: Zyzol on the expanded service descriptions. */
+  font-family: var(--font-zyzol), var(--font-geist-sans), sans-serif;
+  color: rgba(0, 0, 0, 0.5);
   margin-bottom: 2rem;
   line-height: 1.6;
 }
@@ -1346,8 +1379,6 @@ textarea:focus-visible {
   left: 0;
   background: var(--white);
   color: var(--black);
-  border-top: 1px solid var(--black);
-  border-right: 1px solid var(--black);
 }
 
 .card-arrow {
@@ -1360,7 +1391,6 @@ textarea:focus-visible {
   place-items: center;
   background: var(--white);
   color: var(--black);
-  border: 1px solid var(--black);
   cursor: pointer;
   opacity: 0;
   transform: translate(-5px, 5px);
@@ -1385,7 +1415,6 @@ textarea:focus-visible {
   flex: 1;
   flex-direction: column;
   padding: clamp(1.3rem, 2.4vw, 2.2rem);
-  border-top: 1px solid var(--black);
 }
 
 .card-category {
@@ -1397,12 +1426,14 @@ textarea:focus-visible {
 .card-body h3 {
   min-height: 2.25em;
   margin: 0 0 0.6rem;
-  font-family: "Arial Narrow", var(--font-geist-sans), sans-serif;
+  /* Temporary: Rondira on the service titles. */
+  font-family: var(--font-rondira), "Arial Narrow", var(--font-geist-sans), sans-serif;
   font-size: clamp(1.45rem, 2.2vw, 2.25rem);
-  font-weight: 900;
-  letter-spacing: -0.055em;
+  font-weight: 500;
+  /* Temporary: Ferron trial, more tracking. */
+  letter-spacing: 0.02em;
   line-height: 1.02;
-  text-transform: uppercase;
+  text-transform: lowercase;
 }
 
 .instructor {
@@ -1416,7 +1447,11 @@ textarea:focus-visible {
   min-height: 4.5em;
   margin: 0 0 1.25rem;
   overflow: hidden;
-  color: var(--muted);
+  /* Zyzol has no weight below 400 (static 400/700), so lighten via color
+     instead — a slightly lighter ink reads as a lighter weight. */
+  color: rgba(0, 0, 0, 0.5);
+  /* Temporary: Zyzol on service descriptions. */
+  font-family: var(--font-zyzol), var(--font-geist-sans), sans-serif;
   font-size: 0.9rem;
   line-height: 1.5;
   -webkit-box-orient: vertical;
@@ -1445,7 +1480,8 @@ textarea:focus-visible {
   border-bottom: 1px solid var(--line);
   font-family: "Arial Narrow", var(--font-geist-sans), sans-serif;
   font-size: 1.4rem;
-  letter-spacing: -0.04em;
+  /* Temporary: Ferron trial, more tracking. */
+  letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 
@@ -1465,7 +1501,8 @@ textarea:focus-visible {
   margin: 1rem 0 0.6rem;
   font-family: "Arial Narrow", var(--font-geist-sans), sans-serif;
   font-size: clamp(2.5rem, 5vw, 5rem);
-  letter-spacing: -0.06em;
+  /* Temporary: Ferron trial, more tracking. */
+  letter-spacing: 0.02em;
 }
 
 .empty-state p {
@@ -1535,8 +1572,9 @@ textarea:focus-visible {
   margin: 0 0 1rem;
   font-family: "Arial Narrow", var(--font-geist-sans), sans-serif;
   font-size: 2rem;
-  font-weight: 900;
-  letter-spacing: -0.05em;
+  font-weight: 500;
+  /* Temporary: Ferron trial, more tracking. */
+  letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 

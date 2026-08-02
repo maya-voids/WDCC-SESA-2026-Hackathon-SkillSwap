@@ -35,11 +35,11 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
         <div className="landing-hero-copy">
           <p className="landing-kicker">Student Tech Discovery & Connection platform</p>
           <h1 id="landing-heading">
-            LEARN TO
+            learn to 
             <br />
-            <span>MAKE</span>
+            <span>make</span>
             <br />
-            FOR REAL
+            for real
           </h1>
           <p className="landing-intro">
            Find physical tech events and student connections with no distractions
