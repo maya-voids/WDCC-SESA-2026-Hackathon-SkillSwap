@@ -189,6 +189,7 @@ textarea:focus-visible {
   place-items: center;
   background: var(--black);
   color: var(--white);
+  border-radius: 50%;
   font-family: var(--font-geist-mono), monospace;
   font-size: 0.65rem;
   font-weight: 500;
@@ -270,6 +271,12 @@ textarea:focus-visible {
 .button-light:hover {
   background: var(--black);
   color: var(--white);
+}
+
+/* Slight rounding on the navbar buttons. */
+.site-header .button,
+.landing-topbar .button {
+  border-radius: 4px;
 }
 
 .share-skill-overlay {
@@ -457,7 +464,24 @@ textarea:focus-visible {
   text-transform: uppercase;
 }
 
-.landing-topbar > .button {
+/* Icon sits to the left of the wordmark text in both nav bars. */
+.landing-topbar .wordmark,
+.site-header .wordmark {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.landing-topbar .wordmark {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.landing-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   justify-self: end;
 }
 
@@ -477,7 +501,11 @@ textarea:focus-visible {
   flex-direction: column;
   justify-content: center;
   padding: clamp(3.5rem, 7vh, 6.5rem) 2.25vw;
-  border-right: 1px solid var(--black);
+  /* Internships 101 graphic behind the main text; backgrounds don't affect layout.
+     Cover fills the column and crops the excess, keeping the aspect ratio. */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .landing-home-graphic {
@@ -485,11 +513,12 @@ textarea:focus-visible {
   left: 0;
   bottom: 0;
   z-index: 2;
-  width: min(44vw, 620px);
-  max-width: 620px;
+  /* Shrunk to 80% of the original size (0.8 × 44vw / 620px). */
+  width: min(35.2vw, 496px);
+  max-width: 496px;
   height: auto;
   object-fit: contain;
-  transform: translate(-6%, 16%);
+  transform: translate(-6%, 27%);
   padding-left: clamp(1.5rem, 3vw, 2.5rem);
   padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
   pointer-events: none;
@@ -510,6 +539,8 @@ textarea:focus-visible {
 
 .landing-kicker {
   margin: 0 0 clamp(2.2rem, 4.5vh, 4rem);
+  /* White so it reads against the internships101 photo behind it. */
+  color: var(--white);
 }
 
 .landing-hero h1 {
@@ -520,21 +551,27 @@ textarea:focus-visible {
   font-weight: 500;
   /* Temporary: Ferron trial, more tracking. */
   letter-spacing: 0.02em;
-  line-height: 0.86;
+  /* Slightly more vertical spacing between the stacked heading lines. */
+  line-height: 0.92;
   text-transform: uppercase;
+  /* Inverted to white so the heading stands out against the internships101
+     photo behind it and the darker intro/kicker text around it. */
+  color: var(--white);
 }
 
 .landing-hero h1 span {
   display: inline-block;
   padding: 0.02em 0.08em 0.08em;
   background: var(--orange);
-  color: var(--white);
+  /* Inverted with the heading text: black word on the orange highlight. */
+  color: var(--black);
 }
 
 .landing-intro {
   max-width: 760px;
   margin: clamp(2.3rem, 4vh, 3.7rem) 0;
-  color: var(--muted);
+  color: var(--white);
+  font-family: var(--font-zyzol), var(--font-geist-sans), sans-serif;
   font-size: clamp(1rem, 1.45vw, 1.35rem);
   line-height: 1.7;
 }
@@ -548,12 +585,14 @@ textarea:focus-visible {
 }
 
 .landing-stat {
+  position: relative;
   display: flex;
   min-width: 0;
   flex-direction: column;
   justify-content: center;
   padding: clamp(2rem, 4vw, 4rem);
   background-color: var(--white);
+  overflow: hidden;
 }
 
 .landing-stat:first-child {
@@ -566,12 +605,23 @@ textarea:focus-visible {
   color: var(--white);
 }
 
-.landing-stat:nth-child(even) {
-  border-left: 1px solid var(--black);
+/* The "Local learners" box sits on top of the sam.png photo, so its text is white. */
+.landing-stat:nth-child(2) strong,
+.landing-stat:nth-child(2) span {
+  color: var(--white);
 }
 
-.landing-stat:nth-child(n + 3) {
-  border-top: 1px solid var(--black);
+/* Color the remaining white stat boxes with the palette accents. */
+.landing-stat:nth-child(2) {
+  background-color: var(--orange);
+}
+
+.landing-stat:nth-child(3) {
+  background-color: var(--yellow);
+}
+
+.landing-stat:nth-child(4) {
+  background-color: var(--orange);
 }
 
 .landing-stat strong {
@@ -587,6 +637,24 @@ textarea:focus-visible {
 
 .landing-stat > span {
   color: var(--muted);
+}
+
+/* Sam.png fills the "Local learners" box; cover keeps the aspect ratio and
+   crops the excess, which overflow: hidden on .landing-stat keeps invisible
+   outside the box. Text stays on top. */
+.landing-stat-image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.landing-stat strong,
+.landing-stat > span {
+  position: relative;
+  z-index: 1;
 }
 
 .hero {
@@ -927,6 +995,7 @@ textarea:focus-visible {
 
 .workshop-heading-row,
 .how-heading-row {
+  position: relative;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -934,11 +1003,32 @@ textarea:focus-visible {
   margin-bottom: 3rem;
 }
 
+/* Skills backdrop in the marketplace heading: spans the full page width,
+   sits behind the text, is anchored to the top of the heading row so the
+   image's top content (the person) shows, keeps its aspect ratio and is
+   allowed to overflow horizontally. The row clips the vertical overflow (see
+   .marketplace-only .workshop-heading-row). Absolutely positioned, so it
+   never changes the page dimensions. */
+.skillsbg {
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 0;
+  width: 100vw;
+  height: auto;
+  max-width: none;
+  object-fit: contain;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
 .heading-block {
   display: grid;
   width: 100%;
   grid-template-columns: minmax(0, 1fr) minmax(180px, 320px);
   align-items: center;
+  /* A little extra vertical room in the marketplace heading block. */
+  padding-block: clamp(0.5rem, 1vw, 1rem) 0;
   gap: clamp(1.5rem, 4vw, 4rem);
 }
 
@@ -951,6 +1041,8 @@ textarea:focus-visible {
 }
 
 .graphicImage {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: auto;
   object-fit: contain;
@@ -958,9 +1050,10 @@ textarea:focus-visible {
 }
 
 .workshop-heading-row .eyebrow {
-  margin-bottom: 1rem;
+  margin-top: 1rem;
   font-size: clamp(0.72rem, 1vw, 0.9rem) !important;
   line-height: 1.2;
+  color: var(--white);
 }
 
 .workshop-heading-row h2 {
@@ -970,6 +1063,27 @@ textarea:focus-visible {
 .marketplace-only {
   min-height: calc(100vh - 72px);
   border-bottom: 0;
+  /* Less space between the navbar and the heading block. */
+  padding-top: clamp(2rem, 4vw, 4rem);
+}
+
+/* Marketplace heading row: full-bleed. The negative margins pull the row out
+   to the section edges and up to the section top (filling the navbar →
+   heading-block gap with the skills photo), and the matching padding returns
+   the heading content to its original position — nothing moves, no page
+   dimensions change. overflow: hidden clips the photo's tall bottom so it
+   never covers the search tools, and the tighter margin-bottom keeps a
+   (reduced, not removed) gap to the tools. Scoped here so the shared
+   .workshop-heading-row / .how-heading-row rule is unchanged elsewhere. */
+.marketplace-only .workshop-heading-row {
+  margin-top: calc(clamp(2rem, 4vw, 4rem) * -1);
+  margin-left: -4vw;
+  margin-right: -4vw;
+  padding-top: clamp(2rem, 4vw, 4rem);
+  padding-left: 4vw;
+  padding-right: 4vw;
+  overflow: hidden;
+  margin-bottom: clamp(0.75rem, 1.5vw, 1.5rem);
 }
 
 .marketplace-page {
@@ -1095,12 +1209,6 @@ textarea:focus-visible {
 
 .marketplace-filter-category {
   background: var(--pink);
-}
-
-/* Temporary: Zyzol on the category filter dropdown. */
-.marketplace-filter-category select,
-.marketplace-filter-category option {
-  font-family: var(--font-zyzol), var(--font-geist-sans), sans-serif;
 }
 
 .marketplace-filter-level {
@@ -1234,10 +1342,56 @@ textarea:focus-visible {
   min-width: 0;
   min-height: 100%;
   flex-direction: column;
-  background: var(--white);
+  /* Top-left diagonal gradient: full-strength color in the corner fading to
+     white (~15% full color, ~85% white). The fixed 135deg keeps the fade on
+     a square (45°) diagonal instead of the card's rectangular corner-to-corner
+     fit. The default here (orange) also serves hackathons and any unhandled
+     event type. */
+  background: linear-gradient(
+    135deg,
+    var(--orange) 0%,
+    var(--orange) 15%,
+    var(--white) 35%,
+    var(--white) 100%
+  );
   border: 1px solid var(--black);
   /* Very slight rounding on the service cards. */
   border-radius: 4px;
+}
+
+/* Event-type theming: the corner of each card gradient and the card-tag
+   badge follow the event's type (hackathon = orange default above,
+   workshop = yellow, student work = blue). */
+.event-card[data-type="WORKSHOP"] {
+  background: linear-gradient(
+    135deg,
+    var(--yellow) 0%,
+    var(--yellow) 15%,
+    var(--white) 35%,
+    var(--white) 100%
+  );
+}
+
+.event-card[data-type="STUDENT WORK"] {
+  background: linear-gradient(
+    135deg,
+    var(--blue) 0%,
+    var(--blue) 15%,
+    var(--white) 35%,
+    var(--white) 100%
+  );
+}
+
+.event-card[data-type="HACKATHON"] .card-tag {
+  background: var(--orange);
+}
+
+.event-card[data-type="WORKSHOP"] .card-tag {
+  background: var(--yellow);
+}
+
+.event-card[data-type="STUDENT WORK"] .card-tag {
+  background: var(--blue);
 }
 
 .card-image {
@@ -1377,8 +1531,8 @@ textarea:focus-visible {
 .card-tag {
   bottom: 0;
   left: 0;
-  background: var(--white);
-  color: var(--black);
+  background: var(--black);
+  color: var(--white);
 }
 
 .card-arrow {
@@ -1439,6 +1593,7 @@ textarea:focus-visible {
 .instructor {
   margin: 0 0 1rem;
   color: var(--muted);
+  font-family: var(--font-geist-sans), Arial, sans-serif;
   font-size: 0.88rem;
 }
 
@@ -1893,6 +2048,16 @@ footer {
   .workshop-section,
   .how-section {
     padding: 4rem 1rem;
+  }
+
+  /* Keep the heading row full-bleed when the section's padding changes. */
+  .marketplace-only .workshop-heading-row {
+    margin-top: -4rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-top: 4rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   .featured-card,

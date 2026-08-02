@@ -6,6 +6,7 @@ import EventCard from "../../components/EventCard";
 import iconImage from "../../app/icon.png";
 import creditIcon from "../../app/credit_icon.png";
 import graphicImage from "../../app/graphic.png";
+import skillsbg from "../../app/skillsbg.png";
 import {
   CITY,
   EDUCATIONTYPE,
@@ -31,6 +32,10 @@ const EDUCATION_LEVELS = Object.values(EDUCATIONTYPE).filter(
 
 const SERVICE_TYPES = Object.values(SERVICETYPE);
 const SERVICE_TAGS = Object.values(SERVICETAGS);
+
+// The mocked signed-in user shown in the nav bar; newly published
+// services are credited to this person.
+const CURRENT_USER = "M Yang";
 
 function serviceTypeToLabel(serviceType: SERVICETYPE): string {
   return serviceType
@@ -192,7 +197,8 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
     <main className="marketplace-page">
       <header className="site-header">
         <a className="wordmark" href="#workshops" aria-label="SkillSwap home">
-          <Image src={iconImage} alt="SkillSwap" width={50} height={50} />
+          <Image src={iconImage} alt="" width={50} height={50} />
+          SKILL<span>↔</span>SWAP
         </a>
         <div className="header-actions">
           <div
@@ -215,14 +221,14 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
               aria-hidden="true"
             />
           </div>
-          <div className="mock-account" aria-label="Signed in as Alex Morgan">
+          <div className="mock-account" aria-label={`Signed in as ${CURRENT_USER}`}>
             <div className="mock-account-summary">
               <span className="mock-account-avatar" aria-hidden="true">
-                MY
+                {CURRENT_USER.split(" ").map((part) => part[0]).join("")}
               </span>
               <span className="mock-account-copy">
                 <span className="mock-account-label">Signed in</span>
-                <strong>M Yang</strong>
+                <strong>{CURRENT_USER}</strong>
               </span>
             </div>
             <button
@@ -252,10 +258,18 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
         aria-labelledby="workshops-heading"
       >
         <div className="workshop-heading-row">
+          <Image
+            src={skillsbg}
+            alt=""
+            className="skillsbg"
+            width={1256}
+            height={717}
+            aria-hidden="true"
+          />
           <div className="heading-block">
             <div className="heading-copy">
-              <p className="eyebrow">Explore nearby tech services</p>
               <h1 id="workshops-heading">SKILLS NEAR YOU</h1>
+              <p className="eyebrow">Explore nearby tech services</p>
             </div>
             <Image
               src={graphicImage}
@@ -498,7 +512,7 @@ export default function Marketplace({ onLogout }: MarketplaceProps) {
                     location: formData.get("city") as CITY,
                     address: String(formData.get("address")),
                     description: `${String(formData.get("description"))}\n\n${duration} · ${seats} seats available`,
-                    author: "Alex Morgan",
+                    author: CURRENT_USER,
                     type: formData.get("serviceType") as SERVICETYPE,
                     credit: Number(formData.get("credit")),
                     tags: categories,
