@@ -1265,7 +1265,7 @@ textarea:focus-visible {
 .event-modal-heading h2 {
   margin: 0;
   font-family: "Arial Narrow", var(--font-geist-sans), sans-serif;
-  font-size: clamp(2rem, 6vw, 3rem);
+  font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 900;
   letter-spacing: -0.055em;
   line-height: 0.95;
