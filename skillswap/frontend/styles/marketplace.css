@@ -348,7 +348,6 @@ textarea:focus-visible {
 }
 
 .share-skill-field {
-  display: grid;
   gap: 0.55rem;
 }
 
